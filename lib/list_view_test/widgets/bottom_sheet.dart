@@ -47,7 +47,8 @@ class MyModalBottomSheetState extends State<MyModalBottomSheet> {
                       ),
                       Text(
                         Provider.of<CountProviders>(context, listen: true)
-                            .adultCount.toString(),
+                            .tempAdultCount
+                            .toString(),
                         style: const TextStyle(fontSize: 18),
                       ),
                       const SizedBox(
@@ -100,7 +101,8 @@ class MyModalBottomSheetState extends State<MyModalBottomSheet> {
                       ),
                       Text(
                         Provider.of<CountProviders>(context, listen: false)
-                            .childCount.toString(),
+                            .tempChildCount
+                            .toString(),
                         style: const TextStyle(fontSize: 18),
                       ),
                       const SizedBox(
@@ -127,7 +129,13 @@ class MyModalBottomSheetState extends State<MyModalBottomSheet> {
                 height: 40,
               ),
               InkWell(
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  Provider.of<CountProviders>(context, listen: false)
+                      .notifyAdultListeners();
+                  Provider.of<CountProviders>(context, listen: false)
+                      .notifyChildListeners();
+                  Navigator.pop(context);
+                },
                 child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width * 0.60,
