@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/home_page_test/circle.dart';
-import 'package:practise1/list_view_test/home_page_test/square.dart';
+import 'package:practise1/list_view_test/extras/circle.dart';
+import 'package:practise1/list_view_test/extras/square.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});

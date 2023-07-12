@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
+import 'package:practise1/list_view_test/providers/count_providers.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
-import 'package:practise1/list_view_test/slivers_practise/slivers.dart';
 import 'package:provider/provider.dart';
 
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (create) => DateProvider()),
+        ChangeNotifierProvider(create: (create) => CountProviders()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: SliversTest(),
+        home: const MySplashScreen(),
       ),
     );
   }

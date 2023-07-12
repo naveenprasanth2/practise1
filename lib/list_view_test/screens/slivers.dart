@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../home_page_test/bottom_sheet.dart';
-import '../home_page_test/test_page.dart';
+import '../widgets/bottom_sheet.dart';
+import '../extras/test_page.dart';
+import '../providers/count_providers.dart';
+import '../widgets/my_drawer.dart';
 
 class SliversTest extends StatefulWidget {
   const SliversTest({super.key});
@@ -16,33 +18,7 @@ class _SliversTestState extends State<SliversTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Drawer Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                // Handle drawer item tap for home
-                Navigator.pop(context); // Close the drawer
-                // Add your logic for navigating to the home page
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -108,8 +84,9 @@ class _SliversTestState extends State<SliversTest> {
                                 controller: TextEditingController(),
                                 decoration: InputDecoration(
                                     hintText: Provider.of<DateProvider>(context,
-                                        listen: true)
-                                        .date ?? "Select a Date",
+                                                listen: true)
+                                            .date ??
+                                        "Select a Date",
                                     hintStyle:
                                         const TextStyle(color: Colors.black),
                                     border: OutlineInputBorder(
@@ -130,8 +107,7 @@ class _SliversTestState extends State<SliversTest> {
                                     disabledBorder: OutlineInputBorder(
                                         borderSide:
                                             Divider.createBorderSide(context),
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
+                                        borderRadius: BorderRadius.circular(10)),
                                     filled: false,
                                     contentPadding: const EdgeInsets.all(8),
                                     enabled: false),
@@ -147,7 +123,7 @@ class _SliversTestState extends State<SliversTest> {
                               showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return MyModalBottomSheet();
+                                  return const MyModalBottomSheet();
                                 },
                               );
                             },
@@ -158,7 +134,7 @@ class _SliversTestState extends State<SliversTest> {
                                 controller: TextEditingController(),
                                 decoration: InputDecoration(
                                   hintText:
-                                      "Adult - Child",
+                                      "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
                                   border: OutlineInputBorder(
                                       borderSide:
                                           Divider.createBorderSide(context),
