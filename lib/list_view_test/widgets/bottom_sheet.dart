@@ -1,42 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/count_providers.dart';
+import 'package:provider/provider.dart';
 
 class MyModalBottomSheet extends StatefulWidget {
+  const MyModalBottomSheet({super.key});
+
   @override
-  _MyModalBottomSheetState createState() => _MyModalBottomSheetState();
+  MyModalBottomSheetState createState() => MyModalBottomSheetState();
 }
 
-class _MyModalBottomSheetState extends State<MyModalBottomSheet> {
-  int adultCount = 0;
-  int childCount = 0;
-
-  void incrementAdultCount() {
-    setState(() {
-      adultCount++;
-    });
-  }
-
-  void decrementAdultCount() {
-    setState(() {
-      if (adultCount > 0) {
-        adultCount--;
-      }
-    });
-  }
-
-  void incrementChildCount() {
-    setState(() {
-      childCount++;
-    });
-  }
-
-  void decrementChildCount() {
-    setState(() {
-      if (childCount > 0) {
-        childCount--;
-      }
-    });
-  }
-
+class MyModalBottomSheetState extends State<MyModalBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -57,29 +30,39 @@ class _MyModalBottomSheetState extends State<MyModalBottomSheet> {
                   Row(
                     children: [
                       InkWell(
-                        onTap: decrementAdultCount,
+                        onTap: () {
+                          Provider.of<CountProviders>(context, listen: false)
+                              .decrementAdultCount();
+                        },
                         child: Container(
                           height: 30,
                           width: 30,
                           decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey
-                          ),
+                              shape: BoxShape.circle, color: Colors.grey),
                           child: const Icon(Icons.remove),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      Text(adultCount.toString(),  style:const TextStyle(fontSize: 18),),
-                      const SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        Provider.of<CountProviders>(context, listen: true)
+                            .adultCount.toString(),
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
-                        onTap: incrementAdultCount,
+                        onTap: () {
+                          Provider.of<CountProviders>(context, listen: false)
+                              .incrementAdultCount();
+                        },
                         child: Container(
                           height: 30,
                           width: 30,
                           decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey
-                          ),
+                              shape: BoxShape.circle, color: Colors.grey),
                           child: const Icon(Icons.add),
                         ),
                       ),
@@ -87,7 +70,9 @@ class _MyModalBottomSheetState extends State<MyModalBottomSheet> {
                   ),
                 ],
               ),
-              const SizedBox(height: 40,),
+              const SizedBox(
+                height: 40,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,29 +83,39 @@ class _MyModalBottomSheetState extends State<MyModalBottomSheet> {
                   Row(
                     children: [
                       InkWell(
-                        onTap: decrementChildCount,
+                        onTap: () {
+                          Provider.of<CountProviders>(context, listen: false)
+                              .decrementChildCount();
+                        },
                         child: Container(
                           height: 30,
                           width: 30,
                           decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey
-                          ),
+                              shape: BoxShape.circle, color: Colors.grey),
                           child: const Icon(Icons.remove),
                         ),
                       ),
-                      const SizedBox(width: 10,),
-                      Text(childCount.toString(),  style:const TextStyle(fontSize: 18),),
-                      const SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        Provider.of<CountProviders>(context, listen: false)
+                            .childCount.toString(),
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
-                        onTap: incrementChildCount,
+                        onTap: () {
+                          Provider.of<CountProviders>(context, listen: false)
+                              .incrementChildCount();
+                        },
                         child: Container(
                           height: 30,
                           width: 30,
                           decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.grey
-                          ),
+                              shape: BoxShape.circle, color: Colors.grey),
                           child: const Icon(Icons.add),
                         ),
                       ),
@@ -128,23 +123,19 @@ class _MyModalBottomSheetState extends State<MyModalBottomSheet> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 40,),
-
+              const SizedBox(
+                height: 40,
+              ),
               InkWell(
                 onTap: () => Navigator.pop(context),
                 child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width * 0.60,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Colors.purpleAccent,
-                        Colors.pinkAccent
-                      ],
-                    )
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: const LinearGradient(
+                        colors: [Colors.purpleAccent, Colors.pinkAccent],
+                      )),
                   child: const Center(child: Text("submit")),
                 ),
               ),
