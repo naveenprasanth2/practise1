@@ -1,0 +1,240 @@
+import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../home_page_test/bottom_sheet.dart';
+import '../home_page_test/test_page.dart';
+
+class SliversTest extends StatefulWidget {
+  const SliversTest({super.key});
+
+  @override
+  State<SliversTest> createState() => _SliversTestState();
+}
+
+class _SliversTestState extends State<SliversTest> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () {
+                // Handle drawer item tap for home
+                Navigator.pop(context); // Close the drawer
+                // Add your logic for navigating to the home page
+              },
+            ),
+          ],
+        ),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: GestureDetector(
+              onTap: () {},
+              child: const Text(
+                "BookAny",
+                style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 3,
+                ),
+              ),
+            ),
+            centerTitle: true,
+            expandedHeight: 300,
+            backgroundColor: Colors.blueAccent,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.none,
+              centerTitle: true,
+              background: Padding(
+                padding: const EdgeInsets.only(top: 100),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: TextField(
+                        controller: TextEditingController(),
+                        decoration: InputDecoration(
+                          hintText: "enter city name",
+                          border: OutlineInputBorder(
+                              borderSide: Divider.createBorderSide(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: Divider.createBorderSide(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: Divider.createBorderSide(context),
+                              borderRadius: BorderRadius.circular(10)),
+                          filled: false,
+                          contentPadding: const EdgeInsets.all(8),
+                        ),
+                        keyboardType: TextInputType.text,
+                        obscureText: false,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: InkWell(
+                              onTap: () async {
+                                Provider.of<DateProvider>(context,
+                                        listen: false)
+                                    .setDate(context);
+                              },
+                              child: TextField(
+                                controller: TextEditingController(),
+                                decoration: InputDecoration(
+                                    hintText: Provider.of<DateProvider>(context,
+                                        listen: true)
+                                        .date ?? "Select a Date",
+                                    hintStyle:
+                                        const TextStyle(color: Colors.black),
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            Divider.createBorderSide(context),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            Divider.createBorderSide(context),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            Divider.createBorderSide(context),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            Divider.createBorderSide(context),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    filled: false,
+                                    contentPadding: const EdgeInsets.all(8),
+                                    enabled: false),
+                                keyboardType: TextInputType.text,
+                                obscureText: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return MyModalBottomSheet();
+                                },
+                              );
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 30),
+                              child: TextField(
+                                controller: TextEditingController(),
+                                decoration: InputDecoration(
+                                  hintText:
+                                      "Adult - Child",
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  filled: false,
+                                  contentPadding: const EdgeInsets.all(8),
+                                ),
+                                keyboardType: TextInputType.text,
+                                obscureText: false,
+                                enabled: false,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Flexible(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (e) => const TestPage()),
+                              (route) => false);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width * 0.85,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(colors: [
+                              Colors.pinkAccent,
+                              Colors.purpleAccent
+                            ]),
+                          ),
+                          child: const Center(
+                              child: Text(
+                            "search",
+                            style: TextStyle(color: Colors.black),
+                          )),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return ListTile(
+                  title: Text("Item $index"),
+                  leading: const Icon(Icons.add),
+                );
+              },
+              childCount: 100,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
