@@ -86,7 +86,8 @@ class _SliversTestState extends State<SliversTest> {
                                     hintText: Provider.of<DateProvider>(context,
                                                 listen: true)
                                             .date ??
-                                        "Select a Date",
+                                        Provider.of<DateProvider>(context,
+                                            listen: true).initialDate,
                                     hintStyle:
                                         const TextStyle(color: Colors.black),
                                     border: OutlineInputBorder(
@@ -169,11 +170,8 @@ class _SliversTestState extends State<SliversTest> {
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (e) => const TestPage()),
-                              (route) => false);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (builder) => const SliversTest()));
                         },
                         child: Container(
                           height: 50,
