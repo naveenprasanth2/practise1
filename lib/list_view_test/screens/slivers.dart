@@ -3,7 +3,6 @@ import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/bottom_sheet.dart';
-import '../extras/test_page.dart';
 import '../providers/count_providers.dart';
 import '../widgets/my_drawer.dart';
 
@@ -18,23 +17,24 @@ class _SliversTestState extends State<SliversTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             title: GestureDetector(
               onTap: () {},
-              child: const Text(
+              child: Text(
                 "BookAny",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.red.shade400,
                   letterSpacing: 3,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             centerTitle: true,
             expandedHeight: 300,
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: Colors.white,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.none,
@@ -89,7 +89,7 @@ class _SliversTestState extends State<SliversTest> {
                                         Provider.of<DateProvider>(context,
                                             listen: true).initialDate,
                                     hintStyle:
-                                        const TextStyle(color: Colors.black),
+                                        const TextStyle(color: Colors.black54),
                                     border: OutlineInputBorder(
                                         borderSide:
                                             Divider.createBorderSide(context),
@@ -136,6 +136,8 @@ class _SliversTestState extends State<SliversTest> {
                                 decoration: InputDecoration(
                                   hintText:
                                       "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                                  hintStyle:
+                                  const TextStyle(color: Colors.black54),
                                   border: OutlineInputBorder(
                                       borderSide:
                                           Divider.createBorderSide(context),
@@ -177,16 +179,13 @@ class _SliversTestState extends State<SliversTest> {
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
+                            color: Colors.red.shade400,
                             borderRadius: BorderRadius.circular(10),
-                            gradient: const LinearGradient(colors: [
-                              Colors.pinkAccent,
-                              Colors.purpleAccent
-                            ]),
                           ),
                           child: const Center(
                               child: Text(
                             "search",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
                         ),
                       ),
