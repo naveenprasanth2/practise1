@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:practise1/list_view_test/widgets/city_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/location_constants.dart';
 import '../widgets/bottom_sheet.dart';
 import '../providers/count_providers.dart';
 import '../widgets/my_drawer.dart';
@@ -27,7 +29,8 @@ class _SliversTestState extends State<SliversTest> {
                 "BookAny",
                 style: TextStyle(
                   color: Colors.red.shade400,
-                  letterSpacing: 3,
+                  letterSpacing: 1,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -83,11 +86,9 @@ class _SliversTestState extends State<SliversTest> {
                               child: TextField(
                                 controller: TextEditingController(),
                                 decoration: InputDecoration(
-                                    hintText: Provider.of<DateProvider>(context,
-                                                listen: true)
-                                            .date ??
-                                        Provider.of<DateProvider>(context,
-                                            listen: true).initialDate,
+                                    hintText: Provider.of<DateProvider>(context, listen: true).date ??
+                                        Provider.of<DateProvider>(context, listen: true)
+                                            .initialDate,
                                     hintStyle:
                                         const TextStyle(color: Colors.black54),
                                     border: OutlineInputBorder(
@@ -106,8 +107,7 @@ class _SliversTestState extends State<SliversTest> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     disabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            Divider.createBorderSide(context),
+                                        borderSide: Divider.createBorderSide(context),
                                         borderRadius: BorderRadius.circular(10)),
                                     filled: false,
                                     contentPadding: const EdgeInsets.all(8),
@@ -137,7 +137,7 @@ class _SliversTestState extends State<SliversTest> {
                                   hintText:
                                       "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
                                   hintStyle:
-                                  const TextStyle(color: Colors.black54),
+                                      const TextStyle(color: Colors.black54),
                                   border: OutlineInputBorder(
                                       borderSide:
                                           Divider.createBorderSide(context),
@@ -172,8 +172,8 @@ class _SliversTestState extends State<SliversTest> {
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (builder) => const SliversTest()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (builder) => const SliversTest()));
                         },
                         child: Container(
                           height: 50,
@@ -195,15 +195,21 @@ class _SliversTestState extends State<SliversTest> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ListTile(
-                  title: Text("Item $index"),
-                  leading: const Icon(Icons.add),
-                );
-              },
-              childCount: 100,
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.grey.shade200,
+              height: 130, // Set the height of the horizontal list
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                // Set the scroll direction to horizontal
+                itemCount: LocationConstants.locationImages.length,
+                // Set the number of items in the list
+                itemBuilder: (BuildContext context, int index) {
+                  return CityWidget(
+                    cityName: LocationConstants.locationImages[index],
+                  );
+                },
+              ),
             ),
           ),
         ],
