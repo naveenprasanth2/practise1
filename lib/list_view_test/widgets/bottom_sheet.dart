@@ -140,11 +140,18 @@ class MyModalBottomSheetState extends State<MyModalBottomSheet> {
                   height: 50,
                   width: MediaQuery.of(context).size.width * 0.60,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: const LinearGradient(
-                        colors: [Colors.purpleAccent, Colors.pinkAccent],
-                      )),
-                  child: const Center(child: Text("submit")),
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.red.shade400,
+                  ),
+                  child: const Center(
+                      child: Text(
+                    "submit",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16
+                    ),
+                  )),
                 ),
               ),
             ],
