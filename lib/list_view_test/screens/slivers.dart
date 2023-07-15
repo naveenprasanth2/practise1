@@ -16,57 +16,6 @@ class SliversTest extends StatefulWidget {
 }
 
 class _SliversTestState extends State<SliversTest> {
-  late ScrollController _scrollController;
-  final int itemCount = 10;
-  final double scrollDuration = 2.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _autoScroll(MediaQuery.of(context).size.width * 0.95);
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _autoScroll(double itemWidth) async {
-    final double maxScrollExtent = _scrollController.position.maxScrollExtent;
-    final double itemExtent = itemWidth + 16.0; // Adjust with margin if any
-    double currentScrollOffset = 0.0;
-
-    while (true) {
-      await Future.delayed(Duration(seconds: scrollDuration.toInt()));
-      if (_scrollController.hasClients) {
-        currentScrollOffset += itemExtent;
-        if (currentScrollOffset >= maxScrollExtent) {
-          await _scrollController.animateTo(
-            currentScrollOffset,
-            duration: Duration(seconds: scrollDuration.toInt()),
-            curve: Curves.easeInOut,
-          );
-          currentScrollOffset = 0.0;
-          await _scrollController.animateTo(
-            currentScrollOffset,
-            duration: Duration(seconds: scrollDuration.toInt()),
-            curve: Curves.easeInOut,
-          );
-        } else {
-          await _scrollController.animateTo(
-            currentScrollOffset,
-            duration: Duration(seconds: scrollDuration.toInt()),
-            curve: Curves.easeInOut,
-          );
-        }
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,26 +207,6 @@ class _SliversTestState extends State<SliversTest> {
                 itemBuilder: (BuildContext context, int index) {
                   return CityWidget(
                     cityName: LocationConstants.locationImages[index],
-                    onPressed: () {},
-                  );
-                },
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200.0,
-              child: ListView.builder(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                itemCount: itemCount,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/offerBanner.jpg"), fit: BoxFit.cover)
-                    ),
                   );
                 },
               ),
