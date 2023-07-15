@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/slivers.dart';
+import '../screens/home/home_page.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
