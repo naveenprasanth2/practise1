@@ -8,16 +8,16 @@ import '../widgets/bottom_sheet.dart';
 import '../providers/count_providers.dart';
 import '../widgets/my_drawer.dart';
 
-class SliversTest extends StatefulWidget {
-  const SliversTest({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<SliversTest> createState() => _SliversTestState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _SliversTestState extends State<SliversTest> {
+class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
-  final int itemCount = 10;
+  final int itemCount = 4;
   final double scrollDuration = 2.0;
 
   @override
@@ -97,7 +97,7 @@ class _SliversTestState extends State<SliversTest> {
                   collapseMode: CollapseMode.none,
                   centerTitle: true,
                   background: Padding(
-                    padding: const EdgeInsets.only(top: 100),
+                    padding: const EdgeInsets.only(top: 60),
                     child: Column(
                       children: [
                         Padding(
@@ -105,7 +105,7 @@ class _SliversTestState extends State<SliversTest> {
                           child: TextField(
                             controller: TextEditingController(),
                             decoration: InputDecoration(
-                              hintText: "enter city name",
+                              hintText: "Enter city name",
                               border: OutlineInputBorder(
                                   borderSide: Divider.createBorderSide(context),
                                   borderRadius: BorderRadius.circular(10)),
@@ -130,7 +130,8 @@ class _SliversTestState extends State<SliversTest> {
                           children: [
                             Flexible(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 30),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
                                 child: InkWell(
                                   onTap: () async {
                                     Provider.of<DateProvider>(context,
@@ -140,29 +141,25 @@ class _SliversTestState extends State<SliversTest> {
                                   child: TextField(
                                     controller: TextEditingController(),
                                     decoration: InputDecoration(
-                                        hintText: Provider.of<DateProvider>(context, listen: true).date ??
-                                            Provider.of<DateProvider>(context, listen: true)
+                                        hintText: Provider.of<DateProvider>(context,
+                                                    listen: true)
+                                                .date ??
+                                            Provider.of<DateProvider>(context,
+                                                    listen: true)
                                                 .initialDate,
-                                        hintStyle:
-                                            const TextStyle(color: Colors.black54),
+                                        hintStyle: const TextStyle(
+                                            color: Colors.black54),
                                         border: OutlineInputBorder(
-                                            borderSide:
-                                                Divider.createBorderSide(context),
+                                            borderSide: Divider.createBorderSide(
+                                                context),
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         focusedBorder: OutlineInputBorder(
                                             borderSide:
                                                 Divider.createBorderSide(context),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide:
-                                                Divider.createBorderSide(context),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        disabledBorder: OutlineInputBorder(
-                                            borderSide: Divider.createBorderSide(context),
                                             borderRadius: BorderRadius.circular(10)),
+                                        enabledBorder: OutlineInputBorder(borderSide: Divider.createBorderSide(context), borderRadius: BorderRadius.circular(10)),
+                                        disabledBorder: OutlineInputBorder(borderSide: Divider.createBorderSide(context), borderRadius: BorderRadius.circular(10)),
                                         filled: false,
                                         contentPadding: const EdgeInsets.all(8),
                                         enabled: false),
@@ -183,31 +180,35 @@ class _SliversTestState extends State<SliversTest> {
                                   );
                                 },
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 20, right: 30),
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 30),
                                   child: TextField(
                                     controller: TextEditingController(),
                                     decoration: InputDecoration(
                                       hintText:
                                           "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
-                                      hintStyle:
-                                          const TextStyle(color: Colors.black54),
+                                      hintStyle: const TextStyle(
+                                          color: Colors.black54),
                                       border: OutlineInputBorder(
                                           borderSide:
                                               Divider.createBorderSide(context),
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       focusedBorder: OutlineInputBorder(
                                           borderSide:
                                               Divider.createBorderSide(context),
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       enabledBorder: OutlineInputBorder(
                                           borderSide:
                                               Divider.createBorderSide(context),
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       disabledBorder: OutlineInputBorder(
                                           borderSide:
                                               Divider.createBorderSide(context),
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       filled: false,
                                       contentPadding: const EdgeInsets.all(8),
                                     ),
@@ -227,7 +228,7 @@ class _SliversTestState extends State<SliversTest> {
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (builder) => const SliversTest()));
+                                  builder: (builder) => const HomeScreen()));
                             },
                             child: Container(
                               height: 50,
@@ -239,7 +240,8 @@ class _SliversTestState extends State<SliversTest> {
                               child: const Center(
                                   child: Text(
                                 "search",
-                                style: TextStyle(color: Colors.white, fontSize: 20),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               )),
                             ),
                           ),
@@ -279,13 +281,16 @@ class _SliversTestState extends State<SliversTest> {
                         width: MediaQuery.of(context).size.width * 0.95,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
                         decoration: const BoxDecoration(
-                          image: DecorationImage(image: AssetImage("assets/offerBanner.jpg"), fit: BoxFit.cover)
+                          image: DecorationImage(
+                              image: AssetImage("assets/offerBanner.jpg"),
+                              fit: BoxFit.cover),
                         ),
                       );
                     },
                   ),
                 ),
               ),
+
             ],
           ),
         ),

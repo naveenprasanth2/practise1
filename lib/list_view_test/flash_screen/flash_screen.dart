@@ -19,7 +19,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
   void navigateToHomeScreen() async {
     await Future.delayed(const Duration(seconds: 1)).then((value) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const SliversTest()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const HomeScreen()));
     });
   }
 
