@@ -12,7 +12,7 @@ class CityWidget extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         margin: const EdgeInsets.all(8.0),
-        width: 100,
+        width: 110,
         decoration: BoxDecoration(
           color: Colors.grey.shade200,
         ),
