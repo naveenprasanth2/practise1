@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_details_model.dart';
 import 'package:practise1/list_view_test/widgets/amenities_frame.dart';
 
@@ -7,13 +11,26 @@ import '../../widgets/amenities_widget.dart';
 class HotelDetailScreen extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
 
-  HotelDetailScreen({super.key, required this.hotelDetailsModel});
+  const HotelDetailScreen({super.key, required this.hotelDetailsModel});
 
   @override
   State<HotelDetailScreen> createState() => _HotelDetailScreenState();
 }
 
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
+  AmenitiesModel? amenitiesModel;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readJson();
+  }
+
+  void readJson() async {
+    final String jsonString = await rootBundle.loadString('assets/sample.json');
+    amenitiesModel = AmenitiesModel.fromJson(json.decode(jsonString));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

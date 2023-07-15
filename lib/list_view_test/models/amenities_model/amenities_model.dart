@@ -22,12 +22,14 @@ class AmenitiesModel {
     this.seatingAreaModel,
   );
 
-  AmenitiesModel.fromJson(Map<String, dynamic> json) {
-    bedTypeModel = json["bedTypeModel"];
-    hotelFacilitiesModel = json["hotelFacilitiesModel"];
-    mediaTechnologyModel = json["mediaTechnologyModel"];
-    roomFacilityModel = json["roomFacilityModel"];
-    washroomModel = json["washroomModel"];
-    seatingAreaModel = json["seatingAreaModel"];
+  AmenitiesModel.fromJson(Map<dynamic, dynamic> json) {
+    bedTypeModel = BedTypeModel.fromJson(json["bedTypeModel"]);
+    hotelFacilitiesModel =
+        HotelFacilitiesModel.fromJson(json["hotelFacilitiesModel"]);
+    mediaTechnologyModel =
+        MediaTechnologyModel.fromJson(json["mediaTechnologyModel"]);
+    roomFacilityModel = RoomFacilityModel.fromJson(json["roomFacilityModel"]);
+    washroomModel = WashroomModel.fromJson(json["washroomModel"]);
+    seatingAreaModel = SeatingAreaModel.fromJson(json["seatingAreaModel"]);
   }
 }

@@ -6,10 +6,10 @@
     "singleBed": true
   },
   "mediaTechnologyModel": {
-    "tv":  true,
+    "tv": true,
     "ott": false
   },
-  "roomFacilityModel": {
+  "hotelFacilitiesModel": {
     "ac": true,
     "wifi": true,
     "kitchen": true,
@@ -26,6 +26,12 @@
   },
   "washroomModel": {
     "geyser": true
+  },
+  "roomFacilityModel": {
+    "extraMattress": true,
+    "smokeDetector": true,
+    "interCom": true,
+    "books": true
   },
   "seatingAreaModel": {
     "seatingArea": false

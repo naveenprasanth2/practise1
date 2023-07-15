@@ -11,7 +11,7 @@ class BedTypeModel {
     this.singleBed,
   );
 
-  BedTypeModel.fromJson(Map<String, dynamic> json){
+  BedTypeModel.fromJson(Map<dynamic, dynamic> json){
     cot = json["cot"];
     kingSizedBed = json["kingSizedBed"];
     queenSizedBed = json["queenSizedBed"];
