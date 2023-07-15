@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:practise1/list_view_test/widgets/city_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/location_constants.dart';
 import '../widgets/bottom_sheet.dart';
-import '../extras/test_page.dart';
 import '../providers/count_providers.dart';
 import '../widgets/my_drawer.dart';
 
@@ -18,23 +19,25 @@ class _SliversTestState extends State<SliversTest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MyDrawer(),
+      drawer: const MyDrawer(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             title: GestureDetector(
               onTap: () {},
-              child: const Text(
+              child: Text(
                 "BookAny",
                 style: TextStyle(
-                  color: Colors.white,
-                  letterSpacing: 3,
+                  color: Colors.red.shade400,
+                  letterSpacing: 1,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             centerTitle: true,
             expandedHeight: 300,
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: Colors.white,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.none,
@@ -83,12 +86,11 @@ class _SliversTestState extends State<SliversTest> {
                               child: TextField(
                                 controller: TextEditingController(),
                                 decoration: InputDecoration(
-                                    hintText: Provider.of<DateProvider>(context,
-                                                listen: true)
-                                            .date ??
-                                        "Select a Date",
+                                    hintText: Provider.of<DateProvider>(context, listen: true).date ??
+                                        Provider.of<DateProvider>(context, listen: true)
+                                            .initialDate,
                                     hintStyle:
-                                        const TextStyle(color: Colors.black),
+                                        const TextStyle(color: Colors.black54),
                                     border: OutlineInputBorder(
                                         borderSide:
                                             Divider.createBorderSide(context),
@@ -105,8 +107,7 @@ class _SliversTestState extends State<SliversTest> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     disabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            Divider.createBorderSide(context),
+                                        borderSide: Divider.createBorderSide(context),
                                         borderRadius: BorderRadius.circular(10)),
                                     filled: false,
                                     contentPadding: const EdgeInsets.all(8),
@@ -135,6 +136,8 @@ class _SliversTestState extends State<SliversTest> {
                                 decoration: InputDecoration(
                                   hintText:
                                       "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black54),
                                   border: OutlineInputBorder(
                                       borderSide:
                                           Divider.createBorderSide(context),
@@ -169,26 +172,20 @@ class _SliversTestState extends State<SliversTest> {
                     Flexible(
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (e) => const TestPage()),
-                              (route) => false);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (builder) => const SliversTest()));
                         },
                         child: Container(
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
+                            color: Colors.red.shade400,
                             borderRadius: BorderRadius.circular(10),
-                            gradient: const LinearGradient(colors: [
-                              Colors.pinkAccent,
-                              Colors.purpleAccent
-                            ]),
                           ),
                           child: const Center(
                               child: Text(
                             "search",
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
                         ),
                       ),
@@ -198,15 +195,21 @@ class _SliversTestState extends State<SliversTest> {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ListTile(
-                  title: Text("Item $index"),
-                  leading: const Icon(Icons.add),
-                );
-              },
-              childCount: 100,
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.grey.shade200,
+              height: 130, // Set the height of the horizontal list
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                // Set the scroll direction to horizontal
+                itemCount: LocationConstants.locationImages.length,
+                // Set the number of items in the list
+                itemBuilder: (BuildContext context, int index) {
+                  return CityWidget(
+                    cityName: LocationConstants.locationImages[index],
+                  );
+                },
+              ),
             ),
           ),
         ],

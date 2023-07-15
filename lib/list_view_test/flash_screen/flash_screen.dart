@@ -19,8 +19,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
   void navigateToHomeScreen() async {
     await Future.delayed(const Duration(seconds: 1)).then((value) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (builder) => const SliversTest()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const SliversTest()));
     });
   }
 
@@ -28,15 +27,14 @@ class _MySplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.pinkAccent, Colors.purpleAccent],
-        ),
-      ),
+      decoration: BoxDecoration(color: Colors.red.shade400),
       child: const Center(
         child: Text(
-          "BookAny",
-          style: TextStyle(letterSpacing: 2, fontSize: 25),
+          'BookAny', // Replace with your app name or logo
+          style: TextStyle(
+            fontSize: 50, // Set the font size// Set the font weight
+            color: Colors.white, // Set the text color
+          ),
         ),
       ),
     ));
