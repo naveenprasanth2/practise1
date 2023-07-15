@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AmenitiesWidget extends StatelessWidget {
-  const AmenitiesWidget({super.key});
+  final IconData iconData;
+  final String title;
+
+  const AmenitiesWidget({
+    super.key,
+    required this.iconData,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +26,13 @@ class AmenitiesWidget extends StatelessWidget {
                 width: 2.0,
               ),
             ),
-            child: const Center(child: Icon(Icons.add, size: 20)),
+            child: Center(child: Icon(iconData)),
           ),
         ),
-        const SizedBox(width: 10,),
-        const Flexible(child: Text("Summa")),
+        const SizedBox(
+          width: 10,
+        ),
+         Flexible(child: Text(title, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 10),)),
       ],
     );
   }

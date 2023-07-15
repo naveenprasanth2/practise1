@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_details_model.dart';
-import 'package:practise1/list_view_test/widgets/amenities_frame.dart';
-
-import '../../widgets/amenities_widget.dart';
+import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 
 class HotelDetailScreen extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
@@ -19,16 +17,20 @@ class HotelDetailScreen extends StatefulWidget {
 
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
+
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     readJson();
+    super.initState();
   }
 
-  void readJson() async {
-    final String jsonString = await rootBundle.loadString('assets/sample.json');
-    amenitiesModel = AmenitiesModel.fromJson(json.decode(jsonString));
+  Future<void> readJson() async {
+    await rootBundle.loadString("assets/sample.json").then((value){
+      setState(() {
+        amenitiesModel = AmenitiesModel.fromJson(json.decode(value));
+      });
+    });
   }
 
   @override
@@ -142,20 +144,24 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   SizedBox(
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.97,
-                    child: const Center(
+                    child: Center(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: AmenitiesFrameWidget(),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: AmenitiesFrameWidgetOne(
+                          amenitiesModel: amenitiesModel,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.97,
-                    child: const Center(
+                    child: Center(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: AmenitiesFrameWidget(),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: AmenitiesFrameWidgetOne(
+                          amenitiesModel: amenitiesModel,
+                        ),
                       ),
                     ),
                   ),
