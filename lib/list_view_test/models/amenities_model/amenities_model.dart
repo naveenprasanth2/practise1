@@ -6,19 +6,28 @@ import 'package:practise1/list_view_test/models/amenities_model/seating_area.dar
 import 'package:practise1/list_view_test/models/amenities_model/washroom.dart';
 
 class AmenitiesModel {
-  final BedTypeModel bedTypeModel;
-  final HotelFacilitiesModel hotelFacilitiesModel;
-  final MediaTechnologyModel mediaTechnologyModel;
-  final RoomFacilityModel roomFacilityModel;
-  final WashroomModel washroomModel;
-  final SeatingAreaModel seatingAreaModel;
+  BedTypeModel? bedTypeModel;
+  HotelFacilitiesModel? hotelFacilitiesModel;
+  MediaTechnologyModel? mediaTechnologyModel;
+  RoomFacilityModel? roomFacilityModel;
+  WashroomModel? washroomModel;
+  SeatingAreaModel? seatingAreaModel;
 
-  AmenitiesModel({
-    required this.bedTypeModel,
-    required this.hotelFacilitiesModel,
-    required this.mediaTechnologyModel,
-    required this.roomFacilityModel,
-    required this.washroomModel,
-    required this.seatingAreaModel,
-  });
+  AmenitiesModel(
+    this.bedTypeModel,
+    this.hotelFacilitiesModel,
+    this.mediaTechnologyModel,
+    this.roomFacilityModel,
+    this.washroomModel,
+    this.seatingAreaModel,
+  );
+
+  AmenitiesModel.fromJson(Map<String, dynamic> json) {
+    bedTypeModel = json["bedTypeModel"];
+    hotelFacilitiesModel = json["hotelFacilitiesModel"];
+    mediaTechnologyModel = json["mediaTechnologyModel"];
+    roomFacilityModel = json["roomFacilityModel"];
+    washroomModel = json["washroomModel"];
+    seatingAreaModel = json["seatingAreaModel"];
+  }
 }

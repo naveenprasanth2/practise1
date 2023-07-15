@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_details_model.dart';
+import 'package:practise1/list_view_test/widgets/amenities_frame.dart';
 
 import '../../widgets/amenities_widget.dart';
 
@@ -114,49 +115,34 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 170,
+              height: 180,
               width: MediaQuery.of(context).size.width * 0.97,
               decoration: BoxDecoration(color: Colors.grey.shade200),
               padding: const EdgeInsets.all(10),
-              child: ListView.builder(
-                itemCount: 3,
+              child: ListView(
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return SizedBox(
+                children: [
+                  SizedBox(
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.97,
                     child: const Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Column(
-                                children: [
-                                  AmenitiesWidget(),
-                                  AmenitiesWidget(),
-                                  AmenitiesWidget(),
-                                  AmenitiesWidget(),
-                                ],
-                              ),
-                            ),
-                            Flexible(
-                              child: Column(
-                                children: [
-                                  AmenitiesWidget(),
-                                  AmenitiesWidget(),
-                                  AmenitiesWidget(),
-                                  AmenitiesWidget(),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: AmenitiesFrameWidget(),
                       ),
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.97,
+                    child: const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: AmenitiesFrameWidget(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

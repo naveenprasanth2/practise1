@@ -1,6 +1,14 @@
-class MediaTechnologyModel{
-  final bool tv;
-  final bool ott;
+class MediaTechnologyModel {
+  bool? tv;
+  bool? ott;
 
-  MediaTechnologyModel({required this.tv, required this.ott});
+  MediaTechnologyModel(
+    this.tv,
+    this.ott,
+  );
+
+  MediaTechnologyModel.fromJson(Map<String, dynamic> json) {
+    tv = json["tv"];
+    ott = json["ott"];
+  }
 }

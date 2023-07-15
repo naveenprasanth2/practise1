@@ -1,5 +1,9 @@
-class SeatingAreaModel{
-  final bool seatingArea;
+class SeatingAreaModel {
+  bool? seatingArea;
 
-  SeatingAreaModel({required this.seatingArea});
+  SeatingAreaModel(this.seatingArea);
+
+  SeatingAreaModel.fromJson(Map<String, dynamic> json) {
+    seatingArea = json["seatingArea"];
+  }
 }

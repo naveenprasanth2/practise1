@@ -1,5 +1,9 @@
 class WashroomModel {
-  final bool geyser;
+  bool? geyser;
 
-  WashroomModel({required this.geyser});
+  WashroomModel(this.geyser);
+
+  WashroomModel.fromJson(Map<String, dynamic> json) {
+    geyser = json["geyser"];
+  }
 }

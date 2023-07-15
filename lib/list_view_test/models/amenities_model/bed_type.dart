@@ -1,13 +1,20 @@
 class BedTypeModel {
-  final bool cot;
-  final bool kingSizedBed;
-  final bool queenSizedBed;
-  final bool singleBed;
+  bool? cot;
+  bool? kingSizedBed;
+  bool? queenSizedBed;
+  bool? singleBed;
 
-  BedTypeModel({
-    required this.cot,
-    required this.kingSizedBed,
-    required this.queenSizedBed,
-    required this.singleBed,
-  });
+  BedTypeModel(
+    this.cot,
+    this.kingSizedBed,
+    this.queenSizedBed,
+    this.singleBed,
+  );
+
+  BedTypeModel.fromJson(Map<String, dynamic> json){
+    cot = json["cot"];
+    kingSizedBed = json["kingSizedBed"];
+    queenSizedBed = json["queenSizedBed"];
+    singleBed = json["singleBed"];
+  }
 }

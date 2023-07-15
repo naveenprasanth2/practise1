@@ -16,14 +16,14 @@ class AmenitiesWidget extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(
                 color: Colors.black, // Border color
-                width: 2.0, //
+                width: 2.0,
               ),
             ),
             child: const Center(child: Icon(Icons.add, size: 20)),
           ),
         ),
         const SizedBox(width: 10,),
-        const Text("Summa"),
+        const Flexible(child: Text("Summa")),
       ],
     );
   }

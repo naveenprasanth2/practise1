@@ -1,13 +1,20 @@
 class RoomFacilityModel {
-  final bool extraMatress;
-  final bool smokeDetector;
-  final bool interCom;
-  final bool books;
+  bool? extraMattress;
+  bool? smokeDetector;
+  bool? interCom;
+  bool? books;
 
-  RoomFacilityModel({
-    required this.extraMatress,
-    required this.smokeDetector,
-    required this.interCom,
-    required this.books,
-  });
+  RoomFacilityModel(
+    this.extraMattress,
+    this.smokeDetector,
+    this.interCom,
+    this.books,
+  );
+
+  RoomFacilityModel.fromJson(Map<String, dynamic> json) {
+    extraMattress = json["extraMattress"];
+    smokeDetector = json["smokeDetector"];
+    interCom = json["interCom"];
+    books = json["books"];
+  }
 }

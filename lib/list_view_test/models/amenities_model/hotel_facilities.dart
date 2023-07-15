@@ -1,31 +1,47 @@
 class HotelFacilitiesModel {
-  final bool ac;
-  final bool wifi;
-  final bool kitchen;
-  final bool restuarnt;
-  final bool reception;
-  final bool careTaker;
-  final bool security;
-  final bool shuttleService;
-  final bool luggageAssistance;
-  final bool taxi;
-  final bool dailyHousekeeping;
-  final bool fireExtinguisher;
-  final bool firstAidKit;
+  bool? ac;
+  bool? wifi;
+  bool? kitchen;
+  bool? restaurant;
+  bool? reception;
+  bool? careTaker;
+  bool? security;
+  bool? shuttleService;
+  bool? luggageAssistance;
+  bool? taxi;
+  bool? dailyHousekeeping;
+  bool? fireExtinguisher;
+  bool? firstAidKit;
 
-  HotelFacilitiesModel({
-    required this.ac,
-    required this.wifi,
-    required this.kitchen,
-    required this.restuarnt,
-    required this.reception,
-    required this.careTaker,
-    required this.security,
-    required this.shuttleService,
-    required this.luggageAssistance,
-    required this.taxi,
-    required this.dailyHousekeeping,
-    required this.fireExtinguisher,
-    required this.firstAidKit,
-  });
+  HotelFacilitiesModel(
+    this.ac,
+    this.wifi,
+    this.kitchen,
+    this.restaurant,
+    this.reception,
+    this.careTaker,
+    this.security,
+    this.shuttleService,
+    this.luggageAssistance,
+    this.taxi,
+    this.dailyHousekeeping,
+    this.fireExtinguisher,
+    this.firstAidKit,
+  );
+
+  HotelFacilitiesModel.fromJson(Map<String, dynamic> json) {
+    ac = json["ac"];
+    wifi = json["wifi"];
+    kitchen = json["kitchen"];
+    restaurant = json["restaurant"];
+    reception = json["reception"];
+    careTaker = json["careTaker"];
+    security = json["security"];
+    shuttleService = json["shuttleService"];
+    luggageAssistance = json["luggageAssistance"];
+    taxi = json["taxi"];
+    dailyHousekeeping = json["dailyHousekeeping"];
+    fireExtinguisher = json["fireExtinguisher"];
+    firstAidKit = json["firstAidKit"];
+  }
 }
