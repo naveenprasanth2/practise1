@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'circle_container_widget.dart';
+
 class AmenitiesWidget extends StatelessWidget {
   final IconData iconData;
   final String title;
+  final bool isAvailable;
 
   const AmenitiesWidget({
     super.key,
     required this.iconData,
     required this.title,
+    required this.isAvailable,
   });
 
   @override
@@ -16,23 +20,22 @@ class AmenitiesWidget extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(3.0),
-          child: Container(
-            height: 30,
-            width: 30,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.black, // Border color
-                width: 2.0,
-              ),
-            ),
-            child: Center(child: Icon(iconData)),
+          child: CircleContainer(
+            color: Colors.white,
+            size: 30,
+            isTrue: isAvailable,
+            iconData: iconData,
           ),
         ),
         const SizedBox(
           width: 10,
         ),
-         Flexible(child: Text(title, style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 10),)),
+        Flexible(
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 10),
+          ),
+        ),
       ],
     );
   }

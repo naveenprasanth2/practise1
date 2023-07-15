@@ -5,6 +5,7 @@ import 'amenities_widget.dart';
 
 class AmenitiesFrameWidgetOne extends StatelessWidget {
   AmenitiesModel? amenitiesModel;
+
   AmenitiesFrameWidgetOne({super.key, required this.amenitiesModel});
 
   @override
@@ -15,28 +16,60 @@ class AmenitiesFrameWidgetOne extends StatelessWidget {
         Flexible(
           child: Column(
             children: [
-              if(amenitiesModel?.hotelFacilitiesModel?.ac ?? false)
-              const AmenitiesWidget(iconData:Icons.ac_unit,title: "AC",),
-              if(amenitiesModel?.hotelFacilitiesModel?.wifi ?? false)
-              const AmenitiesWidget(iconData: Icons.wifi, title: "WIFI",),
-              if(amenitiesModel?.hotelFacilitiesModel?.kitchen ?? false)
-              const AmenitiesWidget(iconData: Icons.kitchen, title: "Kitchen",),
-              if(amenitiesModel?.hotelFacilitiesModel?.restaurant ?? false)
-              const AmenitiesWidget(iconData: Icons.restaurant, title: "Restaurant",),
+              AmenitiesWidget(
+                  iconData: Icons.ac_unit,
+                  title: "AC",
+                  isAvailable:
+                      amenitiesModel?.hotelFacilitiesModel?.ac ?? false),
+              AmenitiesWidget(
+                iconData: Icons.wifi,
+                title: "WIFI",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.wifi ?? false,
+              ),
+              AmenitiesWidget(
+                iconData: Icons.kitchen,
+                title: "Kitchen",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.kitchen ?? false,
+              ),
+              AmenitiesWidget(
+                iconData: Icons.restaurant,
+                title: "Restaurant",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.restaurant ?? false,
+              ),
             ],
           ),
         ),
         Flexible(
           child: Column(
             children: [
-              if(amenitiesModel?.hotelFacilitiesModel?.reception ?? false)
-                const AmenitiesWidget(iconData:Icons.table_chart,title: "Reception",),
-              if(amenitiesModel?.hotelFacilitiesModel?.careTaker ?? false)
-                const AmenitiesWidget(iconData: Icons.person, title: "Care Taker",),
-              if(amenitiesModel?.hotelFacilitiesModel?.security ?? false)
-                const AmenitiesWidget(iconData: Icons.security, title: "Security",),
-              if(amenitiesModel?.hotelFacilitiesModel?.shuttleService ?? false)
-                const AmenitiesWidget(iconData: Icons.airport_shuttle, title: "Shuttle Service",),
+              AmenitiesWidget(
+                iconData: Icons.table_chart,
+                title: "Reception",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.reception ?? false,
+              ),
+              AmenitiesWidget(
+                iconData: Icons.person,
+                title: "Care Taker",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.careTaker ?? false,
+              ),
+              AmenitiesWidget(
+                iconData: Icons.security,
+                title: "Security",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.security ?? false,
+              ),
+              AmenitiesWidget(
+                iconData: Icons.airport_shuttle,
+                title: "Shuttle Service",
+                isAvailable:
+                    amenitiesModel?.hotelFacilitiesModel?.shuttleService ??
+                        false,
+              ),
             ],
           ),
         ),

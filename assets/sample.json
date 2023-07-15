@@ -11,7 +11,7 @@
   },
   "hotelFacilitiesModel": {
     "ac": true,
-    "wifi": true,
+    "wifi": false,
     "kitchen": true,
     "restaurant": true,
     "reception": true,
