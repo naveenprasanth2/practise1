@@ -8,7 +8,7 @@ class AmenitiesWidget extends StatelessWidget {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.all(2.0),
+          padding: const EdgeInsets.all(3.0),
           child: Container(
             height: 30,
             width: 30,

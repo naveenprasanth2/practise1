@@ -114,12 +114,11 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 160,
+              height: 170,
               width: MediaQuery.of(context).size.width * 0.97,
               decoration: BoxDecoration(color: Colors.grey.shade200),
               padding: const EdgeInsets.all(10),
               child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
                 itemCount: 3,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
@@ -127,30 +126,33 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.97,
                     child: const Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Column(
-                              children: [
-                                AmenitiesWidget(),
-                                AmenitiesWidget(),
-                                AmenitiesWidget(),
-                                AmenitiesWidget(),
-                              ],
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  AmenitiesWidget(),
+                                  AmenitiesWidget(),
+                                  AmenitiesWidget(),
+                                  AmenitiesWidget(),
+                                ],
+                              ),
                             ),
-                          ),
-                          Flexible(
-                            child: Column(
-                              children: [
-                                AmenitiesWidget(),
-                                AmenitiesWidget(),
-                                AmenitiesWidget(),
-                                AmenitiesWidget(),
-                              ],
+                            Flexible(
+                              child: Column(
+                                children: [
+                                  AmenitiesWidget(),
+                                  AmenitiesWidget(),
+                                  AmenitiesWidget(),
+                                  AmenitiesWidget(),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );
