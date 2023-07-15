@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_details_model.dart';
 
+import '../../widgets/amenities_widget.dart';
+
 class HotelDetailScreen extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
-   HotelDetailScreen({super.key, required this.hotelDetailsModel});
+
+  HotelDetailScreen({super.key, required this.hotelDetailsModel});
 
   @override
   State<HotelDetailScreen> createState() => _HotelDetailScreenState();
@@ -19,7 +22,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             pinned: true,
             automaticallyImplyLeading: true,
             backgroundColor: Colors.red.shade400,
-            title:  Text(
+            title: Text(
               widget.hotelDetailsModel.hotelName,
               style: const TextStyle(color: Colors.white),
             ),
@@ -33,8 +36,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       width: MediaQuery.of(context).size.width * 0.95,
-                      margin:  const EdgeInsets.symmetric(horizontal: 8.0),
-                      decoration:  const BoxDecoration(
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage("assets/offerBanner.jpg"),
                             fit: BoxFit.cover),
@@ -43,17 +46,17 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   }),
             ),
           ),
-           const SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: SizedBox(
               height: 5,
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding:  const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Container(
                 color: Colors.white,
-                height: 200,
+                height: 150,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +90,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 fontWeight: FontWeight.normal),
                           ),
                         ),
-                        const SizedBox(width: 10,),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Flexible(
                           child: InkWell(
                             onTap: () {},
@@ -102,9 +107,54 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         ),
                       ],
                     ),
-
                   ],
                 ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 160,
+              width: MediaQuery.of(context).size.width * 0.97,
+              decoration: BoxDecoration(color: Colors.grey.shade200),
+              padding: const EdgeInsets.all(10),
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: 3,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.97,
+                    child: const Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              children: [
+                                AmenitiesWidget(),
+                                AmenitiesWidget(),
+                                AmenitiesWidget(),
+                                AmenitiesWidget(),
+                              ],
+                            ),
+                          ),
+                          Flexible(
+                            child: Column(
+                              children: [
+                                AmenitiesWidget(),
+                                AmenitiesWidget(),
+                                AmenitiesWidget(),
+                                AmenitiesWidget(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
