@@ -15,6 +15,8 @@ import '../../providers/count_provider.dart';
 import '../../providers/date_provider.dart';
 import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../widgets/amenities/amenities_frame3.dart';
+import '../../widgets/bottom_bar/bottom_bar_delegate.dart';
+import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
@@ -111,7 +113,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                               fontSize: 15, color: Colors.white),
                         ),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
                         onTap: () async {
                           Provider.of<DateProvider>(context, listen: false)
@@ -248,6 +252,36 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         ],
                       ),
                     ),
+                    Flexible(
+                        child: Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.green.shade500,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "4.5",
+                          style: TextStyle(
+                            color: Colors.green.shade500,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (e) => const ReviewsScreen()));
+                            },
+                            child: const Text("33 ratings")),
+                      ],
+                    )),
                   ],
                 ),
               ),

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "naveen",
+    "rating": "4",
+    "title": "Excellent",
+    "description": "Its an excellent app to spend your time. Overall its a great app"
+  },
+  {
+    "name": "naveen1",
+    "rating": "3",
+    "title": "Excellent",
+    "description": "Its an excellent app to spend your time. Overall its a great app"
+  },
+  {
+    "name": "naveen2",
+    "rating": "2",
+    "title": "Bad",
+    "description": "Its an excellent app to spend your time. Overall its a great app"
+  },
+  {
+    "name": "naveen3",
+    "rating": "1",
+    "title": "Average",
+    "description": "Its an excellent app to spend your time. Overall its a great app"
+  }
+]
