@@ -2,8 +2,8 @@
   "bedTypeModel": {
     "cot": true,
     "kingSizedBed": true,
-    "queenSizedBed": true,
-    "singleBed": true
+    "queenSizedBed": false,
+    "singleBed": false
   },
   "mediaTechnologyModel": {
     "tv": true,

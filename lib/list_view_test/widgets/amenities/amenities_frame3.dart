@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../models/amenities_model/amenities_model.dart';
 import 'amenities_widget.dart';
 
-class AmenitiesFrameWidget extends StatelessWidget {
+class AmenitiesFrameWidgetThree extends StatelessWidget {
   AmenitiesModel? amenitiesModel;
-  AmenitiesFrameWidget({super.key, required this.amenitiesModel});
+  AmenitiesFrameWidgetThree({super.key, required this.amenitiesModel});
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +16,27 @@ class AmenitiesFrameWidget extends StatelessWidget {
           child: Column(
             children: [
               AmenitiesWidget(
-                  iconData: Icons.ac_unit,
-                  title: "AC",
+                  iconData: Icons.water,
+                  title: "Geyser",
                   isAvailable:
-                  amenitiesModel?.hotelFacilitiesModel?.ac ?? false),
+                  amenitiesModel?.washroomModel?.geyser ?? false),
               AmenitiesWidget(
-                iconData: Icons.wifi,
-                title: "WIFI",
+                iconData: Icons.hotel,
+                title: "Bedsheet",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.wifi ?? false,
+                amenitiesModel?.roomFacilityModel?.extraMattress ?? false,
               ),
               AmenitiesWidget(
-                iconData: Icons.kitchen,
-                title: "Kitchen",
+                iconData: Icons.smoking_rooms,
+                title: "Smoke Detector",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.kitchen ?? false,
+                amenitiesModel?.roomFacilityModel?.smokeDetector ?? false,
               ),
               AmenitiesWidget(
-                iconData: Icons.restaurant,
-                title: "Restaurant",
+                iconData: Icons.phone,
+                title: "Intercom",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.restaurant ?? false,
+                amenitiesModel?.roomFacilityModel?.interCom ?? false,
               ),
             ],
           ),
@@ -45,29 +45,16 @@ class AmenitiesFrameWidget extends StatelessWidget {
           child: Column(
             children: [
               AmenitiesWidget(
-                iconData: Icons.table_chart,
-                title: "Reception",
+                iconData: Icons.book,
+                title: "Books",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.reception ?? false,
+                amenitiesModel?.roomFacilityModel?.books ?? false,
               ),
               AmenitiesWidget(
-                iconData: Icons.person,
-                title: "Care Taker",
+                iconData: Icons.event_seat,
+                title: "Seating area",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.careTaker ?? false,
-              ),
-              AmenitiesWidget(
-                iconData: Icons.security,
-                title: "Security",
-                isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.security ?? false,
-              ),
-              AmenitiesWidget(
-                iconData: Icons.airport_shuttle,
-                title: "Shuttle Service",
-                isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.shuttleService ??
-                    false,
+                amenitiesModel?.seatingAreaModel?.seatingArea ?? false,
               ),
             ],
           ),

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../models/amenities_model/amenities_model.dart';
 import 'amenities_widget.dart';
 
-class AmenitiesFrameWidget extends StatelessWidget {
+class AmenitiesFrameWidgetTwo extends StatelessWidget {
   AmenitiesModel? amenitiesModel;
-  AmenitiesFrameWidget({super.key, required this.amenitiesModel});
+  AmenitiesFrameWidgetTwo({super.key, required this.amenitiesModel});
 
   @override
   Widget build(BuildContext context) {
@@ -16,27 +16,29 @@ class AmenitiesFrameWidget extends StatelessWidget {
           child: Column(
             children: [
               AmenitiesWidget(
-                  iconData: Icons.ac_unit,
-                  title: "AC",
-                  isAvailable:
-                  amenitiesModel?.hotelFacilitiesModel?.ac ?? false),
-              AmenitiesWidget(
-                iconData: Icons.wifi,
-                title: "WIFI",
+                iconData: Icons.luggage,
+                title: "Luggage Assistance",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.wifi ?? false,
+                amenitiesModel?.hotelFacilitiesModel?.luggageAssistance ?? false,
               ),
               AmenitiesWidget(
-                iconData: Icons.kitchen,
-                title: "Kitchen",
+                iconData: Icons.local_taxi,
+                title: "Taxi",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.kitchen ?? false,
+                amenitiesModel?.hotelFacilitiesModel?.taxi ?? false,
               ),
               AmenitiesWidget(
-                iconData: Icons.restaurant,
-                title: "Restaurant",
+                iconData: Icons.person,
+                title: "Daily House Keeping",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.restaurant ?? false,
+                amenitiesModel?.hotelFacilitiesModel?.dailyHousekeeping ?? false,
+              ),
+              AmenitiesWidget(
+                iconData: Icons.medical_services_rounded,
+                title: "First Aid Kit",
+                isAvailable:
+                amenitiesModel?.hotelFacilitiesModel?.firstAidKit ??
+                    false,
               ),
             ],
           ),
@@ -45,28 +47,45 @@ class AmenitiesFrameWidget extends StatelessWidget {
           child: Column(
             children: [
               AmenitiesWidget(
-                iconData: Icons.table_chart,
-                title: "Reception",
+                iconData: Icons.bed,
+                title: "Cot",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.reception ?? false,
+                amenitiesModel?.bedTypeModel?.cot ?? false,
+              ),
+              if(amenitiesModel?.bedTypeModel?.kingSizedBed ?? false)
+              AmenitiesWidget(
+                iconData: Icons.king_bed,
+                title: "King Bed",
+                isAvailable:
+                amenitiesModel?.bedTypeModel?.kingSizedBed ?? false,
+              ),
+              if(amenitiesModel?.bedTypeModel?.queenSizedBed ?? false)
+              AmenitiesWidget(
+                iconData: Icons.king_bed_outlined,
+                title: "Queen Sized Bed",
+                isAvailable:
+                amenitiesModel?.bedTypeModel?.queenSizedBed ?? false,
+              ),
+              if(amenitiesModel?.bedTypeModel?.singleBed ?? false)
+              AmenitiesWidget(
+                iconData: Icons.single_bed,
+                title: "Single Bed",
+                isAvailable:
+                amenitiesModel?.bedTypeModel?.singleBed ??
+                    false,
               ),
               AmenitiesWidget(
-                iconData: Icons.person,
-                title: "Care Taker",
+                iconData: Icons.tv,
+                title: "Tv",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.careTaker ?? false,
+                amenitiesModel?.mediaTechnologyModel?.tv ??
+                    false,
               ),
               AmenitiesWidget(
-                iconData: Icons.security,
-                title: "Security",
+                iconData: Icons.settings_input_antenna,
+                title: "OTT",
                 isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.security ?? false,
-              ),
-              AmenitiesWidget(
-                iconData: Icons.airport_shuttle,
-                title: "Shuttle Service",
-                isAvailable:
-                amenitiesModel?.hotelFacilitiesModel?.shuttleService ??
+                amenitiesModel?.mediaTechnologyModel?.ott ??
                     false,
               ),
             ],

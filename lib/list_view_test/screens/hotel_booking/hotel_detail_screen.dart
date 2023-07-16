@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_details_model.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
+import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
+
+import '../../widgets/amenities/amenities_frame3.dart';
 
 class HotelDetailScreen extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
@@ -159,7 +162,20 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: AmenitiesFrameWidgetOne(
+                        child: AmenitiesFrameWidgetTwo(
+                          amenitiesModel: amenitiesModel,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.97,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: AmenitiesFrameWidgetThree(
                           amenitiesModel: amenitiesModel,
                         ),
                       ),
