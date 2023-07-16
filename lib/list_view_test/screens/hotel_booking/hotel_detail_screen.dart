@@ -39,6 +39,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     readAmenitiesJson();
     readHotelDetailsJson();
     guestPoliciesJson();
+
   }
 
   Future<void> readAmenitiesJson() async {

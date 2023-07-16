@@ -20,8 +20,55 @@ class ReviewsScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
         child: ListView(
-          children: const [
-            RatingStatsWidget(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.red.shade100),
+                    ),
+                    child: const Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.star),
+                              SizedBox(width: 6),
+                              Text("4.5"),
+                            ],
+                          ),
+                          Text("out of 5"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20,),
+                const SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Good"),
+                      Text("53 Ratings"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const RatingStatsWidget(
                 count5Stars: 1,
                 count4Stars: 4,
                 count3Stars: 9,
