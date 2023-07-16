@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/slivers.dart';
+import '../screens/home/home_page.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
@@ -19,7 +19,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
   void navigateToHomeScreen() async {
     await Future.delayed(const Duration(seconds: 1)).then((value) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const SliversTest()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const HomeScreen()));
     });
   }
 

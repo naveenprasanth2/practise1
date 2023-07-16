@@ -13,13 +13,13 @@ class _MyDrawerState extends State<MyDrawer> {
     return Drawer(
       child: ListView(
         children: [
-          const SizedBox(
+           SizedBox(
             height: 100,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.red.shade400,
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -49,7 +49,22 @@ class _MyDrawerState extends State<MyDrawer> {
               Navigator.pop(context); // Close the drawer
               // Add your logic for navigating to the home page
             },
+            trailing: const Icon(Icons.arrow_forward_ios),
           ),
+
+          const Divider(thickness: 1),
+
+          ListTile(
+            leading: const Icon(Icons.luggage),
+            title: const Text('My Bookings'),
+            onTap: () {
+              // Handle drawer item tap for home
+              Navigator.pop(context); // Close the drawer
+              // Add your logic for navigating to the home page
+            },
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
+          const Divider(thickness: 1),
         ],
       ),
     );

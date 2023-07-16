@@ -1,0 +1,39 @@
+{
+  "bedTypeModel": {
+    "cot": true,
+    "kingSizedBed": true,
+    "queenSizedBed": false,
+    "singleBed": false
+  },
+  "mediaTechnologyModel": {
+    "tv": true,
+    "ott": false
+  },
+  "hotelFacilitiesModel": {
+    "ac": true,
+    "wifi": false,
+    "kitchen": true,
+    "restaurant": true,
+    "reception": false,
+    "careTaker": true,
+    "security": true,
+    "shuttleService": true,
+    "luggageAssistance": true,
+    "taxi": true,
+    "dailyHousekeeping": true,
+    "fireExtinguisher": true,
+    "firstAidKit": true
+  },
+  "washroomModel": {
+    "geyser": true
+  },
+  "roomFacilityModel": {
+    "extraMattress": true,
+    "smokeDetector": true,
+    "interCom": true,
+    "books": true
+  },
+  "seatingAreaModel": {
+    "seatingArea": false
+  }
+}
