@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
-import 'package:practise1/list_view_test/providers/count_providers.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:provider/provider.dart';
 
