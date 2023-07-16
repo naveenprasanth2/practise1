@@ -33,7 +33,9 @@ class AmenitiesWidget extends StatelessWidget {
         Flexible(
           child: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 10),
+            style: isAvailable
+                ? const TextStyle(fontWeight: FontWeight.normal, fontSize: 10)
+                : const TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: Colors.black54,),
           ),
         ),
       ],

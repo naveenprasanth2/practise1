@@ -14,7 +14,7 @@
     "wifi": false,
     "kitchen": true,
     "restaurant": true,
-    "reception": true,
+    "reception": false,
     "careTaker": true,
     "security": true,
     "shuttleService": true,
