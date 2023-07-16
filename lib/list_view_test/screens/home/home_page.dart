@@ -231,13 +231,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (builder) => HotelDetailScreen(
-                                    hotelDetailsModel: HotelDetailsModel(
-                                      hotelName: "Naveen Hotels",
-                                      townName: "hebbal",
-                                      cityName: "Bangalore",
-                                      mapViewData: "Near Bangalore"
-                                    ),
-                                  )));
+                                        hotelDetailsModel: HotelDetailsModel(
+                                            hotelName: "Naveen Hotels",
+                                            townName: "hebbal",
+                                            cityName: "Bangalore",
+                                            mapViewData: "Near Bangalore"),
+                                      )));
                             },
                             child: Container(
                               height: 50,
@@ -299,7 +298,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
