@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
-import 'package:practise1/list_view_test/models/hotel_details_model.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
 
@@ -29,7 +29,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   }
 
   Future<void> readJson() async {
-    await rootBundle.loadString("assets/sample.json").then((value){
+    await rootBundle.loadString("assets/sample_amenities.json").then((value) {
       setState(() {
         amenitiesModel = AmenitiesModel.fromJson(json.decode(value));
       });
@@ -85,50 +85,71 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Flexible(
-                      child: Text(
-                        widget.hotelDetailsModel.hotelName,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.hotelDetailsModel.hotelName,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Center(
+                            child: IconButton(
+                              onPressed: () {},
+                                icon: const Icon(
+                              Icons.info_outline,
+                              color: Colors.blueAccent,
+                            )),
+                          ),
+                        ],
                       ),
                     ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "${widget.hotelDetailsModel.townName},",
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-                        Flexible(
-                          child: Text(
-                            widget.hotelDetailsModel.cityName,
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          child: InkWell(
-                            onTap: () {},
-                            child: const Text(
-                              "Map View",
-                              style: TextStyle(
-                                  color: Colors.blueAccent,
+                    Flexible(
+                      flex: 2,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "${widget.hotelDetailsModel.townName},",
+                              style: const TextStyle(
+                                  color: Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.normal),
                             ),
                           ),
-                        ),
-                      ],
+                          Flexible(
+                            child: Text(
+                              widget.hotelDetailsModel.cityName,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Flexible(
+                            child: InkWell(
+                              onTap: () {},
+                              child: const Text(
+                                "Map View",
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -168,7 +189,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       ),
                     ),
                   ),
-
                   SizedBox(
                     height: 100,
                     width: MediaQuery.of(context).size.width * 0.97,

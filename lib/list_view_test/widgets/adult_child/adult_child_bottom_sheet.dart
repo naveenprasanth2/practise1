@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/providers/count_providers.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:provider/provider.dart';
 
-class MyModalBottomSheet extends StatefulWidget {
-  const MyModalBottomSheet({super.key});
+class AdultChildBottomSheet extends StatefulWidget {
+  const AdultChildBottomSheet({super.key});
 
   @override
-  MyModalBottomSheetState createState() => MyModalBottomSheetState();
+  AdultChildBottomSheetState createState() => AdultChildBottomSheetState();
 }
 
-class MyModalBottomSheetState extends State<MyModalBottomSheet> {
+class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(

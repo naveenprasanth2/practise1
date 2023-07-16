@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/models/hotel_details_model.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
-import 'package:practise1/list_view_test/widgets/city_widget.dart';
+import 'package:practise1/list_view_test/widgets/location/city_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/location_constants.dart';
-import '../../widgets/bottom_sheet.dart';
-import '../../providers/count_providers.dart';
-import '../../widgets/my_drawer.dart';
+import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
+import '../../providers/count_provider.dart';
+import '../../widgets/left_drawer/my_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -177,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   showModalBottomSheet(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return const MyModalBottomSheet();
+                                      return const AdultChildBottomSheet();
                                     },
                                   );
                                 },
