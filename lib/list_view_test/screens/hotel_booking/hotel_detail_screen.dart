@@ -6,6 +6,7 @@ import 'package:practise1/list_view_test/models/amenities_model/amenities_model.
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details.dart';
 
 import '../../widgets/amenities/amenities_frame3.dart';
 
@@ -20,18 +21,32 @@ class HotelDetailScreen extends StatefulWidget {
 
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
+  List<MapEntry<String, dynamic>>? hotelDetails;
 
   @override
   void initState() {
     // TODO: implement initState
-    readJson();
+    readAmenitiesJson();
+    readHotelDetailsJson();
     super.initState();
   }
 
-  Future<void> readJson() async {
+  Future<void> readAmenitiesJson() async {
     await rootBundle.loadString("assets/sample_amenities.json").then((value) {
       setState(() {
         amenitiesModel = AmenitiesModel.fromJson(json.decode(value));
+      });
+    });
+  }
+
+  Future<void> readHotelDetailsJson() async {
+    await rootBundle.loadString("assets/hotel_description.json").then((value) {
+      setState(() {
+        final Map<String, dynamic> hotelDetailsMap = json.decode(value);
+        hotelDetails = hotelDetailsMap.entries
+            .toList()
+            .map((entry) => MapEntry(entry.key, entry.value.toString()))
+            .toList();
       });
     });
   }
@@ -101,12 +116,22 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                             width: 10,
                           ),
                           Center(
-                            child: IconButton(
-                              onPressed: () {},
-                                icon: const Icon(
-                              Icons.info_outline,
-                              color: Colors.blueAccent,
-                            )),
+                            child: Builder(builder: (BuildContext context) {
+                              return IconButton(
+                                  onPressed: () {
+                                    showBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return HotelDetailsBottomWidget(
+                                            hotelDetails: hotelDetails!,
+                                          );
+                                        });
+                                  },
+                                  icon: const Icon(
+                                    Icons.info_outline,
+                                    color: Colors.blueAccent,
+                                  ));
+                            }),
                           ),
                         ],
                       ),
