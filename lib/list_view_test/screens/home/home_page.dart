@@ -298,6 +298,48 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 200.0,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: itemCount,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/offerBanner.jpg"),
+                              fit: BoxFit.cover),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 200.0,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: itemCount,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/offerBanner.jpg"),
+                              fit: BoxFit.cover),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),

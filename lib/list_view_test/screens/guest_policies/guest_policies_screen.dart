@@ -27,32 +27,30 @@ class _GuestPoliciesScreenState extends State<GuestPoliciesScreen> {
         backgroundColor: Colors.red.shade400,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        child: Container(
-          child: ListView.builder(
-            itemCount: widget.guestPolicies!.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.guestPolicies![index].key,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: ListView.builder(
+          itemCount: widget.guestPolicies!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.guestPolicies![index].key,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      widget.guestPolicies![index].value.toString(),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                  Text(
+                    widget.guestPolicies![index].value.toString(),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
