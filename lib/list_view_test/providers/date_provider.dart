@@ -5,26 +5,39 @@ class DateProvider extends ChangeNotifier {
   String? date;
   String? initialDate;
 
-  DateProvider(){
+  DateProvider() {
     seInitialDate();
   }
 
   void setDate(BuildContext context) async {
     await showDateRangePicker(
-            context: context,
-            currentDate: DateTime.now().add(const Duration(days: 1)),
-            firstDate: DateTime.now(),
-            lastDate: DateTime.now().add(const Duration(days: 90)))
-        .then((value) {
+      context: context,
+      currentDate: DateTime.now().add(const Duration(days: 1)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 90)),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            primaryColor: Colors.red.shade400, // Set the primary color to red
+            hintColor: Colors.red.shade400, // Set the accent color to red
+            colorScheme: ColorScheme.light(
+              primary: Colors.red.shade400, // Set the primary color to red
+            ),
+          ),
+          child: child ?? Container(),
+        );
+      },
+    ).then((value) {
       DateFormat format = DateFormat("MMM-dd");
       date = "${format.format(value!.start)} - ${format.format(value.end)}";
       notifyListeners();
     });
   }
 
-  void seInitialDate(){
+  void seInitialDate() {
     DateFormat format = DateFormat("MMM-dd");
-    initialDate = "${format.format(DateTime.now().add(const Duration(days: 1)))} - ${format.format(DateTime.now().add(const Duration(days: 2)))}";
+    initialDate =
+        "${format.format(DateTime.now().add(const Duration(days: 1)))} - ${format.format(DateTime.now().add(const Duration(days: 2)))}";
     notifyListeners();
   }
 }

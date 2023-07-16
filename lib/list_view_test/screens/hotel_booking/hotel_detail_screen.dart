@@ -9,7 +9,11 @@ import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/count_provider.dart';
+import '../../providers/date_provider.dart';
+import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../widgets/amenities/amenities_frame3.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -60,8 +64,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 
       if (guestPoliciesData is List) {
         guestPolicies = guestPoliciesData
-            .map((map) =>
-            MapEntry(map['title']?.toString() ?? '',
+            .map((map) => MapEntry(map['title']?.toString() ?? '',
                 map['description']?.toString() ?? ''))
             .toList();
       }
@@ -76,12 +79,60 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: true,
+            centerTitle: true,
+            actions: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.phone)),
+            ],
             backgroundColor: Colors.red.shade400,
-            title: Text(
-              widget.hotelDetailsModel.hotelName,
-              style: const TextStyle(color: Colors.white),
+            title: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.hotelDetailsModel.hotelName,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const AdultChildBottomSheet();
+                            },
+                          );
+                        },
+                        child: Text(
+                          "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(width: 10,),
+                      InkWell(
+                        onTap: () async {
+                          Provider.of<DateProvider>(context, listen: false)
+                              .setDate(context);
+                        },
+                        child: Text(
+                          Provider.of<DateProvider>(context, listen: true)
+                                  .date ??
+                              Provider.of<DateProvider>(context, listen: true)
+                                  .initialDate!,
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
+
           SliverToBoxAdapter(
             child: SizedBox(
               height: 200,
@@ -90,10 +141,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.95,
+                    width: MediaQuery.of(context).size.width * 0.95,
                     margin: const EdgeInsets.symmetric(horizontal: 8.0),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
@@ -208,10 +256,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           SliverToBoxAdapter(
             child: Container(
               height: 180,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.97,
+              width: MediaQuery.of(context).size.width * 0.97,
               decoration: BoxDecoration(color: Colors.grey.shade200),
               padding: const EdgeInsets.all(10),
               child: ListView(
@@ -219,10 +264,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                 children: [
                   SizedBox(
                     height: 100,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.97,
+                    width: MediaQuery.of(context).size.width * 0.97,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -234,10 +276,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   ),
                   SizedBox(
                     height: 100,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.97,
+                    width: MediaQuery.of(context).size.width * 0.97,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -249,10 +288,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   ),
                   SizedBox(
                     height: 100,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.97,
+                    width: MediaQuery.of(context).size.width * 0.97,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -289,14 +325,17 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (builder) =>
-                                    GuestPoliciesScreen(
-                                      guestPolicies: guestPolicies,)));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (builder) => GuestPoliciesScreen(
+                                          guestPolicies: guestPolicies,
+                                        )));
                           },
                           child: Text(
                             "View All",
-                            style: TextStyle(fontSize: 15, color: Colors.red.shade400),
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.red.shade400),
                           ),
                         ),
                       ],
