@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
-import '../../models/star_ratings_model/star_rating_details_model.dart';
-import '../../widgets/ratings/ratings_tile.dart';
+import '../../models/booking_history_model/booking_history_model.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class MyBookingsScreen extends StatefulWidget {
 class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<StarRatingDetailsModel> ratingsDetails = [];
+  List<BookingHistoryModel> myBookingHistoryList = [];
 
   @override
   void initState() {
@@ -27,12 +26,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Future<void> getDetailedRatingsFromJson() async {
     final value =
-        await rootBundle.loadString("assets/star_ratings_detail.json");
+        await rootBundle.loadString("assets/my_bookings_data.json");
     setState(() {
       final dynamic ratingsDetailsData = json.decode(value);
 
       for (var json in ratingsDetailsData) {
-        ratingsDetails.add(json);
+        myBookingHistoryList.add(BookingHistoryModel.fromJson(json));
       }
     });
   }
@@ -112,12 +111,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 border: Border.all(color: Colors.black26)),
-                            child: RatingsTile(
-                                ratingDetail: ratingsDetails[index]),
+                            child: Container(),
                           ),
                         );
                       },
-                      childCount: ratingsDetails.length,
+                      childCount: 1,
                     ),
                   ),
                 ],
@@ -127,12 +125,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: MyBookingsWidget(),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: MyBookingsWidget(bookingHistoryModel: myBookingHistoryList[index],),
                         );
                       },
-                      childCount: ratingsDetails.length,
+                      childCount: myBookingHistoryList.length,
                     ),
                   ),
                 ],
