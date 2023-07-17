@@ -67,7 +67,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   ),
                 ),
               ),
-              tabs: [
+              tabs: const [
                 Tab(
                   child: Align(
                     alignment: Alignment.center,
@@ -75,9 +75,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                       'Upcoming',
                       style: TextStyle(
                         fontSize: 16.0,
-                        color: _tabController.index == 0
-                            ? Colors.white
-                            : Colors.transparent,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -89,9 +87,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                       'Checked Out',
                       style: TextStyle(
                         fontSize: 16.0,
-                        color: _tabController.index == 0
-                            ? Colors.white
-                            : Colors.transparent,
+                        color: Colors.white,
                       ),
                     ),
                   ),
