@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
+import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
@@ -15,7 +16,6 @@ import '../../providers/count_provider.dart';
 import '../../providers/date_provider.dart';
 import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../widgets/amenities/amenities_frame3.dart';
-import '../../widgets/bottom_bar/bottom_bar_delegate.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -32,14 +32,16 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
   List<MapEntry<String, dynamic>>? hotelDetails;
   List<MapEntry<String, dynamic>>? guestPolicies;
+  Map<String, dynamic>? hotelRatings;
+  int? totalRatings;
 
   @override
   void initState() {
     super.initState();
     readAmenitiesJson();
     readHotelDetailsJson();
-    guestPoliciesJson();
-
+    readGuestPoliciesJson();
+    readHotelRatingsJson();
   }
 
   Future<void> readAmenitiesJson() async {
@@ -60,7 +62,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     });
   }
 
-  Future<void> guestPoliciesJson() async {
+  Future<void> readGuestPoliciesJson() async {
     final value = await rootBundle.loadString("assets/guest_policies.json");
     setState(() {
       final dynamic guestPoliciesData = json.decode(value);
@@ -71,6 +73,19 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                 map['description']?.toString() ?? ''))
             .toList();
       }
+    });
+  }
+
+  Future<void> readHotelRatingsJson() async {
+    final value =
+        await rootBundle.loadString("assets/star_ratings_average.json");
+    setState(() {
+      hotelRatings = json.decode(value);
+      totalRatings = hotelRatings!.entries
+          .skip(1)
+          .map((e) => e.value)
+          .reduce((value, element) => value + element)
+          .ceil();
     });
   }
 
@@ -139,23 +154,26 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
 
           SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: ListView.builder(
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/offerBanner.jpg"),
-                        fit: BoxFit.cover,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/offerBanner.jpg"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -254,35 +272,44 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       ),
                     ),
                     Flexible(
-                        child: Row(
-                      children: [
-                        Icon(
-                          Icons.star,
-                          color: Colors.green.shade500,
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "4.5",
-                          style: TextStyle(
-                            color: Colors.green.shade500,
-                            fontWeight: FontWeight.bold,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: StarRatingColourUtils.getStarRatingColor(
+                                hotelRatings?["averageRating"] ?? 0),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TextButton(
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            hotelRatings?["averageRating"]?.toString() ?? "0",
+                            style: TextStyle(
+                              color: StarRatingColourUtils.getStarRatingColor(
+                                  hotelRatings?["averageRating"] ?? 0),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          TextButton(
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (e) => const ReviewsScreen()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReviewsScreen(
+                                    averageRatings:
+                                        hotelRatings?["averageRating"],
+                                  ),
+                                ),
+                              );
                             },
-                            child: const Text("33 ratings")),
-                      ],
-                    )),
+                            child: Text("$totalRatings ratings", style: const TextStyle(color: Colors.blue),),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

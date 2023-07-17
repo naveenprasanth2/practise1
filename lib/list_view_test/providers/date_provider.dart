@@ -28,8 +28,12 @@ class DateProvider extends ChangeNotifier {
         );
       },
     ).then((value) {
-      DateFormat format = DateFormat("MMM-dd");
-      date = "${format.format(value!.start)} - ${format.format(value.end)}";
+      if(value != null){
+        DateFormat format = DateFormat("MMM-dd");
+        date = "${format.format(value.start)} - ${format.format(value.end)}";
+      }else{
+        date = date ?? initialDate;
+      }
       notifyListeners();
     });
   }

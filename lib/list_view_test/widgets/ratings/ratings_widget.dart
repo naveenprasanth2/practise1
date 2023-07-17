@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/star_rating_colour_utils.dart';
+
 class RatingStatsWidget extends StatelessWidget {
   final int count5Stars;
   final int count4Stars;
@@ -26,31 +28,31 @@ class RatingStatsWidget extends StatelessWidget {
             5,
             "Excellent",
             count5Stars,
-            Colors.green.shade800,
+            StarRatingColourUtils.getStarRatingColor(5),
           ),
           _buildRatingStatRow(
             4,
             "Very Good",
             count4Stars,
-            Colors.green.shade400,
+            StarRatingColourUtils.getStarRatingColor(4),
           ),
           _buildRatingStatRow(
             3,
             "Good",
             count3Stars,
-            Colors.yellow.shade400,
+            StarRatingColourUtils.getStarRatingColor(3),
           ),
           _buildRatingStatRow(
             2,
             "Poor",
             count2Stars,
-            Colors.orange.shade400,
+            StarRatingColourUtils.getStarRatingColor(2),
           ),
           _buildRatingStatRow(
             1,
             "Very Poor",
             count1Star,
-            Colors.red.shade500,
+            StarRatingColourUtils.getStarRatingColor(1),
           ),
         ],
       ),
