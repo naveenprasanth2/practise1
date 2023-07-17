@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
 import '../../utils/star_rating_colour_utils.dart';
+import '../../widgets/ratings/ratings_tile.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final double averageRatings;
@@ -112,10 +113,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         Text(
                           "Good",
                           style: TextStyle(
-                            color: StarRatingColourUtils.getStarRatingColor(
-                                widget.averageRatings),
-                            fontWeight: FontWeight.bold
-                          ),
+                              color: StarRatingColourUtils.getStarRatingColor(
+                                  widget.averageRatings),
+                              fontWeight: FontWeight.bold),
                         ),
                         Text("${ratingsDetails.length} Ratings"),
                       ],
@@ -145,11 +145,12 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Container(
-                    height: 200,
+                    height: 150,
                     margin: const EdgeInsets.symmetric(horizontal: 8.0),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(color: Colors.black26)),
+                    child: RatingsTile(ratingDetail: ratingsDetails[index]),
                   ),
                 );
               },

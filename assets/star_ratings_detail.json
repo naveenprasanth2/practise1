@@ -1,28 +1,28 @@
 [
   {
     "name": "naveen",
-    "rating": "4",
+    "rating": 4,
     "title": "Excellent",
     "timeStamp": "12-02-2023",
     "description": "Its an excellent app to spend your time. Overall its a great app"
   },
   {
     "name": "naveen1",
-    "rating": "3",
+    "rating": 3,
     "title": "Excellent",
     "timeStamp": "12-03-2023",
     "description": "Its an excellent app to spend your time"
   },
   {
     "name": "naveen2",
-    "rating": "2",
+    "rating": 2,
     "title": "Bad",
     "timeStamp": "12-04-2023",
     "description": "Overall its a great app"
   },
   {
     "name": "naveen3",
-    "rating": "1",
+    "rating": 1,
     "title": "Average",
     "timeStamp": "12-05-2023",
     "description": "You can try once"
