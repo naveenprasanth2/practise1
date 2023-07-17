@@ -84,7 +84,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       totalRatings = hotelRatings!.entries
           .skip(1)
           .map((e) => e.value)
-          .reduce((value, element) => value + element).ceil();
+          .reduce((value, element) => value + element)
+          .ceil();
     });
   }
 
@@ -297,12 +298,14 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ReviewsScreen()),
+                                  builder: (context) => ReviewsScreen(
+                                    averageRatings:
+                                        hotelRatings?["averageRating"],
+                                  ),
+                                ),
                               );
                             },
-                            child: Text(
-                                "$totalRatings ratings"),
+                            child: Text("$totalRatings ratings"),
                           ),
                         ],
                       ),

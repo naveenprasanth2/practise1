@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
+import '../../utils/star_rating_colour_utils.dart';
+
 class ReviewsScreen extends StatefulWidget {
-  const ReviewsScreen({Key? key}) : super(key: key);
+  final double averageRatings;
+
+  const ReviewsScreen({Key? key, required this.averageRatings})
+      : super(key: key);
 
   @override
   State<ReviewsScreen> createState() => _ReviewsScreenState();
@@ -63,7 +68,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.red.shade100),
                       ),
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.center,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -71,12 +76,24 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.star),
-                                SizedBox(width: 6),
-                                Text("4.5"),
+                                Icon(
+                                  Icons.star,
+                                  color:
+                                      StarRatingColourUtils.getStarRatingColor(
+                                          widget.averageRatings),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.averageRatings.toString(),
+                                  style: TextStyle(
+                                    color: StarRatingColourUtils
+                                        .getStarRatingColor(
+                                            widget.averageRatings),
+                                  ),
+                                ),
                               ],
                             ),
-                            Text("out of 5"),
+                            const Text("out of 5"),
                           ],
                         ),
                       ),
@@ -85,15 +102,22 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   const SizedBox(
                     width: 20,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 100,
                     height: 100,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Good"),
-                        Text("53 Ratings"),
+                        Text(
+                          "Good",
+                          style: TextStyle(
+                            color: StarRatingColourUtils.getStarRatingColor(
+                                widget.averageRatings),
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        Text("${ratingsDetails.length} Ratings"),
                       ],
                     ),
                   ),
@@ -110,7 +134,11 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               count1Star: 5,
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20,),),
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 20,
+            ),
+          ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
@@ -119,9 +147,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   child: Container(
                     height: 200,
                     margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(color: Colors.white, border: Border.all(
-                      color: Colors.black26
-                    )),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black26)),
                   ),
                 );
               },
