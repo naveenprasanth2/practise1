@@ -1,8 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
-class ReviewsScreen extends StatelessWidget {
+class ReviewsScreen extends StatefulWidget {
   const ReviewsScreen({super.key});
+
+  @override
+  State<ReviewsScreen> createState() => _ReviewsScreenState();
+}
+
+class _ReviewsScreenState extends State<ReviewsScreen> {
+  List<Map<String, dynamic>> ratingsDetails = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getDetailedRatingsFromJson();
+    super.initState();
+  }
+
+  Future<void> getDetailedRatingsFromJson() async {
+    final value =
+        await rootBundle.loadString("assets/star_ratings_detail.json");
+    setState(() {
+      final dynamic ratingsDetailsData = json.decode(value);
+
+      for (var json in ratingsDetailsData) {
+        ratingsDetails.add(json);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +82,9 @@ class ReviewsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20,),
+                const SizedBox(
+                  width: 20,
+                ),
                 const SizedBox(
                   width: 100,
                   height: 100,
