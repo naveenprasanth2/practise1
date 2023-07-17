@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
+import '../../models/star_ratings_model/star_rating_details_model.dart';
 import '../../widgets/ratings/ratings_tile.dart';
 
 class MyBookingsScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class MyBookingsScreen extends StatefulWidget {
 class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<Map<String, dynamic>> ratingsDetails = [];
+  List<StarRatingDetailsModel> ratingsDetails = [];
 
   @override
   void initState() {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../models/star_ratings_model/star_rating_details_model.dart';
 import '../../utils/star_rating_colour_utils.dart';
 
 class RatingsTile extends StatelessWidget {
-  final Map<String, dynamic> ratingDetail;
+  final StarRatingDetailsModel ratingDetail;
 
   const RatingsTile({super.key, required this.ratingDetail});
 
@@ -23,7 +24,7 @@ class RatingsTile extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      ratingDetail["title"],
+                      ratingDetail.title,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -66,7 +67,7 @@ class RatingsTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(ratingDetail["description"]),
+                child: Text(ratingDetail.description),
               ),
             ],
           ),
@@ -81,17 +82,17 @@ class RatingsTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      ratingDetail["name"],
+                      ratingDetail.name,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     RatingBarIndicator(
-                      rating: double.parse(ratingDetail["rating"].toString()),
+                      rating: double.parse(ratingDetail.rating.toString()),
                       itemBuilder: (context, _) => Icon(
                         Icons.star,
                         color: StarRatingColourUtils.getStarRatingColor(
-                            double.parse(ratingDetail["rating"].toString())),
+                            double.parse(ratingDetail.rating.toString())),
                       ),
                       itemCount: 5,
                       itemSize: 20.0,
@@ -103,7 +104,7 @@ class RatingsTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      ratingDetail["timeStamp"],
+                      ratingDetail.timeStamp,
                       style: const TextStyle(fontSize: 12),
                     ),
                   ],
