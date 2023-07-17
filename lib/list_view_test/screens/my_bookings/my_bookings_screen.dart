@@ -16,6 +16,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<BookingHistoryModel> myBookingHistoryList = [];
+  List<BookingHistoryModel> myUpcomingList = [];
+  List<BookingHistoryModel> myCheckedOutList = [];
 
   @override
   void initState() {
@@ -25,14 +27,20 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   }
 
   Future<void> getDetailedRatingsFromJson() async {
-    final value =
-        await rootBundle.loadString("assets/my_bookings_data.json");
+    final value = await rootBundle.loadString("assets/my_bookings_data.json");
     setState(() {
       final dynamic ratingsDetailsData = json.decode(value);
 
       for (var json in ratingsDetailsData) {
         myBookingHistoryList.add(BookingHistoryModel.fromJson(json));
       }
+      myUpcomingList = myBookingHistoryList
+          .where((element) => element.checkOutStatus == "booked")
+          .toList();
+
+      myCheckedOutList = myBookingHistoryList
+          .where((element) => element.checkOutStatus != "booked")
+          .toList();
     });
   }
 
@@ -102,20 +110,15 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                          (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: 150,
-                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.black26)),
-                            child: Container(),
+                          child: MyBookingsWidget(
+                            bookingHistoryModel: myUpcomingList[index],
                           ),
                         );
                       },
-                      childCount: 1,
+                      childCount: myUpcomingList.length,
                     ),
                   ),
                 ],
@@ -127,10 +130,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                       (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: MyBookingsWidget(bookingHistoryModel: myBookingHistoryList[index],),
+                          child: MyBookingsWidget(
+                            bookingHistoryModel: myCheckedOutList[index],
+                          ),
                         );
                       },
-                      childCount: myBookingHistoryList.length,
+                      childCount: myCheckedOutList.length,
                     ),
                   ),
                 ],

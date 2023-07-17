@@ -40,9 +40,9 @@ class MyBookingsWidget extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: const Image(
+                      child: Image(
                         image: NetworkImage(
-                          "https://media.istockphoto.com/id/187363337/photo/modern-hotel-building-in-summer.jpg?s=1024x1024&w=is&k=20&c=eAOaQqAgWgAKxRcqW3ahTsB6zhZ-ieNW_y4_POUUxgI=",
+                          bookingHistoryModel.iconImage
                         ),
                         fit: BoxFit.fill,
                       ),
