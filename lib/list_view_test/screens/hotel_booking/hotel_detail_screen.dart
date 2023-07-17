@@ -1,23 +1,22 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
+import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
 import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
+import 'package:practise1/list_view_test/widgets/adult_child/adult_child_bottom_sheet.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
+import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details.dart';
-import 'package:provider/provider.dart';
 
-import '../../models/star_ratings_model/star_ratings_average_model.dart';
-import '../../providers/count_provider.dart';
-import '../../providers/date_provider.dart';
-import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
-import '../../widgets/amenities/amenities_frame3.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -34,16 +33,16 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
   List<MapEntry<String, dynamic>>? hotelDetails;
   List<MapEntry<String, dynamic>>? guestPolicies;
-  RatingModel? hotelRatings;
+  StarRatingAverageModel? hotelRatings;
   int? totalRatings;
 
   @override
   void initState() {
-    super.initState();
     readAmenitiesJson();
     readHotelDetailsJson();
     readGuestPoliciesJson();
     readHotelRatingsJson();
+    super.initState();
   }
 
   Future<void> readAmenitiesJson() async {
@@ -72,7 +71,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       if (guestPoliciesData is List) {
         guestPolicies = guestPoliciesData
             .map((map) => MapEntry(map['title']?.toString() ?? '',
-                map['description']?.toString() ?? ''))
+            map['description']?.toString() ?? ''))
             .toList();
       }
     });
@@ -80,10 +79,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 
   Future<void> readHotelRatingsJson() async {
     final value =
-        await rootBundle.loadString("assets/star_ratings_average.json");
+    await rootBundle.loadString("assets/star_ratings_average.json");
     setState(() {
-      hotelRatings = RatingModel.fromJson(json.decode(value));
-      totalRatings = HotelHelper.calculateTotalRatings(hotelRatings!);
+      hotelRatings = StarRatingAverageModel.fromJson(json.decode(value));
+      totalRatings = hotelRatings != null
+          ? HotelHelper.calculateTotalRatings(hotelRatings!)
+          : 0;
     });
   }
 
@@ -97,7 +98,10 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             automaticallyImplyLeading: true,
             centerTitle: true,
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.phone)),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.phone),
+              ),
             ],
             backgroundColor: Colors.red.shade400,
             title: Align(
@@ -124,7 +128,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         child: Text(
                           "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
                           style: const TextStyle(
-                              fontSize: 15, color: Colors.white),
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -137,11 +143,13 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         },
                         child: Text(
                           Provider.of<DateProvider>(context, listen: true)
-                                  .date ??
+                              .date ??
                               Provider.of<DateProvider>(context, listen: true)
                                   .initialDate!,
                           style: const TextStyle(
-                              fontSize: 15, color: Colors.white),
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -150,7 +158,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               ),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
@@ -212,9 +219,11 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                   showBottomSheet(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return HotelDetailsBottomWidget(
+                                      return hotelDetails != null
+                                          ? HotelDetailsBottomWidget(
                                         hotelDetails: hotelDetails!,
-                                      );
+                                      )
+                                          : SizedBox.shrink();
                                     },
                                   );
                                 },
@@ -270,7 +279,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       ),
                     ),
                     Flexible(
-                      child: Row(
+                      child: hotelRatings != null
+                          ? Row(
                         children: [
                           Icon(
                             Icons.star,
@@ -308,7 +318,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                             ),
                           ),
                         ],
-                      ),
+                      )
+                          : SizedBox.shrink(),
                     ),
                   ],
                 ),
@@ -364,8 +375,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               ),
             ),
           ),
-          //guest policies builder
-          //we use only first 3 widgets to display things
           SliverToBoxAdapter(
             child: Container(
               height: 200,
@@ -388,35 +397,44 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         InkWell(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) => GuestPoliciesScreen(
-                                          guestPolicies: guestPolicies,
-                                        )));
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) => GuestPoliciesScreen(
+                                  guestPolicies: guestPolicies,
+                                ),
+                              ),
+                            );
                           },
                           child: Text(
                             "View All",
                             style: TextStyle(
-                                fontSize: 15, color: Colors.red.shade400),
+                              fontSize: 15,
+                              color: Colors.red.shade400,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    GuestPoliciesWidget(
-                      guestPolicies: guestPolicies,
-                      title: "Check-in and Check-out",
-                      iconData: Icons.watch_later_outlined,
-                    ),
-                    GuestPoliciesWidget(
-                      guestPolicies: guestPolicies,
-                      title: "Local ID Policy",
-                      iconData: Icons.account_box_outlined,
-                    ),
-                    GuestPoliciesWidget(
-                      guestPolicies: guestPolicies,
-                      title: "Couple Friendly",
-                      iconData: Icons.favorite_outline_rounded,
-                    ),
+                    if (guestPolicies != null && guestPolicies!.length >= 3)
+                      Column(
+                        children: [
+                          GuestPoliciesWidget(
+                            guestPolicies: guestPolicies,
+                            title: guestPolicies![0].key,
+                            iconData: Icons.watch_later_outlined,
+                          ),
+                          GuestPoliciesWidget(
+                            guestPolicies: guestPolicies,
+                            title: guestPolicies![1].key,
+                            iconData: Icons.account_box_outlined,
+                          ),
+                          GuestPoliciesWidget(
+                            guestPolicies: guestPolicies,
+                            title: guestPolicies![2].key,
+                            iconData: Icons.favorite_outline_rounded,
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

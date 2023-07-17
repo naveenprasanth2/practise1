@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'star_ratings_average_model.g.dart';
 
-
 @JsonSerializable()
-class RatingModel {
+class StarRatingAverageModel {
   @JsonKey(name: 'averageRating')
   final double averageRating;
 
@@ -22,7 +22,7 @@ class RatingModel {
   @JsonKey(name: 'fiveStarRatingsCount')
   final int fiveStarRatingsCount;
 
-  RatingModel({
+  StarRatingAverageModel({
     required this.averageRating,
     required this.oneStarRatingsCount,
     required this.twoStarRatingsCount,
@@ -31,8 +31,8 @@ class RatingModel {
     required this.fiveStarRatingsCount,
   });
 
-  factory RatingModel.fromJson(Map<String, dynamic> json) =>
-      _$RatingModelFromJson(json);
+  factory StarRatingAverageModel.fromJson(Map<String, dynamic> json) =>
+      _$StarRatingAverageModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$RatingModelToJson(this);
+  Map<String, dynamic> toJson() => _$StarRatingAverageModelToJson(this);
 }

@@ -6,7 +6,9 @@ part of 'star_ratings_average_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-RatingModel _$RatingModelFromJson(Map<String, dynamic> json) => RatingModel(
+StarRatingAverageModel _$StarRatingAverageModelFromJson(
+        Map<String, dynamic> json) =>
+    StarRatingAverageModel(
       averageRating: (json['averageRating'] as num).toDouble(),
       oneStarRatingsCount: json['oneStarRatingsCount'] as int,
       twoStarRatingsCount: json['twoStarRatingsCount'] as int,
@@ -15,7 +17,8 @@ RatingModel _$RatingModelFromJson(Map<String, dynamic> json) => RatingModel(
       fiveStarRatingsCount: json['fiveStarRatingsCount'] as int,
     );
 
-Map<String, dynamic> _$RatingModelToJson(RatingModel instance) =>
+Map<String, dynamic> _$StarRatingAverageModelToJson(
+        StarRatingAverageModel instance) =>
     <String, dynamic>{
       'averageRating': instance.averageRating,
       'oneStarRatingsCount': instance.oneStarRatingsCount,
