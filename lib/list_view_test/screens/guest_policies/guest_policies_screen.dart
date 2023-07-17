@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 
 class GuestPoliciesScreen extends StatefulWidget {
-  final List<MapEntry<String, dynamic>>? guestPolicies;
+  final List<GuestPolicyModel>? guestPolicies;
 
   const GuestPoliciesScreen({super.key, this.guestPolicies});
 
@@ -38,14 +39,14 @@ class _GuestPoliciesScreenState extends State<GuestPoliciesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.guestPolicies![index].key,
+                    widget.guestPolicies![index].title,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    widget.guestPolicies![index].value.toString(),
+                    widget.guestPolicies![index].description.toString(),
                   ),
                 ],
               ),

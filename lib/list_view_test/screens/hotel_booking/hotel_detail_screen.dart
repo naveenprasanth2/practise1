@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -32,7 +33,7 @@ class HotelDetailScreen extends StatefulWidget {
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
   List<MapEntry<String, dynamic>>? hotelDetails;
-  List<MapEntry<String, dynamic>>? guestPolicies;
+  List<GuestPolicyModel>? guestPolicies;
   StarRatingAverageModel? hotelRatings;
   int? totalRatings;
 
@@ -70,8 +71,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 
       if (guestPoliciesData is List) {
         guestPolicies = guestPoliciesData
-            .map((map) => MapEntry(map['title']?.toString() ?? '',
-            map['description']?.toString() ?? ''))
+            .map((map) => GuestPolicyModel.fromJson(map))
             .toList();
       }
     });
@@ -223,7 +223,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                           ? HotelDetailsBottomWidget(
                                         hotelDetails: hotelDetails!,
                                       )
-                                          : SizedBox.shrink();
+                                          : const SizedBox.shrink();
                                     },
                                   );
                                 },
@@ -420,17 +420,17 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         children: [
                           GuestPoliciesWidget(
                             guestPolicies: guestPolicies,
-                            title: guestPolicies![0].key,
+                            title: guestPolicies![0].title,
                             iconData: Icons.watch_later_outlined,
                           ),
                           GuestPoliciesWidget(
                             guestPolicies: guestPolicies,
-                            title: guestPolicies![1].key,
+                            title: guestPolicies![1].title,
                             iconData: Icons.account_box_outlined,
                           ),
                           GuestPoliciesWidget(
                             guestPolicies: guestPolicies,
-                            title: guestPolicies![2].key,
+                            title: guestPolicies![2].title,
                             iconData: Icons.favorite_outline_rounded,
                           ),
                         ],
