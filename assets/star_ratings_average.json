@@ -1,10 +1,8 @@
-[
-  {
-    "averageRating": 3.5,
-    "oneStarRatingsCount": 5,
-    "twoStarRatingsCount": 7,
-    "threeStarRatingsCount": 8,
-    "fourStarRatingsCount": 4,
-    "fiveStarRatingsCount": 9
-  }
-]
+{
+  "averageRating": 3.5,
+  "oneStarRatingsCount": 5,
+  "twoStarRatingsCount": 7,
+  "threeStarRatingsCount": 8,
+  "fourStarRatingsCount": 4,
+  "fiveStarRatingsCount": 9
+}

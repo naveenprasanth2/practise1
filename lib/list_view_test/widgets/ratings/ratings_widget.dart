@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RatingStatsWidget extends StatelessWidget {
+class RatingStatsWidget extends StatefulWidget {
   final int count5Stars;
   final int count4Stars;
   final int count3Stars;
@@ -17,6 +17,19 @@ class RatingStatsWidget extends StatelessWidget {
   });
 
   @override
+  State<RatingStatsWidget> createState() => _RatingStatsWidgetState();
+}
+
+
+class _RatingStatsWidgetState extends State<RatingStatsWidget> {
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -25,31 +38,31 @@ class RatingStatsWidget extends StatelessWidget {
           _buildRatingStatRow(
             5,
             "Excellent",
-            count5Stars,
+            widget.count5Stars,
             Colors.green.shade800,
           ),
           _buildRatingStatRow(
             4,
             "Very Good",
-            count4Stars,
+            widget.count4Stars,
             Colors.green.shade400,
           ),
           _buildRatingStatRow(
             3,
             "Good",
-            count3Stars,
+            widget.count3Stars,
             Colors.yellow.shade400,
           ),
           _buildRatingStatRow(
             2,
             "Poor",
-            count2Stars,
+            widget.count2Stars,
             Colors.orange.shade400,
           ),
           _buildRatingStatRow(
             1,
             "Very Poor",
-            count1Star,
+            widget.count1Star,
             Colors.red.shade500,
           ),
         ],
@@ -115,6 +128,6 @@ class RatingStatsWidget extends StatelessWidget {
   }
 
   int _getTotalCount() {
-    return count5Stars + count4Stars + count3Stars + count2Stars + count1Star;
+    return widget.count5Stars + widget.count4Stars + widget.count3Stars + widget.count2Stars + widget.count1Star;
   }
 }
