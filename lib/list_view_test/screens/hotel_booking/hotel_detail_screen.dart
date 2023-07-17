@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
+import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
@@ -12,6 +13,7 @@ import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_wi
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/star_ratings_model/star_ratings_average_model.dart';
 import '../../providers/count_provider.dart';
 import '../../providers/date_provider.dart';
 import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
@@ -32,7 +34,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
   List<MapEntry<String, dynamic>>? hotelDetails;
   List<MapEntry<String, dynamic>>? guestPolicies;
-  Map<String, dynamic>? hotelRatings;
+  RatingModel? hotelRatings;
   int? totalRatings;
 
   @override
@@ -80,12 +82,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     final value =
         await rootBundle.loadString("assets/star_ratings_average.json");
     setState(() {
-      hotelRatings = json.decode(value);
-      totalRatings = hotelRatings!.entries
-          .skip(1)
-          .map((e) => e.value)
-          .reduce((value, element) => value + element)
-          .ceil();
+      hotelRatings = RatingModel.fromJson(json.decode(value));
+      totalRatings = HotelHelper.calculateTotalRatings(hotelRatings!);
     });
   }
 
@@ -277,16 +275,16 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           Icon(
                             Icons.star,
                             color: StarRatingColourUtils.getStarRatingColor(
-                                hotelRatings?["averageRating"] ?? 0),
+                                hotelRatings!.averageRating),
                           ),
                           const SizedBox(
                             width: 5,
                           ),
                           Text(
-                            hotelRatings?["averageRating"]?.toString() ?? "0",
+                            hotelRatings!.averageRating.toString(),
                             style: TextStyle(
                               color: StarRatingColourUtils.getStarRatingColor(
-                                  hotelRatings?["averageRating"] ?? 0),
+                                  hotelRatings!.averageRating),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -299,13 +297,15 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ReviewsScreen(
-                                    averageRatings:
-                                        hotelRatings?["averageRating"],
+                                    averageRatings: hotelRatings!.averageRating,
                                   ),
                                 ),
                               );
                             },
-                            child: Text("$totalRatings ratings", style: const TextStyle(color: Colors.blue),),
+                            child: Text(
+                              "$totalRatings ratings",
+                              style: const TextStyle(color: Colors.blue),
+                            ),
                           ),
                         ],
                       ),
