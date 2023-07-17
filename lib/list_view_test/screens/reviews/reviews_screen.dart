@@ -67,7 +67,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.red.shade100),
+                        border: Border.all(
+                          color: StarRatingColourUtils.getStarRatingColor(
+                              widget.averageRatings),
+                        ),
                       ),
                       child: Align(
                         alignment: Alignment.center,

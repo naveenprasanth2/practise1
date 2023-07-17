@@ -305,7 +305,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 ),
                               );
                             },
-                            child: Text("$totalRatings ratings"),
+                            child: Text("$totalRatings ratings", style: const TextStyle(color: Colors.blue),),
                           ),
                         ],
                       ),
