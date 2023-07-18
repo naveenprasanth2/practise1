@@ -13,22 +13,31 @@ class _RatingViewState extends State<RatingView> {
   final PageController _pageController = PageController();
   double _starPosition = 200.0;
   int _rating = 0;
-  int _selectedChipIndex = -1;
-  String _selectedValue = "";
+  String _selectedValue = "General";
   bool _isMoreDetailActive = false;
   final FocusNode _moreDetailsFocusNode = FocusNode();
+  List<String> feedbackOptions = [
+    "Bedroom",
+    "Washroom",
+    "Bed",
+    "Staff Behaviour",
+    "Cleanliness",
+    "Basic Amenities",
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24), color: Colors.white),
+        borderRadius: BorderRadius.circular(24),
+        color: Colors.white,
+      ),
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          //Thanks Note
+          // Thanks Note and Cause of Rating
           SizedBox(
-            height: max(300, MediaQuery.of(context).size.height * 0.3),
+            height: max(300, MediaQuery.of(context).size.height * 0.35),
             child: PageView(
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
@@ -38,7 +47,7 @@ class _RatingViewState extends State<RatingView> {
               ],
             ),
           ),
-          //Submit button
+          // Submit button
           Positioned(
             bottom: 0,
             left: 0,
@@ -56,7 +65,7 @@ class _RatingViewState extends State<RatingView> {
               ),
             ),
           ),
-          //skip button
+          // Skip button
           Positioned(
             right: 0,
             child: MaterialButton(
@@ -66,7 +75,7 @@ class _RatingViewState extends State<RatingView> {
               child: const Text("skip"),
             ),
           ),
-          //animated stars
+          // Animated stars
           AnimatedPositioned(
             top: _starPosition,
             left: 0,
@@ -77,26 +86,26 @@ class _RatingViewState extends State<RatingView> {
               children: List.generate(
                 5,
                 (index) => IconButton(
-                    onPressed: () {
-                      _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn);
-                      setState(() {
-                        _starPosition = 20.0;
-                        //index starts with 0, so added 1
-                        _rating = index + 1;
-                      });
-                    },
-                    icon: index < _rating
-                        ? const Icon(
-                            Icons.star,
-                          )
-                        : const Icon(Icons.star_outline_outlined),
-                    color: Colors.red.shade400),
+                  onPressed: () {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                    setState(() {
+                      _starPosition = 20.0;
+                      //index starts with 0, so added 1
+                      _rating = index + 1;
+                    });
+                  },
+                  icon: index < _rating
+                      ? const Icon(Icons.star)
+                      : const Icon(Icons.star_outline_outlined),
+                  color: Colors.red.shade400,
+                ),
               ),
             ),
           ),
-          //back button
+          // Back button
           if (_isMoreDetailActive)
             Positioned(
               top: 0,
@@ -115,7 +124,7 @@ class _RatingViewState extends State<RatingView> {
     );
   }
 
-  _buildThanksNote() {
+  Widget _buildThanksNote() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -128,34 +137,40 @@ class _RatingViewState extends State<RatingView> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Text("We'd love to hear your feed back"),
+        const Text("We'd love to hear your feedback"),
         const Text("How was your experience?"),
       ],
     );
   }
 
-  _causeOfRating() {
+  Widget _causeOfRating() {
     return Stack(
       alignment: Alignment.center,
       children: [
         Visibility(
           visible: !_isMoreDetailActive,
-          //text field display
+          // Text field display
           replacement: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text("Tell us more"),
-              Chip(label: Text(_selectedValue)),
+              Chip(
+                label: Text(_selectedValue),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   focusNode: _moreDetailsFocusNode,
                   decoration: InputDecoration(
-                      hintText: "Write your review here",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                      ),
-                      border: InputBorder.none),
+                    hintText: "Write your review here",
+                    hintStyle: TextStyle(
+                      color: Colors.grey.shade400,
+                    ),
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ],
@@ -164,164 +179,36 @@ class _RatingViewState extends State<RatingView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text("What could be better?"),
-              Wrap(spacing: 8, alignment: WrapAlignment.center, children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedValue = "Bedroom";
-                    });
-                  },
-                  child: Chip(
-                    backgroundColor: _selectedValue == "Bedroom"
-                        ? Colors.red.shade400
-                        : Colors.grey.shade200,
-                    label: Text("Bedroom",
-                        style: TextStyle(
-                          color: _selectedValue == "Bedroom"
-                              ? Colors.white
-                              : Colors.black,
-                        )),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
+              Wrap(
+                spacing: 8,
+                alignment: WrapAlignment.center,
+                children: [
+                  for (String option in feedbackOptions)
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedValue = option;
+                        });
+                      },
+                      child: Chip(
+                        backgroundColor: _selectedValue == option
+                            ? Colors.red.shade400
+                            : Colors.grey.shade200,
+                        label: Text(
+                          option,
+                          style: TextStyle(
+                            color: _selectedValue == option
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedValue = "Washroom";
-                    });
-                  },
-                  child: Chip(
-                    backgroundColor: _selectedValue == "Washroom"
-                        ? Colors.red.shade400
-                        : Colors.grey.shade200,
-                    label: Text("Washroom",
-                        style: TextStyle(
-                          color: _selectedValue == "Washroom"
-                              ? Colors.white
-                              : Colors.black,
-                        )),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedValue = "Bed";
-                    });
-                  },
-                  child: Chip(
-                    backgroundColor: _selectedValue == "Bed"
-                        ? Colors.red.shade400
-                        : Colors.grey.shade200,
-                    label: Text("Bed",
-                        style: TextStyle(
-                          color: _selectedValue == "Bed"
-                              ? Colors.white
-                              : Colors.black,
-                        )),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedValue = "Staff Behaviour";
-                    });
-                  },
-                  child: Chip(
-                    backgroundColor: _selectedValue == "Staff Behaviour"
-                        ? Colors.red.shade400
-                        : Colors.grey.shade200,
-                    label: Text("Staff Behaviour",
-                        style: TextStyle(
-                          color: _selectedValue == "Staff Behaviour"
-                              ? Colors.white
-                              : Colors.black,
-                        )),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedValue = "Cleanliness";
-                    });
-                  },
-                  child: Chip(
-                    backgroundColor: _selectedValue == "Cleanliness"
-                        ? Colors.red.shade400
-                        : Colors.grey.shade200,
-                    label: Text("Cleanliness",
-                        style: TextStyle(
-                          color: _selectedValue == "Cleanliness"
-                              ? Colors.white
-                              : Colors.black,
-                        )),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedValue = "Basic Amenities";
-                    });
-                  },
-                  child: Chip(
-                    backgroundColor: _selectedValue == "Basic Amenities"
-                        ? Colors.red.shade400
-                        : Colors.grey.shade200,
-                    label: Text("Basic Amenities",
-                        style: TextStyle(
-                          color: _selectedValue == "Basic Amenities"
-                              ? Colors.white
-                              : Colors.black,
-                        )),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ]),
+                ],
+              ),
               const SizedBox(
                 height: 16,
               ),
@@ -338,7 +225,7 @@ class _RatingViewState extends State<RatingView> {
                     decoration: TextDecoration.underline,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
