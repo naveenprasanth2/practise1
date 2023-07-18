@@ -50,6 +50,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               "Ratings & Reviews",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ),
             centerTitle: true,

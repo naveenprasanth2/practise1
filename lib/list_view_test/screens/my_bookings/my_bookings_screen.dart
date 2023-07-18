@@ -67,6 +67,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               "My Bookings",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ),
             centerTitle: true,

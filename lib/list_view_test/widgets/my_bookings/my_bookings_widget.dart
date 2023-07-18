@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/widgets/ratings/rating_dialog.dart';
+import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
 
 import '../../models/booking_history_model/booking_history_model.dart';
 
@@ -142,7 +142,7 @@ class MyBookingsWidget extends StatelessWidget {
                   if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
                       bookingHistoryModel.rated == false)
                     InkWell(
-                      onTap: () => showCustomRatingDialog(context),
+                      onTap: () => RatingDialogHelper.openRatingDialog(context),
                       child: Container(
                         height: 50,
                         width: 120,
