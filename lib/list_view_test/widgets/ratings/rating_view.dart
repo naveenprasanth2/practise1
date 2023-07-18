@@ -14,6 +14,7 @@ class _RatingViewState extends State<RatingView> {
   double _starPosition = 200.0;
   int _rating = 0;
   int _selectedChipIndex = -1;
+  String _selectedValue = "";
   bool _isMoreDetailActive = false;
   final FocusNode _moreDetailsFocusNode = FocusNode();
 
@@ -144,7 +145,7 @@ class _RatingViewState extends State<RatingView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text("Tell us more"),
-              Chip(label: Text("Bedroom ${_selectedChipIndex + 1}")),
+              Chip(label: Text(_selectedValue)),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
@@ -163,39 +164,164 @@ class _RatingViewState extends State<RatingView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text("What could be better?"),
-              Wrap(
-                spacing: 8,
-                alignment: WrapAlignment.center,
-                children: List.generate(
-                  6,
-                  (index) => InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedChipIndex = index;
-                      });
-                    },
-                    child: Chip(
-                      backgroundColor: _selectedChipIndex == index
-                          ? Colors.red.shade400
-                          : Colors.grey.shade200,
-                      label: Text("Bedroom ${index + 1}",
-                          style: TextStyle(
-                            color: _selectedChipIndex == index
-                                ? Colors.white
-                                : Colors.black,
-                          )),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                          bottomLeft: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0),
-                        ),
+              Wrap(spacing: 8, alignment: WrapAlignment.center, children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = "Bedroom";
+                    });
+                  },
+                  child: Chip(
+                    backgroundColor: _selectedValue == "Bedroom"
+                        ? Colors.red.shade400
+                        : Colors.grey.shade200,
+                    label: Text("Bedroom",
+                        style: TextStyle(
+                          color: _selectedValue == "Bedroom"
+                              ? Colors.white
+                              : Colors.black,
+                        )),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
                       ),
                     ),
                   ),
                 ),
-              ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = "Washroom";
+                    });
+                  },
+                  child: Chip(
+                    backgroundColor: _selectedValue == "Washroom"
+                        ? Colors.red.shade400
+                        : Colors.grey.shade200,
+                    label: Text("Washroom",
+                        style: TextStyle(
+                          color: _selectedValue == "Washroom"
+                              ? Colors.white
+                              : Colors.black,
+                        )),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = "Bed";
+                    });
+                  },
+                  child: Chip(
+                    backgroundColor: _selectedValue == "Bed"
+                        ? Colors.red.shade400
+                        : Colors.grey.shade200,
+                    label: Text("Bed",
+                        style: TextStyle(
+                          color: _selectedValue == "Bed"
+                              ? Colors.white
+                              : Colors.black,
+                        )),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = "Staff Behaviour";
+                    });
+                  },
+                  child: Chip(
+                    backgroundColor: _selectedValue == "Staff Behaviour"
+                        ? Colors.red.shade400
+                        : Colors.grey.shade200,
+                    label: Text("Staff Behaviour",
+                        style: TextStyle(
+                          color: _selectedValue == "Staff Behaviour"
+                              ? Colors.white
+                              : Colors.black,
+                        )),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = "Cleanliness";
+                    });
+                  },
+                  child: Chip(
+                    backgroundColor: _selectedValue == "Cleanliness"
+                        ? Colors.red.shade400
+                        : Colors.grey.shade200,
+                    label: Text("Cleanliness",
+                        style: TextStyle(
+                          color: _selectedValue == "Cleanliness"
+                              ? Colors.white
+                              : Colors.black,
+                        )),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      _selectedValue = "Basic Amenities";
+                    });
+                  },
+                  child: Chip(
+                    backgroundColor: _selectedValue == "Basic Amenities"
+                        ? Colors.red.shade400
+                        : Colors.grey.shade200,
+                    label: Text("Basic Amenities",
+                        style: TextStyle(
+                          color: _selectedValue == "Basic Amenities"
+                              ? Colors.white
+                              : Colors.black,
+                        )),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
               const SizedBox(
                 height: 16,
               ),
