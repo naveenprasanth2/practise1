@@ -18,11 +18,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   List<BookingHistoryModel> myBookingHistoryList = [];
   List<BookingHistoryModel> myUpcomingList = [];
   List<BookingHistoryModel> myCheckedOutList = [];
+  List<BookingHistoryModel> myCancelledList = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     getDetailedRatingsFromJson();
   }
 
@@ -39,7 +40,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           .toList();
 
       myCheckedOutList = myBookingHistoryList
-          .where((element) => element.checkOutStatus != "booked")
+          .where((element) => element.checkOutStatus == "checkedOut")
+          .toList();
+
+      myCancelledList = myBookingHistoryList
+          .where((element) => element.checkOutStatus == "cancelled")
           .toList();
     });
   }
@@ -54,7 +59,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.red.shade400,
@@ -100,6 +105,18 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     ),
                   ),
                 ),
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Cancelled',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -136,6 +153,23 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                         );
                       },
                       childCount: myCheckedOutList.length,
+                    ),
+                  ),
+                ],
+              ),
+              CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: MyBookingsWidget(
+                            bookingHistoryModel: myCancelledList[index],
+                          ),
+                        );
+                      },
+                      childCount: myCancelledList.length,
                     ),
                   ),
                 ],

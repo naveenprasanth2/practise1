@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/widgets/ratings/rating_dialog.dart';
 
 import '../../models/booking_history_model/booking_history_model.dart';
 
@@ -41,9 +42,7 @@ class MyBookingsWidget extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image(
-                        image: NetworkImage(
-                          bookingHistoryModel.iconImage
-                        ),
+                        image: NetworkImage(bookingHistoryModel.iconImage),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -121,6 +120,68 @@ class MyBookingsWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (bookingHistoryModel.checkOutStatus == "booked")
+                    Container(
+                      height: 50,
+                      width: 120,
+                      margin: const EdgeInsets.all(2),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
+                      bookingHistoryModel.rated == false)
+                    InkWell(
+                      onTap: () => showCustomRatingDialog(context),
+                      child: Container(
+                        height: 50,
+                        width: 120,
+                        margin: const EdgeInsets.all(2),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.star_border_outlined,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              "Rate Now",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
+                      bookingHistoryModel.rated == true)
+                    Container(
+                      height: 50,
+                      width: 120,
+                      margin: const EdgeInsets.all(2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.yellow.shade300,
+                          ),
+                          const Text(
+                            "Rated",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
                   Container(
                     height: 50,
                     width: 120,

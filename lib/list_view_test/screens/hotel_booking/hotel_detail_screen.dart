@@ -16,7 +16,7 @@ import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
-import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
 import '../reviews/reviews_screen.dart';
 
