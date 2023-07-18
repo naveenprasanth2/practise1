@@ -37,7 +37,7 @@ class _RatingViewState extends State<RatingView> {
         children: [
           // Thanks Note and Cause of Rating
           SizedBox(
-            height: max(300, MediaQuery.of(context).size.height * 0.35),
+            height: max(350, MediaQuery.of(context).size.height * 0.35),
             child: PageView(
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
@@ -75,6 +75,7 @@ class _RatingViewState extends State<RatingView> {
               child: const Text("skip"),
             ),
           ),
+          const SizedBox(height: 10,),
           // Animated stars
           AnimatedPositioned(
             top: _starPosition,
