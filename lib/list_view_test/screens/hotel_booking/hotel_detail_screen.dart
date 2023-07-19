@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details/pricing_detail_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -452,9 +454,32 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   const SizedBox(
                     width: 5,
                   ),
-                  Container(
-                    decoration: const BoxDecoration(color: Colors.transparent),
-                    child: const Icon(Icons.info_outline),
+                  InkWell(
+                    onTap: () {
+                      Provider.of<CalculationProvider>(context, listen: false)
+                          .setCostPerNight(
+                              hotelDetailsModel!.roomType.standardRoom.price);
+                      Provider.of<CalculationProvider>(context, listen: false)
+                          .setDiscountPercentage(
+                              hotelDetailsModel!.discountsApplicable[0]);
+                      Provider.of<CalculationProvider>(context, listen: false)
+                          .setGstPercentage(12);
+                      Provider.of<CalculationProvider>(context, listen: false)
+                          .setDiscountPercentage(2);
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PricingDetailsWidget(
+                            hotelDetailsModel: hotelDetailsModel!,
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration:
+                          const BoxDecoration(color: Colors.transparent),
+                      child: const Icon(Icons.info_outline),
+                    ),
                   ),
                 ],
               ),

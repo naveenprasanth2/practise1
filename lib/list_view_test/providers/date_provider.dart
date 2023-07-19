@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 class DateProvider extends ChangeNotifier {
   String? date;
   String? initialDate;
+  int noOfDays = 1;
 
   DateProvider() {
     seInitialDate();
   }
+
 
   void setDate(BuildContext context) async {
     await showDateRangePicker(
@@ -28,10 +30,11 @@ class DateProvider extends ChangeNotifier {
         );
       },
     ).then((value) {
-      if(value != null){
+      if (value != null) {
         DateFormat format = DateFormat("MMM-dd");
         date = "${format.format(value.start)} - ${format.format(value.end)}";
-      }else{
+        noOfDays = value.end.difference(value.start).inDays;
+      } else {
         date = date ?? initialDate;
       }
       notifyListeners();

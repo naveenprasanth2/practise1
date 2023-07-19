@@ -24,10 +24,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   @override
   void initState() {
     super.initState();
-    getDetailedRatingsFromJson();
+    getDetailedReviewsFromJson();
   }
 
-  Future<void> getDetailedRatingsFromJson() async {
+  Future<void> getDetailedReviewsFromJson() async {
     final value =
         await rootBundle.loadString("assets/star_ratings_detail.json");
     setState(() {
