@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (builder) => HotelDetailScreen(
-                                    hotelDetailsModel: HotelDetailsModel(
+                                    hotelSmallDetailsModel: HotelSmallDetailsModel(
                                         hotelName: "Naveen Hotels",
                                         townName: "hebbal",
                                         cityName: "Bangalore",

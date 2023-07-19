@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -18,13 +19,16 @@ import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
+import '../../models/hotel_detail_model/about_hotel_model.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
-  final HotelDetailsModel hotelDetailsModel;
+  final HotelSmallDetailsModel hotelSmallDetailsModel;
 
-  const HotelDetailScreen({Key? key, required this.hotelDetailsModel})
-      : super(key: key);
+  const HotelDetailScreen({
+    Key? key,
+    required this.hotelSmallDetailsModel,
+  }) : super(key: key);
 
   @override
   State<HotelDetailScreen> createState() => _HotelDetailScreenState();
@@ -32,48 +36,26 @@ class HotelDetailScreen extends StatefulWidget {
 
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
-  List<MapEntry<String, dynamic>>? hotelDetails;
+  AboutHotelModel? aboutHotelModel;
   List<GuestPolicyModel>? guestPolicies;
   StarRatingAverageModel? hotelRatings;
+  HotelDetailsModel? hotelDetailsModel;
   int? totalRatings;
 
   @override
   void initState() {
-    readAmenitiesJson();
-    readHotelDetailsJson();
-    readGuestPoliciesJson();
     readHotelRatingsJson();
+    readHotelDetailsModelJson();
     super.initState();
   }
 
-  Future<void> readAmenitiesJson() async {
-    final value = await rootBundle.loadString("assets/sample_amenities.json");
+  Future<void> readHotelDetailsModelJson() async {
+    final value = await rootBundle.loadString("assets/hotel_details.json");
     setState(() {
-      amenitiesModel = AmenitiesModel.fromJson(json.decode(value));
-    });
-  }
-
-  Future<void> readHotelDetailsJson() async {
-    final value = await rootBundle.loadString("assets/hotel_description.json");
-    setState(() {
-      final Map<String, dynamic> hotelDetailsMap = json.decode(value);
-      hotelDetails = hotelDetailsMap.entries
-          .toList()
-          .map((entry) => MapEntry(entry.key, entry.value.toString()))
-          .toList();
-    });
-  }
-
-  Future<void> readGuestPoliciesJson() async {
-    final value = await rootBundle.loadString("assets/guest_policies.json");
-    setState(() {
-      final dynamic guestPoliciesData = json.decode(value);
-
-      if (guestPoliciesData is List) {
-        guestPolicies = guestPoliciesData
-            .map((map) => GuestPolicyModel.fromJson(map))
-            .toList();
-      }
+      hotelDetailsModel = HotelDetailsModel.fromJson(json.decode(value));
+      amenitiesModel = hotelDetailsModel!.amenities;
+      guestPolicies = hotelDetailsModel!.guestPolicies;
+      aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
     });
   }
 
@@ -110,7 +92,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.hotelDetailsModel.hotelName,
+                    // Use a null-aware operator to avoid null errors
+                    hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
                     style: const TextStyle(color: Colors.white),
                   ),
                   Row(
@@ -204,7 +187,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            widget.hotelDetailsModel.hotelName,
+                            hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 20,
@@ -219,9 +202,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                   showBottomSheet(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return hotelDetails != null
+                                      return aboutHotelModel != null
                                           ? HotelDetailsBottomWidget(
-                                              hotelDetails: hotelDetails!,
+                                              aboutHotelModel: aboutHotelModel!,
                                             )
                                           : const SizedBox.shrink();
                                     },
@@ -243,7 +226,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "${widget.hotelDetailsModel.townName},",
+                              "${widget.hotelSmallDetailsModel.townName},",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
@@ -253,7 +236,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           ),
                           Flexible(
                             child: Text(
-                              widget.hotelDetailsModel.cityName,
+                              widget.hotelSmallDetailsModel.cityName,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
@@ -322,7 +305,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 ),
                               ],
                             )
-                          : SizedBox.shrink(),
+                          : const SizedBox.shrink(),
                     ),
                   ],
                 ),
@@ -457,11 +440,13 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   Container(
                     decoration: const BoxDecoration(color: Colors.transparent),
                     child: Text(
-                      widget.hotelDetailsModel.hotelName,
+                      hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
                       style: const TextStyle(color: Colors.black),
                     ),
                   ),
-                  const SizedBox(width: 5,),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   Container(
                     decoration: const BoxDecoration(color: Colors.transparent),
                     child: const Icon(Icons.info_outline),

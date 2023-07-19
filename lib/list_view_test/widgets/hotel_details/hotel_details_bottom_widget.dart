@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/about_hotel_model.dart';
 
 class HotelDetailsBottomWidget extends StatelessWidget {
-  final List<MapEntry<String, dynamic>> hotelDetails;
+  final AboutHotelModel aboutHotelModel;
 
-  const HotelDetailsBottomWidget({Key? key, required this.hotelDetails}) : super(key: key);
+  const HotelDetailsBottomWidget({Key? key, required this.aboutHotelModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,29 +40,66 @@ class HotelDetailsBottomWidget extends StatelessWidget {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: ListView.builder(
-                itemCount: hotelDetails.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
+              child: ListView(
+                children: [
+                  Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          hotelDetails[index].key,
-                          style: const TextStyle(
+                        const Text(
+                          "Description",
+                          style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          hotelDetails[index].value.toString(),
+                          aboutHotelModel.description,
                         ),
                       ],
                     ),
-                  );
-                },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Special Features",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          aboutHotelModel.specialFeatures,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Location & Transportation",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          aboutHotelModel.locationAndTransportation,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

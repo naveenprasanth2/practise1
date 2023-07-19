@@ -4,6 +4,8 @@
   "streetNumber": "2nd Cross, Parapana Agrahara",
   "cityName": "Bangalore",
   "id": "BANMA1274",
+  "averageRatings": 3.5,
+  "noOfRatings": 30,
   "mainImage": "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",
   "locations": {
     "latitude": 40.6892,
@@ -14,6 +16,67 @@
     "Free Cancellation",
     "Pay at hotel"
   ],
+  "aboutHotel": {
+    "Description": "OYO 6790 Hotel subha Residency is a budget hotel in Bangalore with standardised amenities at the best value. The hotel is conveniently located just 4 km from Lalbagh Botanical Garden and 3 km from Cubbon Park. OYO 6790 Hotel offers everything you need for a comfortable stay; CCTV Cameras, Breakfast and Power backup.",
+    "Special Features": "While you are out exploring the city, this hotel room will be your home away from home. Our rooms include amenities such as Free Wifi and Geyser.",
+    "Location & Transportation": "The accommodation is stationed at a distance of 6 km from ISKCON Temple Bangalore, 6 km from Bangalore Palace and 23 km from Bannerghatta Biological Park. Guests will be just 2 km from Bangalore City Railway Station. The hotel is 35 km away from Kempegowda International Airport. \nOYO 6790 Hotel subha Residency has been delighting guests since 27 Mar 2021. \nDistance in property description is calculated using © OpenStreetMap"
+  },
+  "discountsApplicable": [
+    5,
+    20,
+    35
+  ],
+  "roomType": [
+    {
+      "standardRoom": {
+        "imageUrl": "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",
+        "price": 1340
+      },
+      "doubleRoom": {
+        "imageUrl": "https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=1024x1024&w=is&k=20&c=lNQVwTuYzo9wQZfZzHioQMCJRTHWVzhX1UXmcqgnF5k=",
+        "price": 1650
+      }
+    }
+  ],
+  "amenities": {
+    "bedTypeModel": {
+      "cot": true,
+      "kingSizedBed": true,
+      "queenSizedBed": false,
+      "singleBed": false
+    },
+    "mediaTechnologyModel": {
+      "tv": true,
+      "ott": false
+    },
+    "hotelFacilitiesModel": {
+      "ac": true,
+      "wifi": false,
+      "kitchen": true,
+      "restaurant": true,
+      "reception": false,
+      "careTaker": true,
+      "security": true,
+      "shuttleService": true,
+      "luggageAssistance": true,
+      "taxi": true,
+      "dailyHousekeeping": true,
+      "fireExtinguisher": true,
+      "firstAidKit": true
+    },
+    "washroomModel": {
+      "geyser": true
+    },
+    "roomFacilityModel": {
+      "extraMattress": true,
+      "smokeDetector": true,
+      "interCom": true,
+      "books": true
+    },
+    "seatingAreaModel": {
+      "seatingArea": false
+    }
+  },
   "guestPolicies": [
     {
       "title": "Couple Friendly",
@@ -71,67 +134,5 @@
       "title": "Covid-19_Outbreak",
       "description": "Due to Covid-19 outbreak, we urge you to stay tuned to latest updates by Local and Central Government w.r.t Covid tests, lockdowns, and travel restrictions before confirming your Hotel Booking"
     }
-  ],
-  "hotelDetails": {
-    "Description": "OYO 6790 Hotel subha Residency is a budget hotel in Bangalore with standardised amenities at the best value. The hotel is conveniently located just 4 km from Lalbagh Botanical Garden and 3 km from Cubbon Park. OYO 6790 Hotel offers everything you need for a comfortable stay; CCTV Cameras, Breakfast and Power backup.",
-    "Special Features": "While you are out exploring the city, this hotel room will be your home away from home. Our rooms include amenities such as Free Wifi and Geyser.",
-    "Location & Transportation": "The accommodation is stationed at a distance of 6 km from ISKCON Temple Bangalore, 6 km from Bangalore Palace and 23 km from Bannerghatta Biological Park. Guests will be just 2 km from Bangalore City Railway Station. The hotel is 35 km away from Kempegowda International Airport. \nOYO 6790 Hotel subha Residency has been delighting guests since 27 Mar 2021. \nDistance in property description is calculated using © OpenStreetMap"
-  },
-  "price": 1250,
-  "discountsApplicable": [
-    5,
-    20,
-    35
-  ],
-  "roomType": [
-    {
-      "standardRoom": {
-        "imageUrl": "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",
-        "price": 1340
-      },
-      "doubleRoom": {
-        "imageUrl": "https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=1024x1024&w=is&k=20&c=lNQVwTuYzo9wQZfZzHioQMCJRTHWVzhX1UXmcqgnF5k=",
-        "price": 1650
-      }
-    }
-  ],
-  "amenities": {
-    "bedTypeModel": {
-      "cot": true,
-      "kingSizedBed": true,
-      "queenSizedBed": false,
-      "singleBed": false
-    },
-    "mediaTechnologyModel": {
-      "tv": true,
-      "ott": false
-    },
-    "hotelFacilitiesModel": {
-      "ac": true,
-      "wifi": false,
-      "kitchen": true,
-      "restaurant": true,
-      "reception": false,
-      "careTaker": true,
-      "security": true,
-      "shuttleService": true,
-      "luggageAssistance": true,
-      "taxi": true,
-      "dailyHousekeeping": true,
-      "fireExtinguisher": true,
-      "firstAidKit": true
-    },
-    "washroomModel": {
-      "geyser": true
-    },
-    "roomFacilityModel": {
-      "extraMattress": true,
-      "smokeDetector": true,
-      "interCom": true,
-      "books": true
-    },
-    "seatingAreaModel": {
-      "seatingArea": false
-    }
-  }
+  ]
 }
