@@ -187,7 +187,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
+                            hotelDetailsModel?.hotelName ??
+                                "Hotel Name Loading...",
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 20,
@@ -440,8 +441,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   Container(
                     decoration: const BoxDecoration(color: Colors.transparent),
                     child: Text(
-                      hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
-                      style: const TextStyle(color: Colors.black),
+                      "₹ ${hotelDetailsModel?.roomType.standardRoom.price ?? 0}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(

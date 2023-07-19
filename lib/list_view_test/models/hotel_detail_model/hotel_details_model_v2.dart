@@ -50,7 +50,7 @@ class HotelDetailsModel {
   List<int> discountsApplicable;
 
   @JsonKey(name: 'roomType')
-  List<RoomTypeModel> roomType;
+  RoomTypeModel roomType;
 
   @JsonKey(name: 'amenities')
   AmenitiesModel amenities;
