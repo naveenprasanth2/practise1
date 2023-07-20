@@ -32,7 +32,8 @@ class CalculationProvider extends ChangeNotifier {
 
   double? get prepaidDiscountValue => _prepaidDiscountValue;
 
-  double? get finalPriceWithoutPrepaidDiscount => _finalPriceWithoutPrepaidDiscount;
+  double? get finalPriceWithoutPrepaidDiscount =>
+      _finalPriceWithoutPrepaidDiscount;
 
   double? get finalPrice => _finalPrice;
 
@@ -59,7 +60,8 @@ class CalculationProvider extends ChangeNotifier {
 
   void setPrepaidDiscountPercentage(double prepaidDiscountPercentage) {
     _prepaidDiscountPercentage = prepaidDiscountPercentage;
-    _prepaidDiscountValue = ((_afterTaxPrice! * prepaidDiscount!)/100).roundToDouble();
+    _prepaidDiscountValue =
+        ((_afterTaxPrice! * prepaidDiscount!) / 100).roundToDouble();
     setFinalPrice();
     notifyListeners();
   }

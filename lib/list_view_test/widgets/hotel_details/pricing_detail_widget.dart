@@ -58,7 +58,6 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                     "${Provider.of<DateProvider>(context).noOfDays} Night",
                     style: const TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -66,7 +65,6 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                     "${Provider.of<CountProviders>(context).adultCount} Adult",
                     style: const TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -74,7 +72,6 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                     "${Provider.of<CountProviders>(context).childCount} Child",
                     style: const TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],

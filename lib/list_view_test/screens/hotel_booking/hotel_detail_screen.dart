@@ -43,15 +43,33 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   StarRatingAverageModel? hotelRatings;
   HotelDetailsModel? hotelDetailsModel;
   int? totalRatings;
+  bool _isDataLoaded = false;
 
   @override
   void initState() {
-    readHotelRatingsJson();
-    readHotelDetailsModelJson();
     super.initState();
+    readHotelRatingsJson();
   }
 
-  Future<void> readHotelDetailsModelJson() async {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isDataLoaded) {
+      readHotelDetailsModelJson().then((hotelDetails) {
+        setState(() {
+          _isDataLoaded = true;
+          hotelDetailsModel = hotelDetails;
+          amenitiesModel = hotelDetailsModel!.amenities;
+          guestPolicies = hotelDetailsModel!.guestPolicies;
+          aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
+        });
+        // Update price data using Provider.of after data is loaded
+        setPriceData();
+      });
+    }
+  }
+
+  Future<HotelDetailsModel?> readHotelDetailsModelJson() async {
     final value = await rootBundle.loadString("assets/hotel_details.json");
     setState(() {
       hotelDetailsModel = HotelDetailsModel.fromJson(json.decode(value));
@@ -59,6 +77,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       guestPolicies = hotelDetailsModel!.guestPolicies;
       aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
     });
+    return hotelDetailsModel;
   }
 
   Future<void> readHotelRatingsJson() async {
@@ -70,6 +89,15 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ? HotelHelper.calculateTotalRatings(hotelRatings!)
           : 0;
     });
+  }
+
+  setPriceData() {
+    final calculationProvider = Provider.of<CalculationProvider>(context, listen: false);
+    calculationProvider.setCostPerNight(hotelDetailsModel?.roomType.standardRoom.price ?? 0);
+    calculationProvider.setDiscountPercentage(hotelDetailsModel?.discountsApplicable[0] ?? 0);
+    calculationProvider.setGstPercentage(12);
+    calculationProvider.setDiscountPercentage(12);
+    calculationProvider.setPrepaidDiscountPercentage(10);
   }
 
   @override
@@ -443,7 +471,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   Container(
                     decoration: const BoxDecoration(color: Colors.transparent),
                     child: Text(
-                      "₹ ${hotelDetailsModel?.roomType.standardRoom.price ?? 0}",
+                      "₹ ${Provider.of<CalculationProvider>(context, listen: true).finalPriceWithoutPrepaidDiscount ?? 0}",
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
@@ -456,18 +484,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Provider.of<CalculationProvider>(context, listen: false)
-                          .setCostPerNight(
-                              hotelDetailsModel!.roomType.standardRoom.price);
-                      Provider.of<CalculationProvider>(context, listen: false)
-                          .setDiscountPercentage(
-                              hotelDetailsModel!.discountsApplicable[0]);
-                      Provider.of<CalculationProvider>(context, listen: false)
-                          .setGstPercentage(12);
-                      Provider.of<CalculationProvider>(context, listen: false)
-                          .setDiscountPercentage(12);
-                      Provider.of<CalculationProvider>(context, listen: false)
-                          .setPrepaidDiscountPercentage(10);
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
