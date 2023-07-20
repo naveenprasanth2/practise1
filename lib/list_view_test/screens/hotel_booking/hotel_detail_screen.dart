@@ -465,7 +465,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       Provider.of<CalculationProvider>(context, listen: false)
                           .setGstPercentage(12);
                       Provider.of<CalculationProvider>(context, listen: false)
-                          .setDiscountPercentage(2);
+                          .setDiscountPercentage(12);
+                      Provider.of<CalculationProvider>(context, listen: false)
+                          .setPrepaidDiscountPercentage(10);
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
