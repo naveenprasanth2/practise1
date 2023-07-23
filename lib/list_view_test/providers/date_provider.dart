@@ -39,11 +39,11 @@ class DateProvider extends ChangeNotifier {
       if (value != null) {
         date = "${format.format(value.start)} - ${format.format(value.end)}";
         noOfDays = value.end.difference(value.start).inDays;
+        _checkInDate = format.format(value.start);
+        _checkOutDate = format.format(value.end);
       } else {
         date = date ?? initialDate;
       }
-      _checkInDate = format.format(value!.start);
-      _checkOutDate = format.format(value.end);
       notifyListeners();
     });
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
+import 'package:practise1/list_view_test/screens/search_results/search_results_screen.dart';
 import 'package:practise1/list_view_test/widgets/location/city_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -228,16 +229,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Flexible(
                           child: InkWell(
+                            // onTap: () {
+                            //   Navigator.of(context).push(
+                            //     MaterialPageRoute(
+                            //       builder: (builder) => HotelDetailScreen(
+                            //         hotelSmallDetailsModel: HotelSmallDetailsModel(
+                            //             hotelName: "Naveen Hotels",
+                            //             townName: "hebbal",
+                            //             cityName: "Bangalore",
+                            //             mapViewData: "Near Bangalore"),
+                            //       ),
+                            //     ),
+                            //   );
+                            // },
                             onTap: () {
-                              Navigator.of(context).push(
+                              Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                  builder: (builder) => HotelDetailScreen(
-                                    hotelSmallDetailsModel: HotelSmallDetailsModel(
-                                        hotelName: "Naveen Hotels",
-                                        townName: "hebbal",
-                                        cityName: "Bangalore",
-                                        mapViewData: "Near Bangalore"),
-                                  ),
+                                  builder: (builder) =>
+                                      const SearchResultsScreen(),
                                 ),
                               );
                             },
