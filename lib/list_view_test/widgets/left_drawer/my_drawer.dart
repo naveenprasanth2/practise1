@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../screens/my_bookings/my_bookings_screen.dart';
+
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
 
@@ -13,7 +15,7 @@ class _MyDrawerState extends State<MyDrawer> {
     return Drawer(
       child: ListView(
         children: [
-           SizedBox(
+          SizedBox(
             height: 100,
             child: DrawerHeader(
               decoration: BoxDecoration(
@@ -29,7 +31,6 @@ class _MyDrawerState extends State<MyDrawer> {
                       fontSize: 10,
                     ),
                   ),
-
                   Text(
                     'Naveen',
                     style: TextStyle(
@@ -51,15 +52,18 @@ class _MyDrawerState extends State<MyDrawer> {
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
-
           const Divider(thickness: 1),
-
           ListTile(
             leading: const Icon(Icons.luggage),
             title: const Text('My Bookings'),
             onTap: () {
               // Handle drawer item tap for home
-              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (builder) => const MyBookingsScreen(),
+                ),
+              ); // Close the drawer
               // Add your logic for navigating to the home page
             },
             trailing: const Icon(Icons.arrow_forward_ios),

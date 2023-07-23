@@ -34,8 +34,8 @@ class AmenitiesWidget extends StatelessWidget {
           child: Text(
             title,
             style: isAvailable
-                ? const TextStyle(fontWeight: FontWeight.normal, fontSize: 10)
-                : const TextStyle(fontWeight: FontWeight.normal, fontSize: 10, color: Colors.black54,),
+                ? const TextStyle(fontWeight: FontWeight.normal, fontSize: 12)
+                : const TextStyle(fontWeight: FontWeight.normal, fontSize: 12, color: Colors.black54,),
           ),
         ),
       ],

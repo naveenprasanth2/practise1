@@ -1,22 +1,37 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/widgets/booking/booking_widget.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details/pricing_detail_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
+import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
+import 'package:practise1/list_view_test/utils/hotel_helper.dart';
+import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
+import 'package:practise1/list_view_test/widgets/adult_child/adult_child_bottom_sheet.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
+import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
-import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
-import '../../widgets/amenities/amenities_frame3.dart';
+import '../../models/hotel_detail_model/about_hotel_model.dart';
+import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
-  final HotelDetailsModel hotelDetailsModel;
+  final HotelSmallDetailsModel hotelSmallDetailsModel;
 
-  const HotelDetailScreen({Key? key, required this.hotelDetailsModel})
-      : super(key: key);
+  const HotelDetailScreen({
+    Key? key,
+    required this.hotelSmallDetailsModel,
+  }) : super(key: key);
 
   @override
   State<HotelDetailScreen> createState() => _HotelDetailScreenState();
@@ -24,48 +39,69 @@ class HotelDetailScreen extends StatefulWidget {
 
 class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
-  List<MapEntry<String, dynamic>>? hotelDetails;
-  List<MapEntry<String, dynamic>>? guestPolicies;
+  AboutHotelModel? aboutHotelModel;
+  List<GuestPolicyModel>? guestPolicies;
+  StarRatingAverageModel? hotelRatings;
+  HotelDetailsModel? hotelDetailsModel;
+  int? totalRatings;
+  bool _isDataLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    readAmenitiesJson();
-    readHotelDetailsJson();
-    guestPoliciesJson();
+    readHotelRatingsJson();
   }
 
-  Future<void> readAmenitiesJson() async {
-    final value = await rootBundle.loadString("assets/sample_amenities.json");
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isDataLoaded) {
+      readHotelDetailsModelJson().then((hotelDetails) {
+        setState(() {
+          _isDataLoaded = true;
+          hotelDetailsModel = hotelDetails;
+          amenitiesModel = hotelDetailsModel!.amenities;
+          guestPolicies = hotelDetailsModel!.guestPolicies;
+          aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
+        });
+        // Update price data using Provider.of after data is loaded
+        setPriceData();
+      });
+    }
+  }
+
+  Future<HotelDetailsModel?> readHotelDetailsModelJson() async {
+    final value = await rootBundle.loadString("assets/hotel_details.json");
     setState(() {
-      amenitiesModel = AmenitiesModel.fromJson(json.decode(value));
+      hotelDetailsModel = HotelDetailsModel.fromJson(json.decode(value));
+      amenitiesModel = hotelDetailsModel!.amenities;
+      guestPolicies = hotelDetailsModel!.guestPolicies;
+      aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
+    });
+    return hotelDetailsModel;
+  }
+
+  Future<void> readHotelRatingsJson() async {
+    final value =
+        await rootBundle.loadString("assets/star_ratings_average.json");
+    setState(() {
+      hotelRatings = StarRatingAverageModel.fromJson(json.decode(value));
+      totalRatings = hotelRatings != null
+          ? HotelHelper.calculateTotalRatings(hotelRatings!)
+          : 0;
     });
   }
 
-  Future<void> readHotelDetailsJson() async {
-    final value = await rootBundle.loadString("assets/hotel_description.json");
-    setState(() {
-      final Map<String, dynamic> hotelDetailsMap = json.decode(value);
-      hotelDetails = hotelDetailsMap.entries
-          .toList()
-          .map((entry) => MapEntry(entry.key, entry.value.toString()))
-          .toList();
-    });
-  }
-
-  Future<void> guestPoliciesJson() async {
-    final value = await rootBundle.loadString("assets/guest_policies.json");
-    setState(() {
-      final dynamic guestPoliciesData = json.decode(value);
-
-      if (guestPoliciesData is List) {
-        guestPolicies = guestPoliciesData
-            .map((map) =>
-            MapEntry(map['title']?.toString() ?? '',
-                map['description']?.toString() ?? ''))
-            .toList();
-      }
-    });
+  setPriceData() {
+    final calculationProvider =
+        Provider.of<CalculationProvider>(context, listen: false);
+    calculationProvider
+        .setCostPerNight(hotelDetailsModel?.roomType.standardRoom.price ?? 0);
+    calculationProvider
+        .setDiscountPercentage(hotelDetailsModel?.discountsApplicable[0] ?? 0);
+    calculationProvider.setGstPercentage(12);
+    calculationProvider.setDiscountPercentage(12);
+    calculationProvider.setPrepaidDiscountPercentage(10);
   }
 
   @override
@@ -76,33 +112,90 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: true,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.phone),
+              ),
+            ],
             backgroundColor: Colors.red.shade400,
-            title: Text(
-              widget.hotelDetailsModel.hotelName,
-              style: const TextStyle(color: Colors.white),
+            title: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    // Use a null-aware operator to avoid null errors
+                    hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const AdultChildBottomSheet();
+                            },
+                          );
+                        },
+                        child: Text(
+                          "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          Provider.of<DateProvider>(context, listen: false)
+                              .setDate(context);
+                        },
+                        child: Text(
+                          Provider.of<DateProvider>(context, listen: true)
+                                  .date ??
+                              Provider.of<DateProvider>(context, listen: true)
+                                  .initialDate!,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           SliverToBoxAdapter(
-            child: SizedBox(
-              height: 200,
-              child: ListView.builder(
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.95,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/offerBanner.jpg"),
-                        fit: BoxFit.cover,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/offerBanner.jpg"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -128,7 +221,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            widget.hotelDetailsModel.hotelName,
+                            hotelDetailsModel?.hotelName ??
+                                "Hotel Name Loading...",
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 20,
@@ -143,9 +237,11 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                   showBottomSheet(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return HotelDetailsBottomWidget(
-                                        hotelDetails: hotelDetails!,
-                                      );
+                                      return aboutHotelModel != null
+                                          ? HotelDetailsBottomWidget(
+                                              aboutHotelModel: aboutHotelModel!,
+                                            )
+                                          : const SizedBox.shrink();
                                     },
                                   );
                                 },
@@ -165,7 +261,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "${widget.hotelDetailsModel.townName},",
+                              "${widget.hotelSmallDetailsModel.townName},",
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
@@ -175,7 +271,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           ),
                           Flexible(
                             child: Text(
-                              widget.hotelDetailsModel.cityName,
+                              widget.hotelSmallDetailsModel.cityName,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 15,
@@ -200,6 +296,52 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         ],
                       ),
                     ),
+                    Flexible(
+                      child: hotelRatings != null
+                          ? Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color:
+                                      StarRatingColourUtils.getStarRatingColor(
+                                          hotelRatings!.averageRating),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  hotelRatings!.averageRating.toString(),
+                                  style: TextStyle(
+                                    color: StarRatingColourUtils
+                                        .getStarRatingColor(
+                                            hotelRatings!.averageRating),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ReviewsScreen(
+                                          averageRatings:
+                                              hotelRatings!.averageRating,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "$totalRatings ratings",
+                                    style: const TextStyle(color: Colors.blue),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                    ),
                   ],
                 ),
               ),
@@ -208,10 +350,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           SliverToBoxAdapter(
             child: Container(
               height: 180,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.97,
+              width: MediaQuery.of(context).size.width * 0.97,
               decoration: BoxDecoration(color: Colors.grey.shade200),
               padding: const EdgeInsets.all(10),
               child: ListView(
@@ -219,10 +358,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                 children: [
                   SizedBox(
                     height: 100,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.97,
+                    width: MediaQuery.of(context).size.width * 0.97,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -234,10 +370,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   ),
                   SizedBox(
                     height: 100,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.97,
+                    width: MediaQuery.of(context).size.width * 0.97,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -249,10 +382,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   ),
                   SizedBox(
                     height: 100,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.97,
+                    width: MediaQuery.of(context).size.width * 0.97,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -266,8 +396,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               ),
             ),
           ),
-          //guest policies builder
-          //we use only first 3 widgets to display things
           SliverToBoxAdapter(
             child: Container(
               height: 200,
@@ -289,39 +417,130 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (builder) =>
-                                    GuestPoliciesScreen(
-                                      guestPolicies: guestPolicies,)));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) => GuestPoliciesScreen(
+                                  guestPolicies: guestPolicies,
+                                ),
+                              ),
+                            );
                           },
                           child: Text(
                             "View All",
-                            style: TextStyle(fontSize: 15, color: Colors.red.shade400),
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.red.shade400,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    GuestPoliciesWidget(
-                      guestPolicies: guestPolicies,
-                      title: "Check-in and Check-out",
-                      iconData: Icons.watch_later_outlined,
-                    ),
-                    GuestPoliciesWidget(
-                      guestPolicies: guestPolicies,
-                      title: "Local ID Policy",
-                      iconData: Icons.account_box_outlined,
-                    ),
-                    GuestPoliciesWidget(
-                      guestPolicies: guestPolicies,
-                      title: "Couple Friendly",
-                      iconData: Icons.favorite_outline_rounded,
-                    ),
+                    if (guestPolicies != null && guestPolicies!.length >= 3)
+                      Column(
+                        children: [
+                          GuestPoliciesWidget(
+                            guestPolicies: guestPolicies,
+                            title: guestPolicies![0].title,
+                            iconData: Icons.watch_later_outlined,
+                          ),
+                          GuestPoliciesWidget(
+                            guestPolicies: guestPolicies,
+                            title: guestPolicies![1].title,
+                            iconData: Icons.account_box_outlined,
+                          ),
+                          GuestPoliciesWidget(
+                            guestPolicies: guestPolicies,
+                            title: guestPolicies![2].title,
+                            iconData: Icons.favorite_outline_rounded,
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          decoration: const BoxDecoration(color: Colors.transparent),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(color: Colors.transparent),
+                    child: Text(
+                      "₹ ${Provider.of<CalculationProvider>(context, listen: true).finalPriceWithoutPrepaidDiscount ?? 0}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return PricingDetailsWidget(
+                            hotelDetailsModel: hotelDetailsModel!,
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration:
+                          const BoxDecoration(color: Colors.transparent),
+                      child: const Icon(Icons.info_outline),
+                    ),
+                  ),
+                ],
+              ),
+              Builder(builder: (context) {
+                return InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return aboutHotelModel != null
+                            ? BookingWidget(
+                                hotelDetailsModel: hotelDetailsModel!,
+                              )
+                            : const SizedBox.shrink();
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 80,
+                    width: 200,
+                    decoration: BoxDecoration(
+                        color: Colors.red.shade400,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: const Center(
+                      child: Text(
+                        "Book Now",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
       ),
     );
   }
