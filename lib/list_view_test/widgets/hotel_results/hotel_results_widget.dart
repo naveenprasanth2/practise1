@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/widgets/hotel_results/highligths_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HotelResultsWidget extends StatefulWidget {
@@ -24,8 +25,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
       keepPage: true,
     );
     _pageController.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
@@ -62,7 +62,8 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                 child: Center(
                   child: SmoothPageIndicator(
                     controller: _pageController,
-                    count: widget.hotelSearchModel.hotelImages.length, // Total number of dots (pages)
+                    count: widget.hotelSearchModel.hotelImages.length,
+                    // Total number of dots (pages)
                     effect: const ScrollingDotsEffect(
                       dotColor: Colors.grey,
                       activeDotColor: Colors.white,
@@ -75,6 +76,21 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                 ),
               ),
             ],
+          ),
+        ),
+        Container(
+          height: 40,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          width: double.infinity,
+          color: Colors.white,
+          child: Row(
+            children: widget.hotelSearchModel.highlights
+                .map(
+                  (e) => HighLights(
+                    value: e,
+                  ),
+                )
+                .toList(),
           ),
         ),
       ],
