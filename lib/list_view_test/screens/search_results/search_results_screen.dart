@@ -18,7 +18,7 @@ class SearchResultsScreen extends StatefulWidget {
 }
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
-  late Stream<HotelSearchModel?> _hotelSearchStream;
+  late Stream<List<HotelSearchModel>?> _hotelSearchStream;
 
   @override
   void initState() {
@@ -26,9 +26,15 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     _hotelSearchStream = loadHotelSearchResultsJson();
   }
 
-  Stream<HotelSearchModel?> loadHotelSearchResultsJson() async* {
-    final value = await rootBundle.loadString("assets/hotel_search_details.json");
-    yield HotelSearchModel.fromJson(json.decode(value));
+  Stream<List<HotelSearchModel>> loadHotelSearchResultsJson() async* {
+    final value =
+        await rootBundle.loadString("assets/hotel_search_details.json");
+    final jsonData = json.decode(value) as List<dynamic>;
+    final List<HotelSearchModel> hotelSearchList = jsonData
+        .map((jsonObject) => HotelSearchModel.fromJson(jsonObject))
+        .toList();
+
+    yield hotelSearchList;
   }
 
   @override
@@ -89,7 +95,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                         },
                         child: Text(
                           Provider.of<DateProvider>(context, listen: true)
-                              .date ??
+                                  .date ??
                               Provider.of<DateProvider>(context, listen: true)
                                   .initialDate!,
                           style: const TextStyle(
@@ -106,7 +112,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           ),
 
           // Use StreamBuilder to handle data stream
-          StreamBuilder<HotelSearchModel?>(
+          StreamBuilder<List<HotelSearchModel>?>(
             stream: _hotelSearchStream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -127,7 +133,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   // Data is available, build the SliverList with HotelResultsWidget
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Container(
@@ -138,12 +144,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                               border: Border.all(color: Colors.black26),
                             ),
                             child: HotelResultsWidget(
-                              hotelSearchModel: hotelSearchModel,
+                              hotelSearchModel: hotelSearchModel[index],
                             ),
                           ),
                         );
                       },
-                      childCount: 3,
+                      childCount: hotelSearchModel.length,
                     ),
                   );
                 } else {
