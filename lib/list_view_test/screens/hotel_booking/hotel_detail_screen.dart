@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/widgets/booking/booking_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/pricing_detail_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
@@ -92,9 +93,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   }
 
   setPriceData() {
-    final calculationProvider = Provider.of<CalculationProvider>(context, listen: false);
-    calculationProvider.setCostPerNight(hotelDetailsModel?.roomType.standardRoom.price ?? 0);
-    calculationProvider.setDiscountPercentage(hotelDetailsModel?.discountsApplicable[0] ?? 0);
+    final calculationProvider =
+        Provider.of<CalculationProvider>(context, listen: false);
+    calculationProvider
+        .setCostPerNight(hotelDetailsModel?.roomType.standardRoom.price ?? 0);
+    calculationProvider
+        .setDiscountPercentage(hotelDetailsModel?.discountsApplicable[0] ?? 0);
     calculationProvider.setGstPercentage(12);
     calculationProvider.setDiscountPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
@@ -501,22 +505,39 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   ),
                 ],
               ),
-              Container(
-                height: 80,
-                width: 200,
-                decoration: BoxDecoration(
-                    color: Colors.red.shade400,
-                    borderRadius: BorderRadius.circular(30)),
-                child: const Center(
-                  child: Text(
-                    "Book Now",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
+              Builder(builder: (context) {
+                return InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return aboutHotelModel != null
+                            ? BookingWidget(
+                                hotelDetailsModel: hotelDetailsModel!,
+                              )
+                            : const SizedBox.shrink();
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 80,
+                    width: 200,
+                    decoration: BoxDecoration(
+                        color: Colors.red.shade400,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: const Center(
+                      child: Text(
+                        "Book Now",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ],
           ),
         ),

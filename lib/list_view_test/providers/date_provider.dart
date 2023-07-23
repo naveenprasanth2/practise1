@@ -5,11 +5,16 @@ class DateProvider extends ChangeNotifier {
   String? date;
   String? initialDate;
   int noOfDays = 1;
+  String? _checkInDate;
+  String? _checkOutDate;
 
   DateProvider() {
     seInitialDate();
   }
 
+  String get checkInDate => _checkInDate!;
+
+  String get checkOutDate => _checkOutDate!;
 
   void setDate(BuildContext context) async {
     await showDateRangePicker(
@@ -30,13 +35,15 @@ class DateProvider extends ChangeNotifier {
         );
       },
     ).then((value) {
+      DateFormat format = DateFormat("MMM-dd");
       if (value != null) {
-        DateFormat format = DateFormat("MMM-dd");
         date = "${format.format(value.start)} - ${format.format(value.end)}";
         noOfDays = value.end.difference(value.start).inDays;
       } else {
         date = date ?? initialDate;
       }
+      _checkInDate = format.format(value!.start);
+      _checkOutDate = format.format(value.end);
       notifyListeners();
     });
   }
@@ -45,6 +52,8 @@ class DateProvider extends ChangeNotifier {
     DateFormat format = DateFormat("MMM-dd");
     initialDate =
         "${format.format(DateTime.now().add(const Duration(days: 1)))} - ${format.format(DateTime.now().add(const Duration(days: 2)))}";
+    _checkInDate = format.format(DateTime.now().add(const Duration(days: 1)));
+    _checkOutDate = format.format(DateTime.now().add(const Duration(days: 2)));
     notifyListeners();
   }
 }
