@@ -86,11 +86,47 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
           child: Row(
             children: widget.hotelSearchModel.highlights
                 .map(
-                  (e) => HighLights(
-                    value: e,
+                  (value) => HighLights(
+                    value: value,
                   ),
                 )
                 .toList(),
+          ),
+        ),
+        Container(
+          height: 100,
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          width: double.infinity,
+          color: Colors.white,
+          child: Container(
+            margin: const EdgeInsets.only(left: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.hotelSearchModel.hotelName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  "₹ ${widget.hotelSearchModel.price.toString()}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const Text(
+                  "inclusive of all taxes",
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
