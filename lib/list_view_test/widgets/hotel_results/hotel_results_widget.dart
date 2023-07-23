@@ -20,7 +20,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
     super.initState();
     _pageController = PageController(
       initialPage: 0,
-      viewportFraction: 0.95,
+      viewportFraction: 1,
       keepPage: true,
     );
     _pageController.addListener(() {
@@ -39,7 +39,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
           child: Stack(
             children: [
               PageView.builder(
-                physics: const ClampingScrollPhysics(),
+                physics: const RangeMaintainingScrollPhysics(),
                 allowImplicitScrolling: true,
                 controller: _pageController,
                 itemCount: widget.hotelSearchModel.hotelImages.length,
