@@ -134,18 +134,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: 400,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black26),
-                            ),
-                            child: HotelResultsWidget(
-                              hotelSearchModel: hotelSearchModel[index],
-                            ),
+                        return Container(
+                          height: 400,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black26),
+                          ),
+                          child: HotelResultsWidget(
+                            hotelSearchModel: hotelSearchModel[index],
                           ),
                         );
                       },

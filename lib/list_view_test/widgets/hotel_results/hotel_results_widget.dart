@@ -84,6 +84,8 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
           width: double.infinity,
           color: Colors.white,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: widget.hotelSearchModel.highlights
                 .map(
                   (value) => HighLights(

@@ -12,7 +12,7 @@ class HighLights extends StatelessWidget {
       child: Container(
         height: 300,
         margin: const EdgeInsets.all(2.0),
-        width: MediaQuery.of(context).size.width * 0.30,
+        width: MediaQuery.of(context).size.width * 0.22,
         decoration: BoxDecoration(
           color: Colors.red.shade400,
           borderRadius: BorderRadius.circular(30),
@@ -21,7 +21,7 @@ class HighLights extends StatelessWidget {
           child: Text(
             value,
             style: const TextStyle(
-                fontSize: 12,
+                fontSize: 9,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
                 color: Colors.white),
