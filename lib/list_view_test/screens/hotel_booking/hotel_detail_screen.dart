@@ -205,7 +205,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                   child: Stack(
                     children: [
                       PageView.builder(
-                        itemCount: hotelDetailsModel?.hotelImages.length ?? 0,
+                        itemCount:
+                            hotelDetailsModel?.hotelImages.allImages.length ??
+                                0,
                         physics: const RangeMaintainingScrollPhysics(),
                         controller: _pageController,
                         scrollDirection: Axis.horizontal,
@@ -214,7 +216,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                             width: MediaQuery.of(context).size.width * 0.95,
                             margin: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Image.network(
-                              hotelDetailsModel!.hotelImages[index],
+                              hotelDetailsModel!.hotelImages.allImages[index],
                               fit: BoxFit.cover,
                             ),
                           );
@@ -227,7 +229,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         child: Center(
                           child: SmoothPageIndicator(
                             controller: _pageController,
-                            count: hotelDetailsModel?.hotelImages.length ?? 0,
+                            count: hotelDetailsModel
+                                    ?.hotelImages.allImages.length ??
+                                0,
                             // Total number of dots (pages)
                             effect: const ScrollingDotsEffect(
                               dotColor: Colors.grey,

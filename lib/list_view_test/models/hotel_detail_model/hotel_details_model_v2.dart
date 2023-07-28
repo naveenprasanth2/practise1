@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_model.dart';
+import 'package:practise1/list_view_test/models/hotel_images_model/hotel_images_model.dart';
 
 import '../amenities_model/amenities_model.dart';
 import '../guest_policies/guest_policy_model.dart';
@@ -35,7 +36,7 @@ class HotelDetailsModel {
   String mainImage;
 
   @JsonKey(name: 'hotelImages')
-  List<String> hotelImages;
+  HotelImagesModel hotelImages;
 
   @JsonKey(name: 'locations')
   LocationsModel locations;

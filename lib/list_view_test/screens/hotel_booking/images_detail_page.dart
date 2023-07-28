@@ -34,11 +34,26 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
       backgroundColor: Colors.white60,
       body: Stack(
         children: [
+          Positioned(
+            top: 40,
+            left: 10,
+            child: IconButton(
+              icon: const Icon(
+                Icons.close,
+                color: Colors.black,
+                size: 30,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ),
           Center(
             child: SizedBox(
               height: 250,
               child: PageView.builder(
-                itemCount: widget.hotelDetailsModel.hotelImages.length,
+                itemCount:
+                    widget.hotelDetailsModel.hotelImages.allImages.length,
                 physics: const RangeMaintainingScrollPhysics(),
                 controller: _pageController,
                 scrollDirection: Axis.horizontal,
@@ -46,7 +61,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
                   return SizedBox(
                     width: MediaQuery.of(context).size.width * 0.95,
                     child: Image.network(
-                      widget.hotelDetailsModel.hotelImages[index],
+                      widget.hotelDetailsModel.hotelImages.allImages[index],
                       fit: BoxFit.cover,
                     ),
                   );
@@ -60,7 +75,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
               padding: const EdgeInsets.all(16.0),
               child: SmoothPageIndicator(
                 controller: _pageController,
-                count: widget.hotelDetailsModel.hotelImages.length,
+                count: widget.hotelDetailsModel.hotelImages.allImages.length,
                 effect: const ScrollingDotsEffect(
                   dotColor: Colors.grey,
                   activeDotColor: Colors.white,

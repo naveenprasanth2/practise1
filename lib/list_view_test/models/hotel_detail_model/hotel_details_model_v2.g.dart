@@ -16,9 +16,8 @@ HotelDetailsModel _$HotelDetailsModelFromJson(Map<String, dynamic> json) =>
       averageRatings: (json['averageRatings'] as num).toDouble(),
       noOfRatings: json['noOfRatings'] as int,
       mainImage: json['mainImage'] as String,
-      hotelImages: (json['hotelImages'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      hotelImages: HotelImagesModel.fromJson(
+          json['hotelImages'] as Map<String, dynamic>),
       locations:
           LocationsModel.fromJson(json['locations'] as Map<String, dynamic>),
       highlights: (json['highlights'] as List<dynamic>)
