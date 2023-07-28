@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import '../../models/hotel_images_model/hotel_images_model.dart';
+import '../../widgets/images/images_list_view.dart';
+
+class HotelImagesBottomSheet extends StatefulWidget {
+  final HotelImagesModel hotelImagesModel;
+
+  const HotelImagesBottomSheet({Key? key, required this.hotelImagesModel})
+      : super(key: key);
+
+  @override
+  State<HotelImagesBottomSheet> createState() => _HotelImagesBottomSheetState();
+}
+
+class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController;
+
+  final List<String> tabs = [
+    "All",
+    "Room",
+    "Others",
+    "Washroom",
+    "Lobby",
+    "Reception",
+    "Facade"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: tabs.length,
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  pinned: true,
+                  expandedHeight: 140,
+                  bottom: TabBar(
+                    isScrollable: true,
+                    labelColor: Colors.black,
+                    indicatorColor: Colors.red.shade400,
+                    controller: _tabController,
+                    tabs: tabs.map((value) => Tab(text: value)).toList(),
+                  ),
+                ),
+                SliverFillRemaining(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      ImageListView(images: widget.hotelImagesModel.allImages),
+                      ImageListView(images: widget.hotelImagesModel.room),
+                      ImageListView(images: widget.hotelImagesModel.others),
+                      ImageListView(images: widget.hotelImagesModel.washroom),
+                      ImageListView(images: widget.hotelImagesModel.lobby),
+                      ImageListView(images: widget.hotelImagesModel.reception),
+                      ImageListView(images: widget.hotelImagesModel.facade),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 40,
+              left: 0,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+}

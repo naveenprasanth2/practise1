@@ -26,6 +26,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
 import '../reviews/reviews_screen.dart';
+import 'images_categorization_page.dart';
 
 class HotelDetailScreen extends StatefulWidget {
   final HotelSmallDetailsModel hotelSmallDetailsModel;
@@ -192,12 +193,21 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               padding: const EdgeInsets.only(top: 10),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => ImagesDetailPage(
-                          hotelDetailsModel: hotelDetailsModel!),
-                    ),
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (builder) => ImagesDetailPage(
+                  //         hotelDetailsModel: hotelDetailsModel!),
+                  //   ),
+                  // );
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) {
+                      return HotelImagesBottomSheet(
+                        hotelImagesModel: hotelDetailsModel!.hotelImages,
+                      );
+                    },
                   );
                 },
                 child: SizedBox(

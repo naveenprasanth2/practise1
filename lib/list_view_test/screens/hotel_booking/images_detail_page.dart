@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ImagesDetailPage extends StatefulWidget {
-  final HotelDetailsModel hotelDetailsModel;
+  final List<String> images;
+  final int index;
 
-  const ImagesDetailPage({super.key, required this.hotelDetailsModel});
+  const ImagesDetailPage({super.key, required this.images, required this.index});
 
   @override
   State<ImagesDetailPage> createState() => _ImagesDetailPageState();
@@ -18,7 +18,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
   void initState() {
     // TODO: implement initState
     _pageController = PageController(
-      initialPage: 0,
+      initialPage: widget.index,
       viewportFraction: 1,
       keepPage: true,
     );
@@ -53,7 +53,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
               height: 250,
               child: PageView.builder(
                 itemCount:
-                    widget.hotelDetailsModel.hotelImages.allImages.length,
+                    widget.images.length,
                 physics: const RangeMaintainingScrollPhysics(),
                 controller: _pageController,
                 scrollDirection: Axis.horizontal,
@@ -61,7 +61,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
                   return SizedBox(
                     width: MediaQuery.of(context).size.width * 0.95,
                     child: Image.network(
-                      widget.hotelDetailsModel.hotelImages.allImages[index],
+                      widget.images[index],
                       fit: BoxFit.cover,
                     ),
                   );
@@ -75,7 +75,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
               padding: const EdgeInsets.all(16.0),
               child: SmoothPageIndicator(
                 controller: _pageController,
-                count: widget.hotelDetailsModel.hotelImages.allImages.length,
+                count: widget.images.length,
                 effect: const ScrollingDotsEffect(
                   dotColor: Colors.grey,
                   activeDotColor: Colors.white,
