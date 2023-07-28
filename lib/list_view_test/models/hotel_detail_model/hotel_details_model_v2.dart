@@ -34,6 +34,9 @@ class HotelDetailsModel {
   @JsonKey(name: 'mainImage')
   String mainImage;
 
+  @JsonKey(name: 'hotelImages')
+  List<String> hotelImages;
+
   @JsonKey(name: 'locations')
   LocationsModel locations;
 
@@ -64,6 +67,7 @@ class HotelDetailsModel {
       required this.averageRatings,
       required this.noOfRatings,
       required this.mainImage,
+      required this.hotelImages,
       required this.locations,
       required this.highlights,
       required this.guestPolicies,

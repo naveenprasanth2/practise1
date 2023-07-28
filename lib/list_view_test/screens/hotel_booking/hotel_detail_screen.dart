@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/screens/hotel_booking/images_detail_page.dart';
 import 'package:practise1/list_view_test/widgets/booking/booking_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/pricing_detail_widget.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
 import '../reviews/reviews_screen.dart';
@@ -46,9 +48,19 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   int? totalRatings;
   bool _isDataLoaded = false;
 
+  late PageController _pageController;
+
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(
+      initialPage: 0,
+      viewportFraction: 1,
+      keepPage: true,
+    );
+    _pageController.addListener(() {
+      setState(() {});
+    });
     readHotelRatingsJson();
   }
 
@@ -178,23 +190,58 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/offerBanner.jpg"),
-                          fit: BoxFit.cover,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => ImagesDetailPage(
+                          hotelDetailsModel: hotelDetailsModel!),
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  height: 200,
+                  child: Stack(
+                    children: [
+                      PageView.builder(
+                        itemCount: hotelDetailsModel?.hotelImages.length ?? 0,
+                        physics: const RangeMaintainingScrollPhysics(),
+                        controller: _pageController,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Image.network(
+                              hotelDetailsModel!.hotelImages[index],
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: SmoothPageIndicator(
+                            controller: _pageController,
+                            count: hotelDetailsModel?.hotelImages.length ?? 0,
+                            // Total number of dots (pages)
+                            effect: const ScrollingDotsEffect(
+                              dotColor: Colors.grey,
+                              activeDotColor: Colors.white,
+                              dotHeight: 8,
+                              dotWidth: 8,
+                              spacing: 8,
+                              maxVisibleDots: 5,
+                            ),
+                          ),
                         ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
               ),
             ),

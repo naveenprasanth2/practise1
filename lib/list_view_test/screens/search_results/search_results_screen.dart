@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/count_provider.dart';
@@ -134,14 +136,31 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return Container(
-                          height: 400,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black26),
-                          ),
-                          child: HotelResultsWidget(
-                            hotelSearchModel: hotelSearchModel[index],
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) => HotelDetailScreen(
+                                  hotelSmallDetailsModel:
+                                      HotelSmallDetailsModel(
+                                          cityName: "Chennai",
+                                          hotelName: "M Plaza",
+                                          mapViewData: "",
+                                          townName: "Marathalli"),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 400,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black26),
+                            ),
+                            child: HotelResultsWidget(
+                              hotelSearchModel: hotelSearchModel[index],
+                            ),
                           ),
                         );
                       },
