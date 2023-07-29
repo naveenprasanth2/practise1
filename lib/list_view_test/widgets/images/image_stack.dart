@@ -15,7 +15,7 @@ Widget imageStack(String tabName, String imageUrl,
             isScrollControlled: true,
             builder: (context) {
               return HotelImagesBottomSheet(
-                hotelImagesModel: hotelDetailsModel!.hotelImages,
+                hotelImagesModel: hotelDetailsModel.hotelImages,
                 tabName: tabName,
               );
             },
@@ -39,7 +39,7 @@ Widget imageStack(String tabName, String imageUrl,
       ),
       Text(
         tabName,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),

@@ -107,7 +107,10 @@ class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
               top: 40,
               left: 0,
               child: IconButton(
-                icon: const Icon(Icons.close),
+                icon: const Icon(
+                  Icons.close,
+                  size: 30,
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
