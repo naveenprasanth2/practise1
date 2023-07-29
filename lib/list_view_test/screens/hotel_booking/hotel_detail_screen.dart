@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
-import 'package:practise1/list_view_test/screens/hotel_booking/images_detail_page.dart';
 import 'package:practise1/list_view_test/widgets/booking/booking_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/pricing_detail_widget.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,6 @@ import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
 import '../../widgets/images/image_stack.dart';
@@ -49,6 +47,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   HotelDetailsModel? hotelDetailsModel;
   int? totalRatings;
   bool _isDataLoaded = false;
+  List<String> hotelPicTypes = ["reception", "lobby", "facade", "washroom"];
 
   late PageController _pageController;
 
@@ -235,39 +234,25 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (hotelDetailsModel
-                                  ?.hotelImages.reception.isNotEmpty ==
-                              true)
-                            imageStack(
-                                "Reception",
-                                hotelDetailsModel!.hotelImages.reception[0],
-                                hotelDetailsModel!,
-                                context),
-                          if (hotelDetailsModel?.hotelImages.lobby.isNotEmpty ==
-                              true)
-                            imageStack(
-                                "Lobby",
-                                hotelDetailsModel!.hotelImages.lobby[0],
-                                hotelDetailsModel!,
-                                context),
-                          if (hotelDetailsModel
-                                  ?.hotelImages.facade.isNotEmpty ==
-                              true)
-                            imageStack(
-                                "Facade",
-                                hotelDetailsModel!.hotelImages.facade[0],
-                                hotelDetailsModel!,
-                                context),
-                          if (hotelDetailsModel
-                                  ?.hotelImages.washroom.isNotEmpty ==
-                              true)
-                            imageStack(
-                                "Washroom",
-                                hotelDetailsModel!.hotelImages.washroom[0],
-                                hotelDetailsModel!,
-                                context),
-                        ],
+                        children: hotelPicTypes
+                            .map((picType) => hotelDetailsModel != null
+                                    ? Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: imageStack(
+                                          picType.substring(0, 1).toUpperCase() +
+                                              picType
+                                                  .substring(
+                                                    1,
+                                                  )
+                                                  .toLowerCase(),
+                                          hotelDetailsModel!.hotelImages
+                                              .getImageFromType(picType)[0],
+                                          hotelDetailsModel!,
+                                          context),
+                                    )
+                                    : Container() // or another placeholder widget for when hotelDetailsModel is null
+                                )
+                            .toList(),
                       ),
                     ],
                   ),

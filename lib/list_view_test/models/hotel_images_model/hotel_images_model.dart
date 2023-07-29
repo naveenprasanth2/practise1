@@ -36,6 +36,25 @@ class HotelImagesModel {
     return [...room, ...others, ...washroom, ...lobby, ...reception, ...facade];
   }
 
+  List<String> getImageFromType(String type) {
+    switch (type) {
+      case "room":
+        return room;
+      case "others":
+        return others;
+      case "washroom":
+        return washroom;
+      case "lobby":
+        return lobby;
+      case "reception":
+        return reception;
+      case "facade":
+        return facade;
+      default:
+        return allImages;
+    }
+  }
+
   factory HotelImagesModel.fromJson(Map<String, dynamic> json) =>
       _$HotelImagesModelFromJson(json);
 
