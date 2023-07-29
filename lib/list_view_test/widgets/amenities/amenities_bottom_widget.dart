@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_individual.dart';
-import 'amenities_widget.dart';
-
 class AmenitiesBottomWidget extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
 
