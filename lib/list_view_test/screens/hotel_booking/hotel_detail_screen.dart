@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
 import 'package:provider/provider.dart';
@@ -189,7 +190,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           const SizedBox(width: 10),
                           Flexible(
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => MapsScreen()));
+                              },
                               child: const Text(
                                 "Map View",
                                 style: TextStyle(
