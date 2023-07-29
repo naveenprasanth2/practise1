@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ImagesDetailPage extends StatefulWidget {
-  final List<String> images;
+  final List<String> allImages;
   final int index;
 
-  const ImagesDetailPage({super.key, required this.images, required this.index});
+  const ImagesDetailPage({
+    super.key,
+    required this.allImages,
+    required this.index,
+  });
 
   @override
   State<ImagesDetailPage> createState() => _ImagesDetailPageState();
@@ -52,8 +56,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
             child: SizedBox(
               height: 250,
               child: PageView.builder(
-                itemCount:
-                    widget.images.length,
+                itemCount: widget.allImages.length,
                 physics: const RangeMaintainingScrollPhysics(),
                 controller: _pageController,
                 scrollDirection: Axis.horizontal,
@@ -61,7 +64,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
                   return SizedBox(
                     width: MediaQuery.of(context).size.width * 0.95,
                     child: Image.network(
-                      widget.images[index],
+                      widget.allImages[index],
                       fit: BoxFit.cover,
                     ),
                   );
@@ -75,7 +78,7 @@ class _ImagesDetailPageState extends State<ImagesDetailPage> {
               padding: const EdgeInsets.all(16.0),
               child: SmoothPageIndicator(
                 controller: _pageController,
-                count: widget.images.length,
+                count: widget.allImages.length,
                 effect: const ScrollingDotsEffect(
                   dotColor: Colors.grey,
                   activeDotColor: Colors.white,

@@ -3,21 +3,25 @@ import 'package:practise1/list_view_test/screens/hotel_booking/images_detail_pag
 
 class ImageListView extends StatelessWidget {
   final List<String> images;
+  final List<String> allImages;
 
-  const ImageListView({Key? key, required this.images}) : super(key: key);
+  const ImageListView({Key? key, required this.images, required this.allImages})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int indexFromAll;
     return ListView.builder(
       itemCount: images.length,
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
+            indexFromAll = allImages.indexOf(images[index]);
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (builder) =>
-                    ImagesDetailPage(images: images, index: index),
+                    ImagesDetailPage(allImages: allImages, index: indexFromAll),
               ),
             );
           },

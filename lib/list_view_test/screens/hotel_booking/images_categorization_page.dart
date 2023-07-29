@@ -65,13 +65,34 @@ class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      ImageListView(images: widget.hotelImagesModel.allImages),
-                      ImageListView(images: widget.hotelImagesModel.room),
-                      ImageListView(images: widget.hotelImagesModel.others),
-                      ImageListView(images: widget.hotelImagesModel.washroom),
-                      ImageListView(images: widget.hotelImagesModel.lobby),
-                      ImageListView(images: widget.hotelImagesModel.reception),
-                      ImageListView(images: widget.hotelImagesModel.facade),
+                      ImageListView(
+                        images: widget.hotelImagesModel.allImages,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
+                      ImageListView(
+                        images: widget.hotelImagesModel.room,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
+                      ImageListView(
+                        images: widget.hotelImagesModel.others,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
+                      ImageListView(
+                        images: widget.hotelImagesModel.washroom,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
+                      ImageListView(
+                        images: widget.hotelImagesModel.lobby,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
+                      ImageListView(
+                        images: widget.hotelImagesModel.reception,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
+                      ImageListView(
+                        images: widget.hotelImagesModel.facade,
+                        allImages: widget.hotelImagesModel.allImages,
+                      ),
                     ],
                   ),
                 ),
@@ -92,5 +113,4 @@ class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
       ),
     );
   }
-
 }
