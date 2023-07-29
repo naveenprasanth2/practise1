@@ -20,8 +20,17 @@ class RoomFacilityModel {
       this.extraMattress,
       this.smokeDetector,
       this.interCom,
-      this.books,
+      this.books
       );
+
+  Map<String, bool> roomFacilityModelData() {
+    var originalData = toJson();
+    Map<String, bool> roomFacilityModelData = originalData.map((key, value) {
+      return MapEntry(key, value as bool);
+    });
+    return roomFacilityModelData;
+  }
+
 
   factory RoomFacilityModel.fromJson(Map<String, dynamic> json) =>
       _$RoomFacilityModelFromJson(json);

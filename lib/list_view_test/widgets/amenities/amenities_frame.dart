@@ -18,12 +18,12 @@ class AmenitiesFrameWidgetOne extends StatelessWidget {
             children: [
               AmenitiesWidget(
                   iconData: Icons.ac_unit,
-                  title: "AC",
+                  title: "Ac",
                   isAvailable:
                       amenitiesModel?.hotelFacilitiesModel?.ac ?? false),
               AmenitiesWidget(
                 iconData: Icons.wifi,
-                title: "WIFI",
+                title: "Wifi",
                 isAvailable:
                     amenitiesModel?.hotelFacilitiesModel?.wifi ?? false,
               ),

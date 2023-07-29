@@ -12,8 +12,17 @@ class MediaTechnologyModel {
 
   MediaTechnologyModel({
     this.tv,
-    this.ott,
+    this.ott
   });
+
+  Map<String, bool> mediaTechnologyModelData() {
+    var originalData = toJson();
+    Map<String, bool> mediaTechnologyModelData = originalData.map((key, value) {
+      return MapEntry(key, value as bool);
+    });
+    return mediaTechnologyModelData;
+  }
+
 
   factory MediaTechnologyModel.fromJson(Map<String, dynamic> json) =>
       _$MediaTechnologyModelFromJson(json);
