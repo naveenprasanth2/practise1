@@ -4,18 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
-import 'package:practise1/list_view_test/widgets/booking/booking_widget.dart';
-import 'package:practise1/list_view_test/widgets/hotel_details/pricing_detail_widget.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
-import 'package:practise1/list_view_test/providers/count_provider.dart';
-import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
 import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
-import 'package:practise1/list_view_test/widgets/adult_child/adult_child_bottom_sheet.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
 import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
@@ -23,6 +20,7 @@ import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_wi
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
+import '../../widgets/hotel_details_main_widgets/hotel_appbar_widget.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -109,96 +107,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            pinned: true,
-            automaticallyImplyLeading: true,
-            centerTitle: true,
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.phone),
-              ),
-            ],
-            backgroundColor: Colors.red.shade400,
-            title: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    // Use a null-aware operator to avoid null errors
-                    hotelDetailsModel?.hotelName ?? "Hotel Name Loading...",
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const AdultChildBottomSheet();
-                            },
-                          );
-                        },
-                        child: Text(
-                          "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          Provider.of<DateProvider>(context, listen: false)
-                              .setDate(context);
-                        },
-                        child: Text(
-                          Provider.of<DateProvider>(context, listen: true)
-                                  .date ??
-                              Provider.of<DateProvider>(context, listen: true)
-                                  .initialDate!,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  itemCount: 10,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/offerBanner.jpg"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
+          HotelDetailsAppBar(hotelDetailsModel: hotelDetailsModel),
+          HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
           const SliverToBoxAdapter(
             child: SizedBox(
               height: 5,
@@ -463,84 +373,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          decoration: const BoxDecoration(color: Colors.transparent),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(color: Colors.transparent),
-                    child: Text(
-                      "₹ ${Provider.of<CalculationProvider>(context, listen: true).finalPriceWithoutPrepaidDiscount ?? 0}",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return PricingDetailsWidget(
-                            hotelDetailsModel: hotelDetailsModel!,
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      decoration:
-                          const BoxDecoration(color: Colors.transparent),
-                      child: const Icon(Icons.info_outline),
-                    ),
-                  ),
-                ],
-              ),
-              Builder(builder: (context) {
-                return InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return aboutHotelModel != null
-                            ? BookingWidget(
-                                hotelDetailsModel: hotelDetailsModel!,
-                              )
-                            : const SizedBox.shrink();
-                      },
-                    );
-                  },
-                  child: Container(
-                    height: 80,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        color: Colors.red.shade400,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: const Center(
-                      child: Text(
-                        "Book Now",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ],
-          ),
-        ),
+      bottomNavigationBar: HotelDetailsBottomBar(
+        hotelDetailsModel: hotelDetailsModel,
+        aboutHotelModel: aboutHotelModel,
       ),
     );
   }

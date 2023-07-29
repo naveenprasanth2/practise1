@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
-import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
+import 'package:practise1/list_view_test/screens/search_results/search_results_screen.dart';
 import 'package:practise1/list_view_test/widgets/location/city_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +8,7 @@ import '../../constants/location_constants.dart';
 import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../providers/count_provider.dart';
 import '../../widgets/left_drawer/my_drawer.dart';
+import 'city_search_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late ScrollController _scrollController;
   final int itemCount = 4;
   final double scrollDuration = 2.0;
+  final TextEditingController _searchController = TextEditingController();
+  final List<String> _dataList = LocationConstants.citiesList;
+  List<String> _searchResults = [];
 
   @override
   void initState() {
@@ -35,6 +38,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+// Function to perform the search
+  void _performSearch(String query) {
+    query = query.toLowerCase();
+    setState(() {
+      if (query.isEmpty) {
+        // If the search query is empty, show all cities in the list
+        _searchResults = List.from(_dataList);
+      } else {
+        // If the search query is not empty, filter the list based on the query
+        _searchResults = _dataList
+            .where((item) => item.toLowerCase().contains(query))
+            .toList();
+      }
+    });
   }
 
   void _autoScroll(double itemWidth) async {
@@ -102,26 +121,50 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(top: 60),
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: TextField(
-                            controller: TextEditingController(),
-                            decoration: InputDecoration(
-                              hintText: "Enter city name",
-                              border: OutlineInputBorder(
-                                  borderSide: Divider.createBorderSide(context),
-                                  borderRadius: BorderRadius.circular(10)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: Divider.createBorderSide(context),
-                                  borderRadius: BorderRadius.circular(10)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: Divider.createBorderSide(context),
-                                  borderRadius: BorderRadius.circular(10)),
-                              filled: false,
-                              contentPadding: const EdgeInsets.all(8),
+                        InkWell(
+                          onTap: () async {
+                            final searchQuery = await Navigator.push<String>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchPage(
+                                  homeSearchController: _searchController,
+                                ),
+                              ),
+                            );
+                            // When the user returns from the search page, update the search results based on the search query
+                            _performSearch(searchQuery ??
+                                ""); // Passing an empty string in case the searchQuery is null
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: TextField(
+                              controller: _searchController,
+                              enabled: false,
+                              style: const TextStyle(color: Colors.black54),
+                              decoration: InputDecoration(
+                                hintText: "Enter city name",
+                                disabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        Divider.createBorderSide(context),
+                                    borderRadius: BorderRadius.circular(10)),
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        Divider.createBorderSide(context),
+                                    borderRadius: BorderRadius.circular(10)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        Divider.createBorderSide(context),
+                                    borderRadius: BorderRadius.circular(10)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        Divider.createBorderSide(context),
+                                    borderRadius: BorderRadius.circular(10)),
+                                filled: false,
+                                contentPadding: const EdgeInsets.all(8),
+                              ),
+                              keyboardType: TextInputType.text,
+                              obscureText: false,
                             ),
-                            keyboardType: TextInputType.text,
-                            obscureText: false,
                           ),
                         ),
                         const SizedBox(
@@ -141,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .setDate(context);
                                   },
                                   child: TextField(
-                                    controller: TextEditingController(),
+                                    style: const TextStyle(color: Colors.black),
                                     decoration: InputDecoration(
                                         hintText: Provider.of<DateProvider>(context,
                                                     listen: true)
@@ -185,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: const EdgeInsets.only(
                                       left: 20, right: 30),
                                   child: TextField(
-                                    controller: TextEditingController(),
+                                    style: const TextStyle(color: Colors.black),
                                     decoration: InputDecoration(
                                       hintText:
                                           "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
@@ -228,16 +271,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Flexible(
                           child: InkWell(
+                            // onTap: () {
+                            //   Navigator.of(context).push(
+                            //     MaterialPageRoute(
+                            //       builder: (builder) => HotelDetailScreen(
+                            //         hotelSmallDetailsModel: HotelSmallDetailsModel(
+                            //             hotelName: "Naveen Hotels",
+                            //             townName: "hebbal",
+                            //             cityName: "Bangalore",
+                            //             mapViewData: "Near Bangalore"),
+                            //       ),
+                            //     ),
+                            //   );
+                            // },
                             onTap: () {
-                              Navigator.of(context).push(
+                              Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                  builder: (builder) => HotelDetailScreen(
-                                    hotelSmallDetailsModel: HotelSmallDetailsModel(
-                                        hotelName: "Naveen Hotels",
-                                        townName: "hebbal",
-                                        cityName: "Bangalore",
-                                        mapViewData: "Near Bangalore"),
-                                  ),
+                                  builder: (builder) =>
+                                      const SearchResultsScreen(),
                                 ),
                               );
                             },
