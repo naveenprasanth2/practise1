@@ -107,7 +107,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          HotelDetailsAppBar(hotelDetailsModel: hotelDetailsModel),
           HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
           const SliverToBoxAdapter(
             child: SizedBox(
