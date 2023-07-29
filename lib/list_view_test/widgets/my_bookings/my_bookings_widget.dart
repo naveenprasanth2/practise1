@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
+
+import '../../models/booking_history_model/booking_history_model.dart';
 
 class MyBookingsWidget extends StatelessWidget {
-  const MyBookingsWidget({super.key});
+  final BookingHistoryModel bookingHistoryModel;
+
+  const MyBookingsWidget({Key? key, required this.bookingHistoryModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +36,13 @@ class MyBookingsWidget extends StatelessWidget {
                     height: 100,
                     width: 100,
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.circular(20)),
+                      border: Border.all(color: Colors.black26),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: const Image(
-                        image: NetworkImage(
-                            "https://media.istockphoto.com/id/187363337/photo/modern-hotel-building-in-summer.jpg?s=1024x1024&w=is&k=20&c=eAOaQqAgWgAKxRcqW3ahTsB6zhZ-ieNW_y4_POUUxgI="),
+                      child: Image(
+                        image: NetworkImage(bookingHistoryModel.iconImage),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -44,41 +50,47 @@ class MyBookingsWidget extends StatelessWidget {
                   const SizedBox(
                     width: 20,
                   ),
-                  SizedBox(
-                    height: 100,
+                  Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Expanded(
-                          child: Text(
-                            "Bangalore",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        Text(
+                          bookingHistoryModel.cityName,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(
                           height: 5,
                         ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const Text('03 Jan - 04 Jan  '),
-                              Container(
-                                height: 5,
-                                width: 5,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.black,
-                                    border: Border.all(color: Colors.black)),
+                        Row(
+                          children: [
+                            Text(
+                              '${bookingHistoryModel.checkInDate} - ${bookingHistoryModel.checkOutDate}  ',
+                            ),
+                            Container(
+                              height: 5,
+                              width: 5,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black,
+                                border: Border.all(color: Colors.black),
                               ),
-                              const Text("  2 Guests"),
-                            ],
+                            ),
+                            Text(
+                              "  ${bookingHistoryModel.guestsCount} Guests",
+                            ),
+                          ],
+                        ),
+                        Text(bookingHistoryModel.hotelName),
+                        SizedBox(
+                          height: 40, // Adjust the height as needed
+                          child: Text(
+                            "${bookingHistoryModel.doorNumber}, ${bookingHistoryModel.streetNumber}",
+                            softWrap: true,
                           ),
                         ),
-                        const Text("Hotel Name should appear here"),
-                        const Text("Hotel Plot number and Street Name")
                       ],
                     ),
                   ),
@@ -86,7 +98,7 @@ class MyBookingsWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -108,6 +120,68 @@ class MyBookingsWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (bookingHistoryModel.checkOutStatus == "booked")
+                    Container(
+                      height: 50,
+                      width: 120,
+                      margin: const EdgeInsets.all(2),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
+                      bookingHistoryModel.rated == false)
+                    InkWell(
+                      onTap: () => RatingDialogHelper.openRatingDialog(context),
+                      child: Container(
+                        height: 50,
+                        width: 120,
+                        margin: const EdgeInsets.all(2),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.star_border_outlined,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              "Rate Now",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
+                      bookingHistoryModel.rated == true)
+                    Container(
+                      height: 50,
+                      width: 120,
+                      margin: const EdgeInsets.all(2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.yellow.shade300,
+                          ),
+                          const Text(
+                            "Rated",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
                   Container(
                     height: 50,
                     width: 120,

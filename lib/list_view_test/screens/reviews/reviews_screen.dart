@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
+import '../../models/star_ratings_model/star_rating_details_model.dart';
 import '../../utils/star_rating_colour_utils.dart';
 import '../../widgets/ratings/ratings_tile.dart';
 
@@ -18,22 +19,22 @@ class ReviewsScreen extends StatefulWidget {
 }
 
 class _ReviewsScreenState extends State<ReviewsScreen> {
-  List<Map<String, dynamic>> ratingsDetails = [];
+  List<StarRatingDetailsModel> ratingsDetails = [];
 
   @override
   void initState() {
     super.initState();
-    getDetailedRatingsFromJson();
+    getDetailedReviewsFromJson();
   }
 
-  Future<void> getDetailedRatingsFromJson() async {
+  Future<void> getDetailedReviewsFromJson() async {
     final value =
         await rootBundle.loadString("assets/star_ratings_detail.json");
     setState(() {
       final dynamic ratingsDetailsData = json.decode(value);
 
       for (var json in ratingsDetailsData) {
-        ratingsDetails.add(json);
+        ratingsDetails.add(StarRatingDetailsModel.fromJson(json));
       }
     });
   }
@@ -49,6 +50,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               "Ratings & Reviews",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ),
             centerTitle: true,

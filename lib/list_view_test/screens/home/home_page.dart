@@ -229,14 +229,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Flexible(
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
                                   builder: (builder) => HotelDetailScreen(
-                                        hotelDetailsModel: HotelDetailsModel(
-                                            hotelName: "Naveen Hotels",
-                                            townName: "hebbal",
-                                            cityName: "Bangalore",
-                                            mapViewData: "Near Bangalore"),
-                                      )));
+                                    hotelSmallDetailsModel: HotelSmallDetailsModel(
+                                        hotelName: "Naveen Hotels",
+                                        townName: "hebbal",
+                                        cityName: "Bangalore",
+                                        mapViewData: "Near Bangalore"),
+                                  ),
+                                ),
+                              );
                             },
                             child: Container(
                               height: 50,

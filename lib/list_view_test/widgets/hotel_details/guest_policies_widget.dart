@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 
 class GuestPoliciesWidget extends StatelessWidget {
-  final List<MapEntry<String, dynamic>>? guestPolicies;
+  final List<GuestPolicyModel>? guestPolicies;
   final String? title;
   final IconData? iconData;
 
@@ -32,8 +33,8 @@ class GuestPoliciesWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 30),
           child: Text(guestPolicies != null
               ? guestPolicies!
-                  .firstWhere((element) => element.key == title)
-                  .value
+                  .firstWhere((element) => element.title == title)
+                  .description
                   .toString()
               : ""),
         ),

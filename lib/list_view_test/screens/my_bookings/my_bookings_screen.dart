@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
-import '../../widgets/ratings/ratings_tile.dart';
+import '../../models/booking_history_model/booking_history_model.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({Key? key}) : super(key: key);
@@ -15,24 +15,37 @@ class MyBookingsScreen extends StatefulWidget {
 class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<Map<String, dynamic>> ratingsDetails = [];
+  List<BookingHistoryModel> myBookingHistoryList = [];
+  List<BookingHistoryModel> myUpcomingList = [];
+  List<BookingHistoryModel> myCheckedOutList = [];
+  List<BookingHistoryModel> myCancelledList = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     getDetailedRatingsFromJson();
   }
 
   Future<void> getDetailedRatingsFromJson() async {
-    final value =
-        await rootBundle.loadString("assets/star_ratings_detail.json");
+    final value = await rootBundle.loadString("assets/my_bookings_data.json");
     setState(() {
       final dynamic ratingsDetailsData = json.decode(value);
 
       for (var json in ratingsDetailsData) {
-        ratingsDetails.add(json);
+        myBookingHistoryList.add(BookingHistoryModel.fromJson(json));
       }
+      myUpcomingList = myBookingHistoryList
+          .where((element) => element.checkOutStatus == "booked")
+          .toList();
+
+      myCheckedOutList = myBookingHistoryList
+          .where((element) => element.checkOutStatus == "checkedOut")
+          .toList();
+
+      myCancelledList = myBookingHistoryList
+          .where((element) => element.checkOutStatus == "cancelled")
+          .toList();
     });
   }
 
@@ -46,7 +59,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.red.shade400,
@@ -54,6 +67,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               "My Bookings",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ),
             centerTitle: true,
@@ -92,6 +106,18 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     ),
                   ),
                 ),
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Cancelled',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -102,21 +128,15 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                          (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Container(
-                            height: 150,
-                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.black26)),
-                            child: RatingsTile(
-                                ratingDetail: ratingsDetails[index]),
+                          child: MyBookingsWidget(
+                            bookingHistoryModel: myUpcomingList[index],
                           ),
                         );
                       },
-                      childCount: ratingsDetails.length,
+                      childCount: myUpcomingList.length,
                     ),
                   ),
                 ],
@@ -126,12 +146,31 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: MyBookingsWidget(),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: MyBookingsWidget(
+                            bookingHistoryModel: myCheckedOutList[index],
+                          ),
                         );
                       },
-                      childCount: ratingsDetails.length,
+                      childCount: myCheckedOutList.length,
+                    ),
+                  ),
+                ],
+              ),
+              CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: MyBookingsWidget(
+                            bookingHistoryModel: myCancelledList[index],
+                          ),
+                        );
+                      },
+                      childCount: myCancelledList.length,
                     ),
                   ),
                 ],
