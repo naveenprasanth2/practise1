@@ -237,7 +237,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                         children: hotelPicTypes
                             .map((picType) => hotelDetailsModel != null
                                     ? Padding(
-                                      padding: const EdgeInsets.only(left: 5),
+                                      padding: const EdgeInsets.symmetric(horizontal: 2),
                                       child: imageStack(
                                           picType.substring(0, 1).toUpperCase() +
                                               picType
