@@ -25,6 +25,7 @@ import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bot
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
+import '../../widgets/images/image_stack.dart';
 import '../reviews/reviews_screen.dart';
 import 'images_categorization_page.dart';
 
@@ -190,69 +191,83 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 2),
               child: InkWell(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (builder) => ImagesDetailPage(
-                  //         hotelDetailsModel: hotelDetailsModel!),
-                  //   ),
-                  // );
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return HotelImagesBottomSheet(
-                        hotelImagesModel: hotelDetailsModel!.hotelImages,
-                      );
-                    },
-                  );
+                  if (hotelDetailsModel?.hotelImages != null) {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return HotelImagesBottomSheet(
+                          hotelImagesModel: hotelDetailsModel!.hotelImages,
+                          tabName: "All",
+                        );
+                      },
+                    );
+                  }
                 },
                 child: SizedBox(
-                  height: 200,
+                  height: 250,
                   child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    // This aligns the children of the stack at the bottom center
                     children: [
-                      PageView.builder(
-                        itemCount:
-                            hotelDetailsModel?.hotelImages.allImages.length ??
-                                0,
-                        physics: const RangeMaintainingScrollPhysics(),
-                        controller: _pageController,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Image.network(
-                              hotelDetailsModel!.hotelImages.allImages[index],
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        },
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: SmoothPageIndicator(
-                            controller: _pageController,
-                            count: hotelDetailsModel
-                                    ?.hotelImages.allImages.length ??
-                                0,
-                            // Total number of dots (pages)
-                            effect: const ScrollingDotsEffect(
-                              dotColor: Colors.grey,
-                              activeDotColor: Colors.white,
-                              dotHeight: 8,
-                              dotWidth: 8,
-                              spacing: 8,
-                              maxVisibleDots: 5,
-                            ),
-                          ),
+                      if (hotelDetailsModel?.hotelImages.allImages != null)
+                        PageView.builder(
+                          itemCount:
+                              hotelDetailsModel!.hotelImages.allImages.length,
+                          physics: const RangeMaintainingScrollPhysics(),
+                          controller: _pageController,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width * 0.99,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 1.0),
+                              child: Image.network(
+                                hotelDetailsModel!.hotelImages.allImages[index],
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
                         ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (hotelDetailsModel
+                                  ?.hotelImages.reception.isNotEmpty ==
+                              true)
+                            imageStack(
+                                "Reception",
+                                hotelDetailsModel!.hotelImages.reception[0],
+                                hotelDetailsModel!,
+                                context),
+                          if (hotelDetailsModel?.hotelImages.lobby.isNotEmpty ==
+                              true)
+                            imageStack(
+                                "Lobby",
+                                hotelDetailsModel!.hotelImages.lobby[0],
+                                hotelDetailsModel!,
+                                context),
+                          if (hotelDetailsModel
+                                  ?.hotelImages.facade.isNotEmpty ==
+                              true)
+                            imageStack(
+                                "Facade",
+                                hotelDetailsModel!.hotelImages.facade[0],
+                                hotelDetailsModel!,
+                                context),
+                          if (hotelDetailsModel
+                                  ?.hotelImages.washroom.isNotEmpty ==
+                              true)
+                            imageStack(
+                                "Washroom",
+                                hotelDetailsModel!.hotelImages.washroom[0],
+                                hotelDetailsModel!,
+                                context),
+                        ],
                       ),
                     ],
                   ),

@@ -4,9 +4,13 @@ import '../../widgets/images/images_list_view.dart';
 
 class HotelImagesBottomSheet extends StatefulWidget {
   final HotelImagesModel hotelImagesModel;
+  final String tabName;
 
-  const HotelImagesBottomSheet({Key? key, required this.hotelImagesModel})
-      : super(key: key);
+  const HotelImagesBottomSheet({
+    Key? key,
+    required this.hotelImagesModel,
+    required this.tabName,
+  }) : super(key: key);
 
   @override
   State<HotelImagesBottomSheet> createState() => _HotelImagesBottomSheetState();
@@ -30,6 +34,7 @@ class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
   void initState() {
     super.initState();
     _tabController = TabController(
+      initialIndex: tabs.indexOf(widget.tabName),
       length: tabs.length,
       vsync: this,
     );

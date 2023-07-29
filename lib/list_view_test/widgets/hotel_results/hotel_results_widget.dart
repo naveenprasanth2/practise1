@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/widgets/hotel_results/highligths_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
