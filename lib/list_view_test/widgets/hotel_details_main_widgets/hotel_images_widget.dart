@@ -55,7 +55,7 @@ class _HotelImagesWithIconsWidgetState
           }
         },
         child: SizedBox(
-          height: 250,
+          height: 300,
           child: Stack(
             children: [
               Stack(
@@ -70,9 +70,8 @@ class _HotelImagesWithIconsWidgetState
                       controller: _pageController,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width * 0.99,
-                          margin: const EdgeInsets.symmetric(horizontal: 1.0),
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
                           child: Image.network(
                             widget.hotelDetailsModel!.hotelImages
                                 .allImages[index],
