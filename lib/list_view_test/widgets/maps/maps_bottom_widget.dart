@@ -30,7 +30,9 @@ class _OfficeTabViewState extends State<OfficeTabView>
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            physics: const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(
+              decelerationRate: ScrollDecelerationRate.normal,
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             itemCount: snapshot.data?.offices.length,
             itemBuilder: (context, index) {
@@ -40,8 +42,7 @@ class _OfficeTabViewState extends State<OfficeTabView>
                 LatLng(office!.lat, office.lng),
               );
               return Padding(
-                padding:
-                    const EdgeInsets.symmetric( vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -81,13 +82,22 @@ class _OfficeTabViewState extends State<OfficeTabView>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TabBar(
+      child: Container(
+        color: Colors.white, // Set the background color to white
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16), // A
+            Center(
+              child: Container(
+                width: 20, // Customize the width of the indicator
+                height: 2, // Customize the height of the indicator
+                color: Colors.black, // Customize the color of the indicator
+              ),
+            ),// dd some extra space at the top
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: TabBar(
                 isScrollable: true,
                 indicatorColor: Colors.red.shade400,
                 labelStyle: const TextStyle(fontSize: 13),
@@ -99,18 +109,18 @@ class _OfficeTabViewState extends State<OfficeTabView>
                   Tab(text: 'Popular Places'),
                 ],
               ),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    _buildOfficeListView(context),
-                    _buildOfficeListView(context),
-                    _buildOfficeListView(context),
-                    _buildOfficeListView(context),
-                  ],
-                ),
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _buildOfficeListView(context),
+                  _buildOfficeListView(context),
+                  _buildOfficeListView(context),
+                  _buildOfficeListView(context),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

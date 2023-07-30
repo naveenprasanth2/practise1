@@ -22,7 +22,7 @@ class _MapScreenState extends State<MapScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     String jsonString =
-    await rootBundle.loadString('assets/nearby_places.json');
+        await rootBundle.loadString('assets/nearby_places.json');
 
     final jsonResponse = jsonDecode(jsonString);
     return OfficesModel.fromJson(jsonResponse);
@@ -67,12 +67,17 @@ class _MapScreenState extends State<MapScreen> {
               maxChildSize: 0.6,
               builder:
                   (BuildContext context, ScrollController scrollController) {
-                return SingleChildScrollView(
-                  controller: scrollController,
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: GestureDetector(
-                      onHorizontalDragUpdate: (_) {},
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (scrollNotification) {
+                    if (scrollNotification.metrics.pixels != 0.0) {
+                      return true;
+                    }
+                    return false;
+                  },
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.6,
                       child: OfficeTabView(
                         futureOffices: fetchGoogleOffices(),
                       ),
