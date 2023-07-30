@@ -1,79 +1,68 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geodesy/geodesy.dart';
+import '../../models/nearby_places_model/nearby_places_model.dart';
+import '../../models/nearby_places_model/place_category_model.dart';
 
-import '../../models/nearby_places_model/office_model.dart';
-import '../../models/nearby_places_model/offices_model.dart';
+class NearByPlacesTabView extends StatefulWidget {
+  final NearbyPlacesModel nearbyPlacesModel;
 
-class OfficeTabView extends StatefulWidget {
-  final Future<OfficesModel> futureOffices;
-
-  const OfficeTabView({required this.futureOffices, Key? key})
+  const NearByPlacesTabView({Key? key, required this.nearbyPlacesModel})
       : super(key: key);
 
   @override
-  State<OfficeTabView> createState() => _OfficeTabViewState();
+  State<NearByPlacesTabView> createState() => _NearByPlacesTabViewState();
 }
 
-class _OfficeTabViewState extends State<OfficeTabView>
-    with AutomaticKeepAliveClientMixin {
+class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
+    with AutomaticKeepAliveClientMixin<NearByPlacesTabView> {
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildOfficeListView(BuildContext context) {
-    final LatLng fixedLocation = LatLng(37.4219999, -122.0840575);
+  Widget _buildPlaceListView(
+      BuildContext context, List<PlaceCategoryModel> places) {
+    final LatLng fixedLocation = LatLng(
+        widget.nearbyPlacesModel.hotelLocationDetails.lat,
+        widget.nearbyPlacesModel.hotelLocationDetails.lng);
     final Geodesy geodesy = Geodesy();
 
-    return FutureBuilder<OfficesModel>(
-      future: widget.futureOffices,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(
-              decelerationRate: ScrollDecelerationRate.normal,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            itemCount: snapshot.data?.offices.length,
-            itemBuilder: (context, index) {
-              OfficeModel? office = snapshot.data?.offices[index];
-              num officeDistance = geodesy.distanceBetweenTwoGeoPoints(
-                LatLng(fixedLocation.latitude, fixedLocation.longitude),
-                LatLng(office!.lat, office.lng),
-              );
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(
+        decelerationRate: ScrollDecelerationRate.normal,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      itemCount: places.length,
+      itemBuilder: (context, index) {
+        PlaceCategoryModel? place = places[index];
+        num placeDistance = geodesy.distanceBetweenTwoGeoPoints(
+          LatLng(fixedLocation.latitude, fixedLocation.longitude),
+          LatLng(place.lat, place.lng),
+        );
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Icon(Icons.location_pin),
+              const SizedBox(width: 30),
+              // add some space between icon and text
+              Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.location_pin),
-                    const SizedBox(width: 30),
-                    // add some space between icon and text
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            office.name,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            '${(officeDistance / 1000).toStringAsFixed(2)} km',
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
+                    Text(
+                      place.name,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      '${(placeDistance / 1000).toStringAsFixed(2)} km',
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        return const Center(child: CircularProgressIndicator());
+              ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -94,7 +83,7 @@ class _OfficeTabViewState extends State<OfficeTabView>
                 height: 2, // Customize the height of the indicator
                 color: Colors.black, // Customize the color of the indicator
               ),
-            ),// dd some extra space at the top
+            ), // dd some extra space at the top
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: TabBar(
@@ -113,10 +102,17 @@ class _OfficeTabViewState extends State<OfficeTabView>
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildOfficeListView(context),
-                  _buildOfficeListView(context),
-                  _buildOfficeListView(context),
-                  _buildOfficeListView(context),
+                  _buildPlaceListView(context, [
+                    ...widget.nearbyPlacesModel.transport,
+                    ...widget.nearbyPlacesModel.mallsAndRestaurants,
+                    ...widget.nearbyPlacesModel.popularPlaces,
+                    ...widget.nearbyPlacesModel.others
+                  ]),
+                  _buildPlaceListView(
+                      context, widget.nearbyPlacesModel.transport),
+                  _buildPlaceListView(
+                      context, widget.nearbyPlacesModel.popularPlaces),
+                  _buildPlaceListView(context, widget.nearbyPlacesModel.others),
                 ],
               ),
             ),
