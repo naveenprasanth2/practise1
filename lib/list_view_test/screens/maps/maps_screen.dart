@@ -114,7 +114,7 @@ class _MapScreenState extends State<MapScreen> {
                       nearbyPlaces!.hotelLocationDetails.lat,
                       nearbyPlaces!.hotelLocationDetails.lng,
                     ),
-                    zoom: 16,
+                    zoom: 17,
                   ),
                   markers: _markers.values.toSet(),
                 ),

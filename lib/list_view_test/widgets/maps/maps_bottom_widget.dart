@@ -90,7 +90,7 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
       gmaps.CameraUpdate.newCameraPosition(
         gmaps.CameraPosition(
           target: gmaps.LatLng(latitude, longitude),
-          zoom: 14.0, // Set it to your desired zoom level
+          zoom: 18, // Set it to your desired zoom level
         ),
       ),
     );
