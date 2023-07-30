@@ -48,7 +48,7 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              if (placesDetails.keys.first == "all")
+              if (placesDetails.keys.first == "others")
                 const Icon(Icons.location_pin),
               if (placesDetails.keys.first == "transport")
                 const Icon(Icons.emoji_transportation),
@@ -121,24 +121,16 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
                 labelStyle: const TextStyle(fontSize: 13),
                 // Set your desired text size
                 tabs: const [
-                  Tab(text: 'All'),
                   Tab(text: 'Transport'),
                   Tab(text: 'Malls & Restaurants'),
                   Tab(text: 'Popular Places'),
+                  Tab(text: 'Others'),
                 ],
               ),
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildPlaceListView(context, {
-                    "all": [
-                      ...widget.nearbyPlacesModel.transport,
-                      ...widget.nearbyPlacesModel.mallsAndRestaurants,
-                      ...widget.nearbyPlacesModel.popularPlaces,
-                      ...widget.nearbyPlacesModel.others
-                    ]
-                  }),
                   _buildPlaceListView(context,
                       {"transport": widget.nearbyPlacesModel.transport}),
                   _buildPlaceListView(context, {
@@ -148,6 +140,8 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
                   _buildPlaceListView(context, {
                     "popularPlaces": widget.nearbyPlacesModel.popularPlaces
                   }),
+                  _buildPlaceListView(
+                      context, {"others": widget.nearbyPlacesModel.others}),
                 ],
               ),
             ),
