@@ -37,7 +37,16 @@ class _MapScreenState extends State<MapScreen> {
   Future<BitmapDescriptor> _createCustomMarkerIcon(String path) async {
     final byteData = await rootBundle.load(path);
     var codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(),
-        targetWidth: 80);
+        targetWidth: 120);
+    var frame = await codec.getNextFrame();
+    final data = await frame.image.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
+  }
+
+  Future<BitmapDescriptor> _createCustomMarkerIconForMainPlace(String path) async {
+    final byteData = await rootBundle.load(path);
+    var codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(),
+        targetWidth: 170);
     var frame = await codec.getNextFrame();
     final data = await frame.image.toByteData(format: ui.ImageByteFormat.png);
     return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
@@ -51,7 +60,7 @@ class _MapScreenState extends State<MapScreen> {
   void _addMarkers() async {
     if (nearbyPlaces == null || mapController == null) return;
 
-    final hotelIcon = await _createCustomMarkerIcon('assets/hotel_icon.png');
+    final hotelIcon = await _createCustomMarkerIconForMainPlace('assets/hotel_icon.png');
     final othersIcon = await _createCustomMarkerIcon('assets/others_icon.png');
     final transportIcon =
         await _createCustomMarkerIcon('assets/transport_icon.png');
