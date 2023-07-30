@@ -17,71 +17,74 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final Map<String, Marker> _markers = {};
   NearbyPlacesModel? nearbyPlaces;
+  GoogleMapController? mapController;
 
   @override
   void initState() {
     super.initState();
-    parseJsonToNearbyPlacesModel().then((value) => {
-          setState(() {
-            nearbyPlaces = value;
-          }),
-        });
+    _loadNearbyPlaces();
   }
 
-  Future<NearbyPlacesModel> parseJsonToNearbyPlacesModel() async {
+  Future<void> _loadNearbyPlaces() async {
     final jsonString = await rootBundle.loadString('assets/nearby_places.json');
     final jsonMap = json.decode(jsonString);
     final nearbyPlacesModel = NearbyPlacesModel.fromJson(jsonMap);
-    return nearbyPlacesModel;
-  }
-
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    if (nearbyPlaces == null) return;
-
-    final hotelIcon = await _createCustomMarkerIcon('assets/hotel_icon.jpeg');
-    final othersIcon = await _createCustomMarkerIcon('assets/others_icon.jpeg');
-    final transportIcon =
-        await _createCustomMarkerIcon('assets/transport_icon.jpeg');
-    final mallsRestaurantsIcon =
-        await _createCustomMarkerIcon('assets/malls_restaurants_icon.jpeg');
-    final popularPlacesIcon =
-        await _createCustomMarkerIcon('assets/popular_places_icon.jpeg');
-
     setState(() {
-      _markers.clear();
-      _createMarkers(nearbyPlaces!, hotelIcon, othersIcon, transportIcon,
-          mallsRestaurantsIcon, popularPlacesIcon);
+      nearbyPlaces = nearbyPlacesModel;
     });
   }
 
-  void _createMarkers(
-      NearbyPlacesModel nearbyPlaces,
-      BitmapDescriptor hotelIcon,
-      BitmapDescriptor othersIcon,
-      BitmapDescriptor transportIcon,
-      BitmapDescriptor mallsRestaurantsIcon,
-      BitmapDescriptor popularPlacesIcon) {
+  Future<BitmapDescriptor> _createCustomMarkerIcon(String path) async {
+    final byteData = await rootBundle.load(path);
+    var codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(),
+        targetWidth: 120);
+    var frame = await codec.getNextFrame();
+    final data = await frame.image.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    _addMarkers();
+  }
+
+  void _addMarkers() async {
+    if (nearbyPlaces == null || mapController == null) return;
+
+    final hotelIcon = await _createCustomMarkerIcon('assets/hotel_icon.png');
+    final othersIcon = await _createCustomMarkerIcon('assets/others_icon.png');
+    final transportIcon =
+        await _createCustomMarkerIcon('assets/transport_icon.png');
+    final mallsRestaurantsIcon =
+        await _createCustomMarkerIcon('assets/malls_restaurants_icon.png');
+    final popularPlacesIcon =
+        await _createCustomMarkerIcon('assets/popular_places_icon.png');
+
     final hotelMarker = Marker(
-      markerId: MarkerId(nearbyPlaces.hotelLocationDetails.name),
+      markerId: MarkerId(nearbyPlaces!.hotelLocationDetails.name),
       icon: hotelIcon,
       position: LatLng(
-        nearbyPlaces.hotelLocationDetails.lat,
-        nearbyPlaces.hotelLocationDetails.lng,
+        nearbyPlaces!.hotelLocationDetails.lat,
+        nearbyPlaces!.hotelLocationDetails.lng,
       ),
       infoWindow: InfoWindow(
-        title: nearbyPlaces.hotelLocationDetails.name,
-        snippet: nearbyPlaces.hotelLocationDetails.address,
+        title: nearbyPlaces!.hotelLocationDetails.name,
+        snippet: nearbyPlaces!.hotelLocationDetails.address,
       ),
     );
     _markers['hotel'] = hotelMarker;
 
-    _addMarkers(nearbyPlaces.transport, transportIcon);
-    _addMarkers(nearbyPlaces.mallsAndRestaurants, mallsRestaurantsIcon);
-    _addMarkers(nearbyPlaces.popularPlaces, popularPlacesIcon);
-    _addMarkers(nearbyPlaces.others, othersIcon);
+    _addCategoryMarkers(nearbyPlaces!.transport, transportIcon);
+    _addCategoryMarkers(
+        nearbyPlaces!.mallsAndRestaurants, mallsRestaurantsIcon);
+    _addCategoryMarkers(nearbyPlaces!.popularPlaces, popularPlacesIcon);
+    _addCategoryMarkers(nearbyPlaces!.others, othersIcon);
+
+    setState(() {}); // To trigger marker addition on the map
   }
 
-  void _addMarkers(List<PlaceCategoryModel> places, BitmapDescriptor icon) {
+  void _addCategoryMarkers(
+      List<PlaceCategoryModel> places, BitmapDescriptor icon) {
     for (final place in places) {
       final marker = Marker(
         markerId: MarkerId(place.name),
@@ -96,15 +99,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  Future<BitmapDescriptor> _createCustomMarkerIcon(String path) async {
-    final byteData = await rootBundle.load(path);
-    var codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(),
-        targetWidth: 100);
-    var frame = await codec.getNextFrame();
-    final data = await frame.image.toByteData(format: ui.ImageByteFormat.png);
-    return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,9 +108,12 @@ class _MapScreenState extends State<MapScreen> {
               ? Container()
               : GoogleMap(
                   onMapCreated: _onMapCreated,
+                  mapType: MapType.terrain,
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(nearbyPlaces!.hotelLocationDetails.lat,
-                        nearbyPlaces!.hotelLocationDetails.lng),
+                    target: LatLng(
+                      nearbyPlaces!.hotelLocationDetails.lat,
+                      nearbyPlaces!.hotelLocationDetails.lng,
+                    ),
                     zoom: 16,
                   ),
                   markers: _markers.values.toSet(),
@@ -139,13 +136,12 @@ class _MapScreenState extends State<MapScreen> {
                   child: SingleChildScrollView(
                     controller: scrollController,
                     child: SizedBox(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.6,
-                      child: (nearbyPlaces != null)
-                          ? NearByPlacesTabView(nearbyPlacesModel: nearbyPlaces!)
-                          : const CircularProgressIndicator(),  // Replace this with an appropriate widget for when nearbyPlaces is null
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: (nearbyPlaces != null && mapController != null)
+                          ? NearByPlacesTabView(
+                              nearbyPlacesModel: nearbyPlaces!,
+                              googleMapController: mapController!)
+                          : const Center(child: CircularProgressIndicator()),
                     ),
                   ),
                 );

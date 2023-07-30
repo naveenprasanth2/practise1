@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:geodesy/geodesy.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../models/nearby_places_model/place_category_model.dart';
 
 class NearByPlacesTabView extends StatefulWidget {
   final NearbyPlacesModel nearbyPlacesModel;
+  final gmaps.GoogleMapController googleMapController;
 
-  const NearByPlacesTabView({Key? key, required this.nearbyPlacesModel})
+  const NearByPlacesTabView(
+      {Key? key,
+      required this.nearbyPlacesModel,
+      required this.googleMapController})
       : super(key: key);
 
   @override
@@ -54,24 +59,40 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
               const SizedBox(width: 30),
               // add some space between icon and text
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      place.name,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '${(placeDistance / 1000).toStringAsFixed(2)} km',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                child: InkWell(
+                  onTap: () {
+                    _moveCamera(place.lat, place.lng);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        place.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        '${(placeDistance / 1000).toStringAsFixed(2)} km',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  void _moveCamera(double latitude, double longitude) {
+    widget.googleMapController.animateCamera(
+      gmaps.CameraUpdate.newCameraPosition(
+        gmaps.CameraPosition(
+          target: gmaps.LatLng(latitude, longitude),
+          zoom: 14.0, // Set it to your desired zoom level
+        ),
+      ),
     );
   }
 
