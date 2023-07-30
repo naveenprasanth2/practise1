@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:practise1/list_view_test/models/nearby_places_model/place_category_model.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../widgets/maps/maps_bottom_widget.dart';
@@ -110,6 +111,44 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  void _openMap() async {
+    final double latitude = nearbyPlaces!.hotelLocationDetails.lat;
+    final double longitude = nearbyPlaces!.hotelLocationDetails.lng;
+    final String name = nearbyPlaces!.hotelLocationDetails.name;
+
+    await map_launcher.MapLauncher.installedMaps.then(
+      (availableMaps) => {
+        if (availableMaps.isNotEmpty)
+          {
+            availableMaps[0].showMarker(
+              coords: map_launcher.Coords(latitude, longitude),
+              title: name,
+            ),
+          }
+        else
+          {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('No Maps Apps Installed'),
+                  content: const Text('Please install a maps app to navigate.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          },
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +158,7 @@ class _MapScreenState extends State<MapScreen> {
               ? Container()
               : GoogleMap(
                   onMapCreated: _onMapCreated,
+                  myLocationButtonEnabled: false,
                   mapType: MapType.terrain,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(
@@ -145,6 +185,25 @@ class _MapScreenState extends State<MapScreen> {
                   Icons.close,
                   color: Colors.black,
                   size: 30,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 200,
+            right: 10,
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: FloatingActionButton(
+                onPressed: () {
+                  _openMap();
+                },
+                backgroundColor: Colors.red.shade400,
+                child: const Icon(
+                  Icons.directions,
+                  color: Colors.white,
                 ),
               ),
             ),
