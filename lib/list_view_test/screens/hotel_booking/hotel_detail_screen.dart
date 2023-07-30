@@ -194,7 +194,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (builder) => MapsScreen()));
+                                        builder: (builder) => const MapScreen()));
                               },
                               child: const Text(
                                 "Map View",

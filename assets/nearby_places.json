@@ -1,0 +1,24 @@
+{
+  "offices": [
+    {"name": "Office 1", "address": "Address 1", "lat": 40.7128, "lng": -74.0060},
+    {"name": "Office 2", "address": "Address 2", "lat": 51.5074, "lng": -0.1278},
+    {"name": "Office 3", "address": "Address 3", "lat": 48.8566, "lng": 2.3522},
+    {"name": "Office 4", "address": "Address 4", "lat": 35.6895, "lng": 139.6917},
+    {"name": "Office 5", "address": "Address 5", "lat": 55.7558, "lng": 37.6176},
+    {"name": "Office 6", "address": "Address 6", "lat": 39.9042, "lng": 116.4074},
+    {"name": "Office 7", "address": "Address 7", "lat": 34.0522, "lng": -118.2437},
+    {"name": "Office 8", "address": "Address 8", "lat": 51.1657, "lng": 10.4515},
+    {"name": "Office 9", "address": "Address 9", "lat": 41.9028, "lng": 12.4964},
+    {"name": "Office 10", "address": "Address 10", "lat": 39.9526, "lng": -75.1652},
+    {"name": "Office 11", "address": "Address 11", "lat": 37.7749, "lng": -122.4194},
+    {"name": "Office 12", "address": "Address 12", "lat": 52.5200, "lng": 13.4050},
+    {"name": "Office 13", "address": "Address 13", "lat": 28.6139, "lng": 77.2090},
+    {"name": "Office 14", "address": "Address 14", "lat": 22.5726, "lng": 88.3639},
+    {"name": "Office 15", "address": "Address 15", "lat": 18.5204, "lng": 73.8567},
+    {"name": "Office 16", "address": "Address 16", "lat": 12.9716, "lng": 77.5946},
+    {"name": "Office 17", "address": "Address 17", "lat": 13.0827, "lng": 80.2707},
+    {"name": "Office 18", "address": "Address 18", "lat": 23.8103, "lng": 90.4125},
+    {"name": "Office 19", "address": "Address 19", "lat": 30.3753, "lng": 69.3451},
+    {"name": "Office 20", "address": "Address 20", "lat": 15.8700, "lng": 100.9925}
+  ]
+}

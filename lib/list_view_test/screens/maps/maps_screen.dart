@@ -1,40 +1,88 @@
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'dart:convert';
 
-class MapsScreen extends StatefulWidget {
-  const MapsScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../models/nearby_places_model/offices_model.dart';
+import '../../widgets/maps/maps_bottom_widget.dart';
+
+class MapScreen extends StatefulWidget {
+  const MapScreen({Key? key}) : super(key: key);
 
   @override
-  State<MapsScreen> createState() => _MapsScreenState();
+  State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapsScreenState extends State<MapsScreen> {
+class _MapScreenState extends State<MapScreen> {
+  final Map<String, Marker> _markers = {};
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    requestLocationPermission();
-    super.initState();
+  Future<OfficesModel> fetchGoogleOffices() async {
+    // Simulate a network request
+    await Future.delayed(const Duration(seconds: 2));
+
+    String jsonString =
+    await rootBundle.loadString('assets/nearby_places.json');
+
+    final jsonResponse = jsonDecode(jsonString);
+    return OfficesModel.fromJson(jsonResponse);
   }
 
-  void requestLocationPermission() async {
-    if (await Permission.location.isGranted) {
-      // Either the permission was already granted before or the user just granted it.
-    } else {
-      Permission.location.request();
-    }
+  Future<void> _onMapCreated(GoogleMapController controller) async {
+    final googleOffices = await fetchGoogleOffices();
+    setState(() {
+      _markers.clear();
+      for (final office in googleOffices.offices) {
+        final marker = Marker(
+          markerId: MarkerId(office.name),
+          position: LatLng(office.lat, office.lng),
+          infoWindow: InfoWindow(
+            title: office.name,
+            snippet: office.address,
+          ),
+        );
+        _markers[office.name] = marker;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Google Maps Demo')),
-      body: const GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(0, 0),  // Set this to your desired coordinates
-          zoom: 5,
-        ),
+      body: Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(0, 0),
+              zoom: 2,
+            ),
+            markers: _markers.values.toSet(),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: DraggableScrollableSheet(
+              initialChildSize: 0.2,
+              minChildSize: 0.2,
+              maxChildSize: 0.6,
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                return SingleChildScrollView(
+                  controller: scrollController,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: GestureDetector(
+                      onHorizontalDragUpdate: (_) {},
+                      child: OfficeTabView(
+                        futureOffices: fetchGoogleOffices(),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
