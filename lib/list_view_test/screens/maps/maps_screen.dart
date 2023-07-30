@@ -37,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<BitmapDescriptor> _createCustomMarkerIcon(String path) async {
     final byteData = await rootBundle.load(path);
     var codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(),
-        targetWidth: 120);
+        targetWidth: 80);
     var frame = await codec.getNextFrame();
     final data = await frame.image.toByteData(format: ui.ImageByteFormat.png);
     return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
@@ -114,7 +114,7 @@ class _MapScreenState extends State<MapScreen> {
                       nearbyPlaces!.hotelLocationDetails.lat,
                       nearbyPlaces!.hotelLocationDetails.lng,
                     ),
-                    zoom: 17,
+                    zoom: 16,
                   ),
                   markers: _markers.values.toSet(),
                 ),
