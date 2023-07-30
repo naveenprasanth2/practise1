@@ -43,7 +43,8 @@ class _MapScreenState extends State<MapScreen> {
     return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
   }
 
-  Future<BitmapDescriptor> _createCustomMarkerIconForMainPlace(String path) async {
+  Future<BitmapDescriptor> _createCustomMarkerIconForMainPlace(
+      String path) async {
     final byteData = await rootBundle.load(path);
     var codec = await ui.instantiateImageCodec(byteData.buffer.asUint8List(),
         targetWidth: 170);
@@ -60,7 +61,8 @@ class _MapScreenState extends State<MapScreen> {
   void _addMarkers() async {
     if (nearbyPlaces == null || mapController == null) return;
 
-    final hotelIcon = await _createCustomMarkerIconForMainPlace('assets/hotel_icon.png');
+    final hotelIcon =
+        await _createCustomMarkerIconForMainPlace('assets/hotel_icon.png');
     final othersIcon = await _createCustomMarkerIcon('assets/others_icon.png');
     final transportIcon =
         await _createCustomMarkerIcon('assets/transport_icon.png');
@@ -127,6 +129,26 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   markers: _markers.values.toSet(),
                 ),
+          Positioned(
+            top: 50,
+            left: 10,
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                  size: 30,
+                ),
+              ),
+            ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: DraggableScrollableSheet(
