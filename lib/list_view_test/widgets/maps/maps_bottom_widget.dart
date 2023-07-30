@@ -18,8 +18,9 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _buildPlaceListView(
-      BuildContext context, List<PlaceCategoryModel> places) {
+  Widget _buildPlaceListView(BuildContext context,
+      Map<String, List<PlaceCategoryModel>> placesDetails) {
+    List<PlaceCategoryModel> places = placesDetails.values.first;
     final LatLng fixedLocation = LatLng(
         widget.nearbyPlacesModel.hotelLocationDetails.lat,
         widget.nearbyPlacesModel.hotelLocationDetails.lng);
@@ -42,7 +43,14 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Icon(Icons.location_pin),
+              if (placesDetails.keys.first == "all")
+                const Icon(Icons.location_pin),
+              if (placesDetails.keys.first == "transport")
+                const Icon(Icons.emoji_transportation),
+              if (placesDetails.keys.first == "mallsAndRestaurants")
+                const Icon(Icons.restaurant),
+              if (placesDetails.keys.first == "popularPlaces")
+                const Icon(Icons.place_outlined),
               const SizedBox(width: 30),
               // add some space between icon and text
               Expanded(
@@ -102,17 +110,23 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildPlaceListView(context, [
-                    ...widget.nearbyPlacesModel.transport,
-                    ...widget.nearbyPlacesModel.mallsAndRestaurants,
-                    ...widget.nearbyPlacesModel.popularPlaces,
-                    ...widget.nearbyPlacesModel.others
-                  ]),
-                  _buildPlaceListView(
-                      context, widget.nearbyPlacesModel.transport),
-                  _buildPlaceListView(
-                      context, widget.nearbyPlacesModel.popularPlaces),
-                  _buildPlaceListView(context, widget.nearbyPlacesModel.others),
+                  _buildPlaceListView(context, {
+                    "all": [
+                      ...widget.nearbyPlacesModel.transport,
+                      ...widget.nearbyPlacesModel.mallsAndRestaurants,
+                      ...widget.nearbyPlacesModel.popularPlaces,
+                      ...widget.nearbyPlacesModel.others
+                    ]
+                  }),
+                  _buildPlaceListView(context,
+                      {"transport": widget.nearbyPlacesModel.transport}),
+                  _buildPlaceListView(context, {
+                    "mallsAndRestaurants":
+                        widget.nearbyPlacesModel.mallsAndRestaurants
+                  }),
+                  _buildPlaceListView(context, {
+                    "popularPlaces": widget.nearbyPlacesModel.popularPlaces
+                  }),
                 ],
               ),
             ),
