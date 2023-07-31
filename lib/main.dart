@@ -3,6 +3,7 @@ import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:practise1/list_view_test/providers/maps_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (create) => DateProvider()),
         ChangeNotifierProvider(create: (create) => CountProviders()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
+        ChangeNotifierProvider(create: (create) => MapProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

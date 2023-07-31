@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/calculation_provider.dart';
 import '../booking/booking_widget.dart';
+import '../hotel_details/pricing_detail_widget.dart';
 
 class HotelDetailsBottomBar extends StatelessWidget {
   final HotelDetailsModel? hotelDetailsModel;
@@ -19,6 +20,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      height: 80,
       child: Container(
         decoration: const BoxDecoration(color: Colors.transparent),
         child: Row(
@@ -46,7 +48,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       builder: (BuildContext context) {
-                        return HotelDetailsBottomBar(
+                        return PricingDetailsWidget(
                           hotelDetailsModel: hotelDetailsModel!,
                         );
                       },
@@ -75,18 +77,27 @@ class HotelDetailsBottomBar extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 80,
-                  width: 200,
+                  height: 40,
+                  width: 150,
                   decoration: BoxDecoration(
-                      color: Colors.red.shade400,
-                      borderRadius: BorderRadius.circular(30)),
+                    color: Colors.red.shade400,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
                   child: const Center(
                     child: Text(
                       "Book Now",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

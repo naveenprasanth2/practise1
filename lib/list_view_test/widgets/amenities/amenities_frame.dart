@@ -4,9 +4,9 @@ import 'package:practise1/list_view_test/models/amenities_model/amenities_model.
 import 'amenities_widget.dart';
 
 class AmenitiesFrameWidgetOne extends StatelessWidget {
-  AmenitiesModel? amenitiesModel;
+  final AmenitiesModel? amenitiesModel;
 
-  AmenitiesFrameWidgetOne({super.key, required this.amenitiesModel});
+  const AmenitiesFrameWidgetOne({super.key, required this.amenitiesModel});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class AmenitiesFrameWidgetOne extends StatelessWidget {
             children: [
               AmenitiesWidget(
                   iconData: Icons.ac_unit,
-                  title: "AC",
+                  title: "Ac",
                   isAvailable:
                       amenitiesModel?.hotelFacilitiesModel?.ac ?? false),
               AmenitiesWidget(
                 iconData: Icons.wifi,
-                title: "WIFI",
+                title: "Wifi",
                 isAvailable:
                     amenitiesModel?.hotelFacilitiesModel?.wifi ?? false,
               ),
