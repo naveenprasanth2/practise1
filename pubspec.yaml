@@ -45,6 +45,8 @@ dependencies:
   rating_dialog: ^2.0.4
   flutter_rating_bar: ^4.0.1
   json_annotation: ^4.8.1
+  dots_indicator: ^3.0.0
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
