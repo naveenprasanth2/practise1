@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:practise1/list_view_test/models/nearby_places_model/place_category_model.dart';
+import 'package:practise1/list_view_test/providers/maps_provider.dart';
+import 'package:provider/provider.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../widgets/maps/maps_bottom_widget.dart';
 
@@ -56,6 +58,8 @@ class _MapScreenState extends State<MapScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    Provider.of<MapProvider>(context, listen: false)
+        .setLatAndLng(nearbyPlaces!);
     _addMarkers();
   }
 
@@ -74,6 +78,12 @@ class _MapScreenState extends State<MapScreen> {
 
     final hotelMarker = Marker(
       markerId: MarkerId(nearbyPlaces!.hotelLocationDetails.name),
+      onTap: () {
+        Provider.of<MapProvider>(context, listen: false).setClickedLatAndLng(
+            nearbyPlaces!.hotelLocationDetails.lat,
+            nearbyPlaces!.hotelLocationDetails.lng,
+            nearbyPlaces!.hotelLocationDetails.name);
+      },
       icon: hotelIcon,
       position: LatLng(
         nearbyPlaces!.hotelLocationDetails.lat,
@@ -100,6 +110,10 @@ class _MapScreenState extends State<MapScreen> {
     for (final place in places) {
       final marker = Marker(
         markerId: MarkerId(place.name),
+        onTap: () {
+          Provider.of<MapProvider>(context, listen: false)
+              .setClickedLatAndLng(place.lat, place.lng, place.name);
+        },
         position: LatLng(place.lat, place.lng),
         icon: icon,
         infoWindow: InfoWindow(
@@ -112,17 +126,16 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _openMap() async {
-    final double latitude = nearbyPlaces!.hotelLocationDetails.lat;
-    final double longitude = nearbyPlaces!.hotelLocationDetails.lng;
-    final String name = nearbyPlaces!.hotelLocationDetails.name;
-
     await map_launcher.MapLauncher.installedMaps.then(
       (availableMaps) => {
         if (availableMaps.isNotEmpty)
           {
             availableMaps[0].showMarker(
-              coords: map_launcher.Coords(latitude, longitude),
-              title: name,
+              coords: map_launcher.Coords(
+                  Provider.of<MapProvider>(context, listen: false).clickedLat,
+                  Provider.of<MapProvider>(context, listen: false).clickedLng),
+              title: Provider.of<MapProvider>(context, listen: false)
+                  .clickedPlaceName,
             ),
           }
         else
@@ -152,94 +165,96 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          (nearbyPlaces == null)
-              ? Container()
-              : GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  myLocationButtonEnabled: false,
-                  mapType: MapType.terrain,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                      nearbyPlaces!.hotelLocationDetails.lat,
-                      nearbyPlaces!.hotelLocationDetails.lng,
+      body: Consumer<MapProvider>(builder: (context, provider, _) {
+        return Stack(
+          children: [
+            (nearbyPlaces == null)
+                ? Container()
+                : GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    myLocationButtonEnabled: false,
+                    mapType: MapType.terrain,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
+                        nearbyPlaces!.hotelLocationDetails.lat,
+                        nearbyPlaces!.hotelLocationDetails.lng,
+                      ),
+                      zoom: 16,
                     ),
-                    zoom: 16,
+                    markers: _markers.values.toSet(),
                   ),
-                  markers: _markers.values.toSet(),
-                ),
-          Positioned(
-            top: 50,
-            left: 10,
-            child: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.black,
-                  size: 30,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 200,
-            right: 10,
-            child: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: FloatingActionButton(
-                onPressed: () {
-                  _openMap();
+            Positioned(
+              top: 50,
+              left: 10,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
                 },
-                backgroundColor: Colors.red.shade400,
-                child: const Icon(
-                  Icons.directions,
-                  color: Colors.white,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.black,
+                    size: 30,
+                  ),
                 ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: DraggableScrollableSheet(
-              initialChildSize: 0.2,
-              minChildSize: 0.2,
-              maxChildSize: 0.6,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification.metrics.pixels != 0.0) {
-                      return true;
-                    }
-                    return false;
+            Positioned(
+              bottom: 200,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: FloatingActionButton(
+                  onPressed: () {
+                    _openMap();
                   },
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      child: (nearbyPlaces != null && mapController != null)
-                          ? NearByPlacesTabView(
-                              nearbyPlacesModel: nearbyPlaces!,
-                              googleMapController: mapController!)
-                          : const Center(child: CircularProgressIndicator()),
-                    ),
+                  backgroundColor: Colors.red.shade400,
+                  child: const Icon(
+                    Icons.directions,
+                    color: Colors.white,
                   ),
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ],
-      ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: DraggableScrollableSheet(
+                initialChildSize: 0.2,
+                minChildSize: 0.2,
+                maxChildSize: 0.6,
+                builder:
+                    (BuildContext context, ScrollController scrollController) {
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (scrollNotification) {
+                      if (scrollNotification.metrics.pixels != 0.0) {
+                        return true;
+                      }
+                      return false;
+                    },
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: (nearbyPlaces != null && mapController != null)
+                            ? NearByPlacesTabView(
+                                nearbyPlacesModel: nearbyPlaces!,
+                                googleMapController: mapController!)
+                            : const Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

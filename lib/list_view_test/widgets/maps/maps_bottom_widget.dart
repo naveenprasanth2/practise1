@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geodesy/geodesy.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
+import 'package:practise1/list_view_test/providers/maps_provider.dart';
+import 'package:provider/provider.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../models/nearby_places_model/place_category_model.dart';
 
@@ -8,11 +10,11 @@ class NearByPlacesTabView extends StatefulWidget {
   final NearbyPlacesModel nearbyPlacesModel;
   final gmaps.GoogleMapController googleMapController;
 
-  const NearByPlacesTabView(
-      {Key? key,
-      required this.nearbyPlacesModel,
-      required this.googleMapController})
-      : super(key: key);
+  const NearByPlacesTabView({
+    Key? key,
+    required this.nearbyPlacesModel,
+    required this.googleMapController,
+  }) : super(key: key);
 
   @override
   State<NearByPlacesTabView> createState() => _NearByPlacesTabViewState();
@@ -61,6 +63,8 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
               Expanded(
                 child: InkWell(
                   onTap: () {
+                    Provider.of<MapProvider>(context, listen: false)
+                        .setClickedLatAndLng(place.lat, place.lng, place.name);
                     _moveCamera(place.lat, place.lng);
                   },
                   child: Row(
