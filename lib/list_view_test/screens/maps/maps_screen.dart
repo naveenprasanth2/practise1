@@ -35,11 +35,10 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
+    MapProvider mapProvider = Provider.of<MapProvider>(context, listen: false);
     mapController = controller;
-    Provider.of<MapProvider>(context, listen: false)
-        .setLatAndLng(nearbyPlaces!);
-    Provider.of<MapProvider>(context, listen: false)
-        .addMarkers(nearbyPlaces!, mapController!, context);
+    mapProvider.setLatAndLng(nearbyPlaces!);
+    mapProvider.addMarkers(nearbyPlaces!, mapController!, context);
   }
 
   @override

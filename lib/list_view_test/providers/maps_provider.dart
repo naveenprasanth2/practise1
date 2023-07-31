@@ -34,8 +34,7 @@ class MapProvider extends ChangeNotifier {
       final marker = Marker(
         markerId: MarkerId(place.name),
         onTap: () {
-          Provider.of<MapProvider>(context, listen: false)
-              .setClickedLatAndLng(place.lat, place.lng, place.name);
+          setClickedLatAndLng(place.lat, place.lng, place.name);
         },
         position: LatLng(place.lat, place.lng),
         icon: icon,
@@ -111,11 +110,8 @@ class MapProvider extends ChangeNotifier {
         if (availableMaps.isNotEmpty)
           {
             availableMaps[0].showMarker(
-              coords: Coords(
-                  Provider.of<MapProvider>(context, listen: false).clickedLat,
-                  Provider.of<MapProvider>(context, listen: false).clickedLng),
-              title: Provider.of<MapProvider>(context, listen: false)
-                  .clickedPlaceName,
+              coords: Coords(clickedLat,clickedLng),
+              title: clickedPlaceName,
             ),
           }
         else
