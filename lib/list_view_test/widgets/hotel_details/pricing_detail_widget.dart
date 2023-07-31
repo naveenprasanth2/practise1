@@ -174,8 +174,8 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                 ),
               ),
               Expanded(
-                child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
+                flex: 2,
+                child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -185,15 +185,14 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.centerLeft,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                   'Discount Applied',
-                                  textAlign: TextAlign.center,
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 Text(
                                   'Discount ${calculationProvider.discountPercentage} %',
-                                  textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.black),
                                 ),
                               ],
@@ -227,6 +226,7 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                   ],
                 ),
               ),
+
               const Divider(
                 thickness: 2,
               ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/calculation_provider.dart';
 import '../booking/booking_widget.dart';
+import '../hotel_details/pricing_detail_widget.dart';
 
 class HotelDetailsBottomBar extends StatelessWidget {
   final HotelDetailsModel? hotelDetailsModel;
@@ -46,7 +47,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       builder: (BuildContext context) {
-                        return HotelDetailsBottomBar(
+                        return PricingDetailsWidget(
                           hotelDetailsModel: hotelDetailsModel!,
                         );
                       },
