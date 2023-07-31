@@ -20,6 +20,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      height: 80,
       child: Container(
         decoration: const BoxDecoration(color: Colors.transparent),
         child: Row(
@@ -76,18 +77,27 @@ class HotelDetailsBottomBar extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 80,
-                  width: 200,
+                  height: 40,
+                  width: 150,
                   decoration: BoxDecoration(
-                      color: Colors.red.shade400,
-                      borderRadius: BorderRadius.circular(30)),
+                    color: Colors.red.shade400,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
                   child: const Center(
                     child: Text(
                       "Book Now",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

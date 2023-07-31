@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:map_launcher/map_launcher.dart' as map_launcher;
 import 'package:practise1/list_view_test/providers/maps_provider.dart';
+import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:provider/provider.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../widgets/maps/maps_bottom_widget.dart';
@@ -89,19 +89,31 @@ class _MapScreenState extends State<MapScreen> {
             Positioned(
               bottom: 200,
               right: 10,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
+              child: FloatingActionButton(
+                heroTag: "open map button",
+                onPressed: () {
+                  mapProvider.openMap(context);
                 },
-                child: FloatingActionButton(
-                  onPressed: () {
-                    mapProvider.openMap(context);
-                  },
-                  backgroundColor: Colors.red.shade400,
-                  child: const Icon(
-                    Icons.directions,
-                    color: Colors.white,
-                  ),
+                backgroundColor: Colors.red.shade400,
+                child: const Icon(
+                  Icons.directions,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 300,
+              right: 10,
+              child: FloatingActionButton(
+                heroTag: "copy button",
+                onPressed: () {
+                  GeneralUtils.copyAddressToClipboard(
+                      context, mapProvider.clickedAddress);
+                },
+                backgroundColor: Colors.grey.shade400,
+                child: const Icon(
+                  Icons.file_copy_outlined,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -64,7 +64,7 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
                 child: InkWell(
                   onTap: () {
                     Provider.of<MapProvider>(context, listen: false)
-                        .setClickedLatAndLng(place.lat, place.lng, place.name);
+                        .setClickedLatAndLng(place.lat, place.lng, place.name, place.address);
                     _moveCamera(place.lat, place.lng);
                   },
                   child: Row(

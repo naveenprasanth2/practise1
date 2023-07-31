@@ -3,29 +3,32 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
-import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
 import '../models/nearby_places_model/place_category_model.dart';
+import '../utils/common_helper/general_utils.dart';
 
 class MapProvider extends ChangeNotifier {
   final Map<String, Marker> markers = {};
   late double clickedLat;
   late double clickedLng;
   late String clickedPlaceName;
+  late String clickedAddress;
 
   void setLatAndLng(NearbyPlacesModel nearbyPlacesModel) {
     PlaceCategoryModel nearbyPlaces = nearbyPlacesModel.hotelLocationDetails;
     clickedLat = nearbyPlaces.lat;
     clickedLng = nearbyPlaces.lng;
     clickedPlaceName = nearbyPlaces.name;
+    clickedAddress = '$clickedPlaceName, ${nearbyPlaces.address}';
   }
 
-  void setClickedLatAndLng(
-      double latitude, double longitude, String placeName) {
+  void setClickedLatAndLng(double latitude,
+      double longitude, String placeName, String address) {
     clickedLat = latitude;
     clickedLng = longitude;
     clickedPlaceName = placeName;
+    clickedAddress = '$clickedPlaceName, $address';
   }
 
   void addCategoryMarkers(List<PlaceCategoryModel> places,
@@ -34,7 +37,7 @@ class MapProvider extends ChangeNotifier {
       final marker = Marker(
         markerId: MarkerId(place.name),
         onTap: () {
-          setClickedLatAndLng(place.lat, place.lng, place.name);
+          setClickedLatAndLng(place.lat, place.lng, place.name, place.address);
         },
         position: LatLng(place.lat, place.lng),
         icon: icon,
@@ -67,9 +70,11 @@ class MapProvider extends ChangeNotifier {
       markerId: MarkerId(nearbyPlaces.hotelLocationDetails.name),
       onTap: () {
         setClickedLatAndLng(
-            nearbyPlaces.hotelLocationDetails.lat,
-            nearbyPlaces.hotelLocationDetails.lng,
-            nearbyPlaces.hotelLocationDetails.name);
+          nearbyPlaces.hotelLocationDetails.lat,
+          nearbyPlaces.hotelLocationDetails.lng,
+          nearbyPlaces.hotelLocationDetails.name,
+          nearbyPlaces.hotelLocationDetails.address,
+        );
       },
       icon: hotelIcon,
       position: LatLng(
@@ -110,7 +115,7 @@ class MapProvider extends ChangeNotifier {
         if (availableMaps.isNotEmpty)
           {
             availableMaps[0].showMarker(
-              coords: Coords(clickedLat,clickedLng),
+              coords: Coords(clickedLat, clickedLng),
               title: clickedPlaceName,
             ),
           }
