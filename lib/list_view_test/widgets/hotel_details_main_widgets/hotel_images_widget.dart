@@ -55,75 +55,78 @@ class _HotelImagesWithIconsWidgetState
           }
         },
         child: SizedBox(
-          height: 300,
+          height: 350,
           child: Stack(
             children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                // This aligns the children of the stack at the bottom center
-                children: [
-                  if (widget.hotelDetailsModel?.hotelImages.allImages != null)
-                    PageView.builder(
-                      itemCount: widget
-                          .hotelDetailsModel!.hotelImages.allImages.length,
-                      physics: const RangeMaintainingScrollPhysics(),
-                      controller: _pageController,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Image.network(
-                            widget.hotelDetailsModel!.hotelImages
-                                .allImages[index],
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: hotelPicTypes
-                        .map((picType) => widget.hotelDetailsModel != null
-                                ? Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 2),
-                                    child: imageStack(
-                                        picType.substring(0, 1).toUpperCase() +
-                                            picType
-                                                .substring(
-                                                  1,
-                                                )
-                                                .toLowerCase(),
-                                        widget.hotelDetailsModel!.hotelImages
-                                            .getImageFromType(picType)[0],
-                                        widget.hotelDetailsModel!,
-                                        context),
-                                  )
-                                : Container() // or another placeholder widget for when hotelDetailsModel is null
-                            )
-                        .toList(),
+              if (widget.hotelDetailsModel?.hotelImages.allImages != null)
+                SizedBox(
+                  height: 300,
+                  child: PageView.builder(
+                    itemCount: widget
+                        .hotelDetailsModel!.hotelImages.allImages.length,
+                    physics: const RangeMaintainingScrollPhysics(),
+                    controller: _pageController,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.network(
+                          widget.hotelDetailsModel!.hotelImages
+                              .allImages[index],
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
                   ),
-                ],
+                ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: hotelPicTypes
+                      .map((picType) => widget.hotelDetailsModel != null
+                      ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 2),
+                    child: imageStack(
+                        picType
+                            .substring(0, 1)
+                            .toUpperCase() +
+                            picType
+                                .substring(
+                              1,
+                            )
+                                .toLowerCase(),
+                        widget.hotelDetailsModel!.hotelImages
+                            .getImageFromType(picType)[0],
+                        widget.hotelDetailsModel!,
+                        context),
+                  )
+                      : Container() // or another placeholder widget for when hotelDetailsModel is null
+                  )
+                      .toList(),
+                ),
               ),
               Positioned(
-                  top: 50,
-                  left: 10,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white60
-                      ),
-                      child: const Icon(
-                        Icons.close,
-                        size: 30,
-                      ),
+                top: 50,
+                left: 10,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Container(
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white60),
+                    child: const Icon(
+                      Icons.close,
+                      size: 30,
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
