@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/utils/string_utils.dart';
 
 import '../../screens/hotel_booking/images_categorization_page.dart';
 import '../images/image_stack.dart';
@@ -62,8 +63,8 @@ class _HotelImagesWithIconsWidgetState
                 SizedBox(
                   height: 300,
                   child: PageView.builder(
-                    itemCount: widget
-                        .hotelDetailsModel!.hotelImages.allImages.length,
+                    itemCount:
+                        widget.hotelDetailsModel!.hotelImages.allImages.length,
                     physics: const RangeMaintainingScrollPhysics(),
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,
@@ -71,8 +72,8 @@ class _HotelImagesWithIconsWidgetState
                       return SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: Image.network(
-                          widget.hotelDetailsModel!.hotelImages
-                              .allImages[index],
+                          widget
+                              .hotelDetailsModel!.hotelImages.allImages[index],
                           fit: BoxFit.cover,
                         ),
                       );
@@ -80,7 +81,7 @@ class _HotelImagesWithIconsWidgetState
                   ),
                 ),
               Positioned(
-                bottom: 0,
+                bottom: 15,
                 left: 0,
                 right: 0,
                 child: Row(
@@ -88,25 +89,19 @@ class _HotelImagesWithIconsWidgetState
                   mainAxisSize: MainAxisSize.min,
                   children: hotelPicTypes
                       .map((picType) => widget.hotelDetailsModel != null
-                      ? Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 2),
-                    child: imageStack(
-                        picType
-                            .substring(0, 1)
-                            .toUpperCase() +
-                            picType
-                                .substring(
-                              1,
-                            )
-                                .toLowerCase(),
-                        widget.hotelDetailsModel!.hotelImages
-                            .getImageFromType(picType)[0],
-                        widget.hotelDetailsModel!,
-                        context),
-                  )
-                      : Container() // or another placeholder widget for when hotelDetailsModel is null
-                  )
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 2),
+                                  child: imageStack(
+                                      StringUtils.convertToSentenceCase(
+                                          picType),
+                                      widget.hotelDetailsModel!.hotelImages
+                                          .getImageFromType(picType)[0],
+                                      widget.hotelDetailsModel!,
+                                      context),
+                                )
+                              : Container() // or another placeholder widget for when hotelDetailsModel is null
+                          )
                       .toList(),
                 ),
               ),

@@ -17,6 +17,7 @@ import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
+import '../../widgets/coupons/coupons_main_widget.dart';
 import '../../widgets/hotel_details_main_widgets/guest_policies_widget.dart';
 import '../reviews/reviews_screen.dart';
 
@@ -103,6 +104,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
           const SliverToBoxAdapter(
@@ -267,6 +269,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           GuestPoliciesMainWidget(
             guestPolicies: guestPolicies ?? [],
           ),
+          CouponsMainWidget(
+          )
         ],
       ),
       bottomNavigationBar: HotelDetailsBottomBar(
