@@ -80,7 +80,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
                   height: 40,
                   width: 150,
                   decoration: BoxDecoration(
-                    color: Colors.red.shade400,
+                    color: Colors.red.shade600,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: const [
                       BoxShadow(
@@ -95,7 +95,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
                       "Book Now",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

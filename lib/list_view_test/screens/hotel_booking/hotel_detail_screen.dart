@@ -5,21 +5,19 @@ import 'package:practise1/list_view_test/models/guest_policies/guest_policy_mode
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
+import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/amenities_main_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
-import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
 import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
-import 'package:practise1/list_view_test/widgets/amenities/amenities_frame.dart';
-import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
-import '../../widgets/amenities/amenities_bottom_widget.dart';
+import '../../widgets/hotel_details_main_widgets/guest_policies_widget.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -194,7 +192,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (builder) => const MapScreen()));
+                                        builder: (builder) =>
+                                            const MapScreen()));
                               },
                               child: const Text(
                                 "Map View",
@@ -260,120 +259,13 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                  height: 180,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(color: Colors.grey.shade200),
-                  padding: const EdgeInsets.all(10),
-                  child: SizedBox(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: AmenitiesFrameWidgetOne(
-                          amenitiesModel: amenitiesModel,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Builder(builder: (context) {
-                    return InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return AmenitiesBottomWidget(
-                              hotelDetailsModel: hotelDetailsModel!,
-                            );
-                          },
-                        );
-                      },
-                      child: Text(
-                        "View All",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.red.shade400,
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ],
+          if (amenitiesModel != null && hotelDetailsModel != null)
+            AmenitiesMainWidget(
+              amenitiesModel: amenitiesModel!,
+              hotelDetailsModel: hotelDetailsModel!,
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 200,
-              width: double.infinity,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Guest Policies",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) => GuestPoliciesScreen(
-                                  guestPolicies: guestPolicies,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "View All",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.red.shade400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (guestPolicies != null && guestPolicies!.length >= 3)
-                      Column(
-                        children: [
-                          GuestPoliciesWidget(
-                            guestPolicies: guestPolicies,
-                            title: guestPolicies![0].title,
-                            iconData: Icons.favorite_outline_rounded,
-                          ),
-                          GuestPoliciesWidget(
-                            guestPolicies: guestPolicies,
-                            title: guestPolicies![1].title,
-                            iconData: Icons.account_box_outlined,
-                          ),
-                          GuestPoliciesWidget(
-                            guestPolicies: guestPolicies,
-                            title: guestPolicies![2].title,
-                            iconData: Icons.watch_later_outlined,
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ),
+          GuestPoliciesMainWidget(
+            guestPolicies: guestPolicies ?? [],
           ),
         ],
       ),
