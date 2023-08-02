@@ -100,8 +100,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
         Provider.of<CalculationProvider>(context, listen: false);
     calculationProvider
         .setCostPerNight(hotelDetailsModel?.roomType.standardRoom.price ?? 0);
-    calculationProvider
-        .setDiscountPercentage(hotelDetailsModel?.discountsApplicable[0] ?? 0);
+    calculationProvider.setDiscountPercentage(0);
     calculationProvider.setGstPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
   }

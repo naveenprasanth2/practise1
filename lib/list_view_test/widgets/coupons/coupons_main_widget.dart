@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/widgets/coupons/coupon_display_container_widget.dart';
+import 'package:practise1/list_view_test/widgets/coupons/coupon_widget_with_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/coupon_model/coupon_model.dart';
@@ -99,14 +100,45 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
             child: Builder(builder: (context) {
               return InkWell(
                 onTap: () {
-                  // showBottomSheet(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return AmenitiesBottomWidget(
-                  //       hotelDetailsModel: hotelDetailsModel,
-                  //     );
-                  //   },
-                  // );
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // Make the Column take the minimum height needed
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const SizedBox(),
+                                IconButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  icon: const Icon(Icons.close),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              // Add Expanded here to make ListView take available space
+                              child: ListView.builder(
+                                itemCount: widget.coupons.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: CouponWidgetWithButton(
+                                      couponModel: widget.coupons[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
                 child: Text(
                   "View All",

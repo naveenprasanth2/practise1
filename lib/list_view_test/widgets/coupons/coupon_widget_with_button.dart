@@ -1,61 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
-import 'package:practise1/list_view_test/providers/calculation_provider.dart';
-import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
+import 'package:practise1/list_view_test/widgets/coupons/coupon_detail_widget.dart';
 import 'package:provider/provider.dart';
 
-class CouponDetailWidget extends StatelessWidget {
+import '../../providers/calculation_provider.dart';
+import '../../providers/coupon_state_provider.dart';
+
+class CouponWidgetWithButton extends StatelessWidget {
   final CouponModel couponModel;
 
-  const CouponDetailWidget({super.key, required this.couponModel});
+  const CouponWidgetWithButton({
+    super.key,
+    required this.couponModel,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: InkWell(
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return CouponDetailWidget(
+                couponModel: couponModel,
+              );
+            },
+          );
+        },
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Image.network(
+                couponModel.imageUrl,
+                fit: BoxFit.fill,
+                height: 40,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 40,
-                      child: Row(
-                        children: [
-                          Image.network(
-                            couponModel.imageUrl,
-                            fit: BoxFit.fill,
-                            height: 40,
-                          ),
-                          Text(couponModel.couponCode),
-                        ],
-                      ),
+                    Text(
+                      couponModel.shortDescription,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.close),
+                    Text(
+                      couponModel.couponCode,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
                   ],
                 ),
-                Text(couponModel.description),
-                Text(couponModel.shortDescription),
-              ],
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Consumer<CouponStateProvider>(
+              ),
+              Consumer<CouponStateProvider>(
                 builder: (context, couponStateProvider, _) {
                   return InkWell(
                     onTap: () async {
@@ -74,8 +80,8 @@ class CouponDetailWidget extends StatelessWidget {
                           .then((value) => Navigator.pop(context));
                     },
                     child: Container(
-                      height: 40,
-                      width: double.infinity,
+                      height: 25,
+                      width: 100,
                       decoration: BoxDecoration(
                         color: couponStateProvider.couponCode !=
                                 couponModel.couponCode
@@ -94,14 +100,14 @@ class CouponDetailWidget extends StatelessWidget {
                         child: Text(
                           couponStateProvider.couponCode !=
                                   couponModel.couponCode
-                              ? "Apply Now"
+                              ? "Apply"
                               : "Remove",
                           style: TextStyle(
                             color: couponStateProvider.couponCode !=
                                     couponModel.couponCode
                                 ? Colors.white
                                 : Colors.black,
-                            fontSize: 16,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -110,8 +116,8 @@ class CouponDetailWidget extends StatelessWidget {
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
