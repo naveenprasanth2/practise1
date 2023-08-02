@@ -141,7 +141,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
                   );
                 },
                 child: Text(
-                  "View All",
+                  "see more...",
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.red.shade400,
