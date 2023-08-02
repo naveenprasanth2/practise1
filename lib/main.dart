@@ -6,6 +6,8 @@ import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/providers/maps_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'list_view_test/providers/coupon_state_provider.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (create) => CountProviders()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
         ChangeNotifierProvider(create: (create) => MapProvider()),
+        ChangeNotifierProvider(create: (create) => CouponStateProvider())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

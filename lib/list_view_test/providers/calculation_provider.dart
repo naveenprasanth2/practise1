@@ -47,19 +47,34 @@ class CalculationProvider extends ChangeNotifier {
   void setDiscountPercentage(int discountPercentage) {
     _discountPercentage = discountPercentage.toDouble();
     _discountedPrice = (costPerNight! * discountPercentage) / 100;
+    setPreTaxPrice();
+    notifyListeners();
+  }
+
+  void setPreTaxPrice() {
     _pretaxPrice = (costPerNight! - discountedPrice!);
     notifyListeners();
   }
 
   void setGstPercentage(double gstPercentage) {
     _gstPercentage = gstPercentage;
+    setAfterTaxPrice();
+    notifyListeners();
+  }
+
+  void setAfterTaxPrice() {
     _gstPrice = (pretaxPrice! * _gstPercentage!) / 100;
-    _afterTaxPrice = (_pretaxPrice! - (_pretaxPrice! * _gstPercentage!) / 100);
+    _afterTaxPrice = (_pretaxPrice! + _gstPrice!);
     notifyListeners();
   }
 
   void setPrepaidDiscountPercentage(double prepaidDiscountPercentage) {
     _prepaidDiscountPercentage = prepaidDiscountPercentage;
+    setPrepaidDiscountValue();
+    notifyListeners();
+  }
+
+  void setPrepaidDiscountValue() {
     _prepaidDiscountValue =
         ((_afterTaxPrice! * prepaidDiscount!) / 100).roundToDouble();
     setFinalPrice();
@@ -69,6 +84,24 @@ class CalculationProvider extends ChangeNotifier {
   void setFinalPrice() {
     _finalPriceWithoutPrepaidDiscount = _afterTaxPrice;
     _finalPrice = (_afterTaxPrice! - _prepaidDiscountValue!);
+    notifyListeners();
+  }
+
+  void setDiscounts(int discountPercentage) {
+    setDiscountPercentage(discountPercentage);
+    setPreTaxPrice();
+    setAfterTaxPrice();
+    setPrepaidDiscountValue();
+    setFinalPrice();
+    notifyListeners();
+  }
+
+  void resetDiscounts() {
+    setDiscountPercentage(0);
+    setPreTaxPrice();
+    setAfterTaxPrice();
+    setPrepaidDiscountValue();
+    setFinalPrice();
     notifyListeners();
   }
 }

@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
 import 'package:practise1/list_view_test/widgets/coupons/coupon_detail_widget.dart';
 
 class CouponDisplayContainerWidget extends StatelessWidget {
-  const CouponDisplayContainerWidget({super.key});
+  final CouponModel couponModel;
+
+  const CouponDisplayContainerWidget({
+    super.key,
+    required this.couponModel,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        showModalBottomSheet(context: context, builder: (BuildContext context){
-          return CouponDetailWidget();
-        });
+        showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return CouponDetailWidget(
+              couponModel: couponModel,
+            );
+          },
+        );
       },
       child: Container(
         height: 60,
@@ -21,7 +32,7 @@ class CouponDisplayContainerWidget extends StatelessWidget {
         child: Row(
           children: [
             Image.network(
-              "https://as1.ftcdn.net/v2/jpg/00/98/97/68/1000_F_98976874_2oufUlOChMQ1WwlkNyHkeOAHM6B0cRDV.jpg",
+              couponModel.imageUrl,
               fit: BoxFit.fill,
               height: 40,
             ),
@@ -31,12 +42,12 @@ class CouponDisplayContainerWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Up to 10% off",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    couponModel.shortDescription,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Use code TFYTF10",
+                    couponModel.couponCode,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                       color: Colors.grey.shade600,
@@ -45,7 +56,7 @@ class CouponDisplayContainerWidget extends StatelessWidget {
                 ],
               ),
             ),
-           const Icon(Icons.arrow_forward_ios),
+            const Icon(Icons.arrow_forward_ios),
           ],
         ),
       ),

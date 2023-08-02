@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/widgets/coupons/coupon_display_container_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../models/coupon_model/coupon_model.dart';
+
 class CouponsMainWidget extends StatefulWidget {
+  final List<CouponModel> coupons;
+
   const CouponsMainWidget({
     super.key,
+    required this.coupons,
   });
 
   @override
@@ -50,7 +55,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
                 SizedBox(
                   height: 80,
                   child: PageView.builder(
-                    itemCount: 10,
+                    itemCount: widget.coupons.length,
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,
                     padEnds: false,
@@ -59,7 +64,9 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
                         height: 50,
                         width: MediaQuery.of(context).size.width,
                         child: Center(
-                          child: CouponDisplayContainerWidget(),
+                          child: CouponDisplayContainerWidget(
+                            couponModel: widget.coupons[index],
+                          ),
                         ),
                       );
                     },
@@ -75,7 +82,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
             child: Center(
               child: SmoothPageIndicator(
                 controller: _pageController,
-                count: 10,
+                count: widget.coupons.length,
                 effect: ScrollingDotsEffect(
                   dotColor: Colors.grey,
                   activeDotColor: Colors.red.shade400,

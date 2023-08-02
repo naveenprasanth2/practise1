@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
@@ -39,6 +40,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   List<GuestPolicyModel>? guestPolicies;
   StarRatingAverageModel? hotelRatings;
   HotelDetailsModel? hotelDetailsModel;
+  List<CouponModel>? coupons;
   int? totalRatings;
   bool _isDataLoaded = false;
 
@@ -68,8 +70,13 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 
   Future<HotelDetailsModel?> readHotelDetailsModelJson() async {
     final value = await rootBundle.loadString("assets/hotel_details.json");
+    final couponList =
+        await rootBundle.loadString("assets/discounts_applicable.json");
     setState(() {
       hotelDetailsModel = HotelDetailsModel.fromJson(json.decode(value));
+      coupons = (json.decode(couponList) as List<dynamic>)
+          .map((val) => CouponModel.fromJson(val))
+          .toList();
       amenitiesModel = hotelDetailsModel!.amenities;
       guestPolicies = hotelDetailsModel!.guestPolicies;
       aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
@@ -96,7 +103,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     calculationProvider
         .setDiscountPercentage(hotelDetailsModel?.discountsApplicable[0] ?? 0);
     calculationProvider.setGstPercentage(12);
-    calculationProvider.setDiscountPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
   }
 
@@ -270,6 +276,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             guestPolicies: guestPolicies ?? [],
           ),
           CouponsMainWidget(
+            coupons: coupons ?? [],
           )
         ],
       ),

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
+import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
+import 'package:provider/provider.dart';
 
 class CouponDetailWidget extends StatelessWidget {
-  const CouponDetailWidget({super.key});
+  final CouponModel couponModel;
+
+  const CouponDetailWidget({super.key, required this.couponModel});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +32,11 @@ class CouponDetailWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           Image.network(
-                            "https://as1.ftcdn.net/v2/jpg/00/98/97/68/1000_F_98976874_2oufUlOChMQ1WwlkNyHkeOAHM6B0cRDV.jpg",
+                            couponModel.imageUrl,
                             fit: BoxFit.fill,
                             height: 40,
                           ),
-                          Text("TFYTF10"),
+                          Text(couponModel.couponCode),
                         ],
                       ),
                     ),
@@ -42,23 +48,38 @@ class CouponDetailWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                    "Get up to 20% off using the code YTYTF20. Applicable on selected hotels"),
+                Text(couponModel.description),
+                Text(couponModel.shortDescription),
               ],
             ),
+            const Spacer(),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Column(
-                children: [
-                  InkWell(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Consumer<CouponStateProvider>(
+                builder: (context, couponStateProvider, _) {
+                  return InkWell(
                     onTap: () {
+                      Provider.of<CalculationProvider>(context, listen: false)
+                          .setDiscounts(couponModel.percentage);
+                      if (couponStateProvider.couponCode !=
+                          couponModel.couponCode) {
+                        couponStateProvider
+                            .setCouponCode(couponModel.couponCode);
+                      } else {
+                        couponStateProvider.removeCouponCode();
+                        Provider.of<CalculationProvider>(context, listen: false)
+                            .resetDiscounts();
+                      }
                       Navigator.pop(context);
                     },
                     child: Container(
                       height: 40,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.red.shade600,
+                        color: couponStateProvider.couponCode !=
+                                couponModel.couponCode
+                            ? Colors.red.shade600
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: const [
                           BoxShadow(
@@ -68,19 +89,25 @@ class CouponDetailWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          "Apply Now",
+                          couponStateProvider.couponCode !=
+                                  couponModel.couponCode
+                              ? "Apply Now"
+                              : "Remove",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: couponStateProvider.couponCode !=
+                                    couponModel.couponCode
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ],
