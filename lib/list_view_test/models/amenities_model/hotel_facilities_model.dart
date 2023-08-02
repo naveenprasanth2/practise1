@@ -56,8 +56,16 @@ class HotelFacilitiesModel {
     this.taxi,
     this.dailyHousekeeping,
     this.fireExtinguisher,
-    this.firstAidKit,
+    this.firstAidKit
   });
+
+  Map<String, bool> hotelFacilitiesModelData() {
+    var originalData = toJson();
+    Map<String, bool> hotelFacilitiesModelData = originalData.map((key, value) {
+      return MapEntry(key, value as bool);
+    });
+    return hotelFacilitiesModelData;
+  }
 
   factory HotelFacilitiesModel.fromJson(Map<String, dynamic> json) =>
       _$HotelFacilitiesModelFromJson(json);

@@ -20,8 +20,16 @@ class BedTypeModel {
       this.cot,
       this.kingSizedBed,
       this.queenSizedBed,
-      this.singleBed,
+      this.singleBed
       );
+
+  Map<String, bool> bedTypeModelData() {
+    var originalData = toJson();
+    Map<String, bool> bedTypeModelData = originalData.map((key, value) {
+      return MapEntry(key, value as bool);
+    });
+    return bedTypeModelData;
+  }
 
   factory BedTypeModel.fromJson(Map<String, dynamic> json) =>
       _$BedTypeModelFromJson(json);

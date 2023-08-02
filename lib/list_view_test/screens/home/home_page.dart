@@ -185,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: TextField(
                                     style: const TextStyle(color: Colors.black),
+                                    textAlign: TextAlign.center,
                                     decoration: InputDecoration(
                                         hintText: Provider.of<DateProvider>(context,
                                                     listen: true)
@@ -193,7 +194,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     listen: true)
                                                 .initialDate,
                                         hintStyle: const TextStyle(
-                                            color: Colors.black54),
+                                            color: Colors.black54,
+                                            fontSize: 13),
                                         border: OutlineInputBorder(
                                             borderSide: Divider.createBorderSide(
                                                 context),
@@ -229,11 +231,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       left: 20, right: 30),
                                   child: TextField(
                                     style: const TextStyle(color: Colors.black),
+                                    textAlign: TextAlign.center,
                                     decoration: InputDecoration(
                                       hintText:
                                           "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
                                       hintStyle: const TextStyle(
-                                          color: Colors.black54),
+                                          color: Colors.black54, fontSize: 13),
                                       border: OutlineInputBorder(
                                           borderSide:
                                               Divider.createBorderSide(context),

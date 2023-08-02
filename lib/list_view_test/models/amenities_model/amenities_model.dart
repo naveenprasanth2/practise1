@@ -29,13 +29,13 @@ class AmenitiesModel {
   SeatingAreaModel? seatingAreaModel;
 
   AmenitiesModel(
-      this.bedTypeModel,
-      this.hotelFacilitiesModel,
-      this.mediaTechnologyModel,
-      this.roomFacilityModel,
-      this.washroomModel,
-      this.seatingAreaModel,
-      );
+    this.bedTypeModel,
+    this.hotelFacilitiesModel,
+    this.mediaTechnologyModel,
+    this.roomFacilityModel,
+    this.washroomModel,
+    this.seatingAreaModel,
+  );
 
   factory AmenitiesModel.fromJson(Map<String, dynamic> json) =>
       _$AmenitiesModelFromJson(json);

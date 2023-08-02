@@ -7,7 +7,17 @@ class WashroomModel {
   @JsonKey(name: 'geyser')
   bool? geyser;
 
-  WashroomModel(this.geyser);
+  WashroomModel(
+    this.geyser
+  );
+
+  Map<String, bool> washroomModelData() {
+    var originalData = toJson();
+    Map<String, bool> washroomModelData = originalData.map((key, value) {
+      return MapEntry(key, value as bool);
+    });
+    return washroomModelData;
+  }
 
   factory WashroomModel.fromJson(Map<String, dynamic> json) =>
       _$WashroomModelFromJson(json);

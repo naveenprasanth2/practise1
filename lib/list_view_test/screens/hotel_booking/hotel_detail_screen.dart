@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
 import 'package:provider/provider.dart';
@@ -13,14 +14,12 @@ import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_
 import 'package:practise1/list_view_test/screens/guest_policies/guest_policies_screen.dart';
 import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
-import 'package:practise1/list_view_test/widgets/amenities/amenities_frame1.dart';
-import 'package:practise1/list_view_test/widgets/amenities/amenities_frame2.dart';
-import 'package:practise1/list_view_test/widgets/amenities/amenities_frame3.dart';
+import 'package:practise1/list_view_test/widgets/amenities/amenities_frame.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/guest_policies_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
-import '../../widgets/hotel_details_main_widgets/hotel_appbar_widget.dart';
+import '../../widgets/amenities/amenities_bottom_widget.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -107,7 +106,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          HotelDetailsAppBar(hotelDetailsModel: hotelDetailsModel),
           HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
           const SliverToBoxAdapter(
             child: SizedBox(
@@ -192,7 +190,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           const SizedBox(width: 10),
                           Flexible(
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (builder) => const MapScreen()));
+                              },
                               child: const Text(
                                 "Map View",
                                 style: TextStyle(
@@ -258,17 +261,17 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             ),
           ),
           SliverToBoxAdapter(
-            child: Container(
-              height: 180,
-              width: MediaQuery.of(context).size.width * 0.97,
-              decoration: BoxDecoration(color: Colors.grey.shade200),
-              padding: const EdgeInsets.all(10),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  SizedBox(
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                  height: 180,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(color: Colors.grey.shade200),
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(
                     height: 100,
-                    width: MediaQuery.of(context).size.width * 0.97,
+                    width: MediaQuery.of(context).size.width,
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -278,32 +281,33 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.97,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: AmenitiesFrameWidgetTwo(
-                          amenitiesModel: amenitiesModel,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Builder(builder: (context) {
+                    return InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return AmenitiesBottomWidget(
+                              hotelDetailsModel: hotelDetailsModel!,
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "View All",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.red.shade400,
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width * 0.97,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: AmenitiesFrameWidgetThree(
-                          amenitiesModel: amenitiesModel,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                    );
+                  }),
+                ),
+              ],
             ),
           ),
           SliverToBoxAdapter(
@@ -352,7 +356,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           GuestPoliciesWidget(
                             guestPolicies: guestPolicies,
                             title: guestPolicies![0].title,
-                            iconData: Icons.watch_later_outlined,
+                            iconData: Icons.favorite_outline_rounded,
                           ),
                           GuestPoliciesWidget(
                             guestPolicies: guestPolicies,
@@ -362,7 +366,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                           GuestPoliciesWidget(
                             guestPolicies: guestPolicies,
                             title: guestPolicies![2].title,
-                            iconData: Icons.favorite_outline_rounded,
+                            iconData: Icons.watch_later_outlined,
                           ),
                         ],
                       ),

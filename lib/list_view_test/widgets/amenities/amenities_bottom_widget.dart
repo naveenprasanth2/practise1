@@ -1,40 +1,36 @@
 import 'package:flutter/material.dart';
-import '../../models/hotel_images_model/hotel_images_model.dart';
-import '../../widgets/images/images_list_view.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/widgets/amenities/amenities_individual.dart';
+class AmenitiesBottomWidget extends StatefulWidget {
+  final HotelDetailsModel hotelDetailsModel;
 
-class HotelImagesBottomSheet extends StatefulWidget {
-  final HotelImagesModel hotelImagesModel;
-  final String tabName;
-
-  const HotelImagesBottomSheet({
+  const AmenitiesBottomWidget({
     Key? key,
-    required this.hotelImagesModel,
-    required this.tabName,
+    required this.hotelDetailsModel,
   }) : super(key: key);
 
   @override
-  State<HotelImagesBottomSheet> createState() => _HotelImagesBottomSheetState();
+  State<AmenitiesBottomWidget> createState() => _AmenitiesBottomWidgetState();
 }
 
-class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
+class _AmenitiesBottomWidgetState extends State<AmenitiesBottomWidget>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
   final List<String> tabs = [
-    "All",
-    "Room",
-    "Others",
+    "Bed Type",
+    "Hotel Facilities",
+    "Media & Technology",
+    "Room Facility",
     "Washroom",
-    "Lobby",
-    "Reception",
-    "Facade"
+    "Seating Area",
   ];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      initialIndex: tabs.indexOf(widget.tabName),
+      initialIndex: 0,
       length: tabs.length,
       vsync: this,
     );
@@ -70,33 +66,29 @@ class _HotelImagesBottomSheetState extends State<HotelImagesBottomSheet>
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      ImageListView(
-                        images: widget.hotelImagesModel.allImages,
-                        allImages: widget.hotelImagesModel.allImages,
+                      AmenitiesIndividualWidget(
+                        values: widget.hotelDetailsModel.amenities.bedTypeModel!
+                            .bedTypeModelData(),
                       ),
-                      ImageListView(
-                        images: widget.hotelImagesModel.room,
-                        allImages: widget.hotelImagesModel.allImages,
+                      AmenitiesIndividualWidget(
+                        values: widget.hotelDetailsModel.amenities.hotelFacilitiesModel!
+                            .hotelFacilitiesModelData(),
                       ),
-                      ImageListView(
-                        images: widget.hotelImagesModel.others,
-                        allImages: widget.hotelImagesModel.allImages,
+                      AmenitiesIndividualWidget(
+                        values: widget.hotelDetailsModel.amenities.mediaTechnologyModel!
+                            .mediaTechnologyModelData(),
                       ),
-                      ImageListView(
-                        images: widget.hotelImagesModel.washroom,
-                        allImages: widget.hotelImagesModel.allImages,
+                      AmenitiesIndividualWidget(
+                        values: widget.hotelDetailsModel.amenities.roomFacilityModel!
+                            .roomFacilityModelData(),
                       ),
-                      ImageListView(
-                        images: widget.hotelImagesModel.lobby,
-                        allImages: widget.hotelImagesModel.allImages,
+                      AmenitiesIndividualWidget(
+                        values: widget.hotelDetailsModel.amenities.washroomModel!
+                            .washroomModelData(),
                       ),
-                      ImageListView(
-                        images: widget.hotelImagesModel.reception,
-                        allImages: widget.hotelImagesModel.allImages,
-                      ),
-                      ImageListView(
-                        images: widget.hotelImagesModel.facade,
-                        allImages: widget.hotelImagesModel.allImages,
+                      AmenitiesIndividualWidget(
+                        values: widget.hotelDetailsModel.amenities.seatingAreaModel!
+                            .seatingAreaModelData(),
                       ),
                     ],
                   ),

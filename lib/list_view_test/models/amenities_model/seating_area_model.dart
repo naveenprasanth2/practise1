@@ -7,6 +7,14 @@ class SeatingAreaModel {
   @JsonKey(name: 'seatingArea')
   bool? seatingArea;
 
+  Map<String, bool> seatingAreaModelData() {
+    var originalData = toJson();
+    Map<String, bool> seatingAreaModelData = originalData.map((key, value) {
+      return MapEntry(key, value as bool);
+    });
+    return seatingAreaModelData;
+  }
+
   SeatingAreaModel(this.seatingArea);
 
   factory SeatingAreaModel.fromJson(Map<String, dynamic> json) =>
