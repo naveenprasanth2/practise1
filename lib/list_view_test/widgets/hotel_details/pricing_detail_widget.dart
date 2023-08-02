@@ -313,51 +313,6 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           flex: 6,
                           child: Container(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              'GST ${calculationProvider.gstPercentage}%',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              calculationProvider.gstPrice.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              calculationProvider.gstPrice.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: Container(
-                            alignment: Alignment.centerLeft,
                             child: const Text(
                               'Prepaid Discount',
                               textAlign: TextAlign.center,
@@ -404,6 +359,51 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           flex: 6,
                           child: Container(
                             alignment: Alignment.centerLeft,
+                            child: Text(
+                              'GST ${calculationProvider.gstPercentage}%',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              calculationProvider.gstPriceWithoutPrepaidDiscount.toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              calculationProvider.gstPriceWithPrepaidDiscount.toString(),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: Container(
+                            alignment: Alignment.centerLeft,
                             child: const Text(
                               'Final Price',
                               textAlign: TextAlign.center,
@@ -429,7 +429,7 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(
-                              calculationProvider.finalPrice.toString(),
+                              calculationProvider.finalPriceWithPrepaidDiscount.toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
@@ -483,7 +483,7 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(
-                              calculationProvider.finalPrice.toString(),
+                              calculationProvider.finalPriceWithPrepaidDiscount.toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black,

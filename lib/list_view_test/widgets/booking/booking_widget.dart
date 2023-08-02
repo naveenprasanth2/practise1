@@ -249,7 +249,7 @@ class BookingWidget extends StatelessWidget {
                         ),
                         Text(
                           Provider.of<CalculationProvider>(context)
-                              .finalPrice
+                              .finalPriceWithPrepaidDiscount
                               .toString(),
                           style: const TextStyle(color: Colors.white),
                         ),

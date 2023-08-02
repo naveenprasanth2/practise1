@@ -26,7 +26,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
     super.initState();
     _pageController = PageController(
       initialPage: 0,
-      viewportFraction: 1,
+      viewportFraction: 0.85,
       keepPage: true,
     );
     _pageController.addListener(() {
@@ -41,7 +41,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
         alignment: Alignment.bottomLeft,
         children: [
           Container(
-            height: 130,
+            height: 150,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(color: Colors.white),
             padding: const EdgeInsets.all(10),
@@ -54,19 +54,22 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 SizedBox(
-                  height: 80,
+                  height: 100,
                   child: PageView.builder(
                     itemCount: widget.coupons.length,
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,
                     padEnds: false,
                     itemBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(
-                          child: CouponDisplayContainerWidget(
-                            couponModel: widget.coupons[index],
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(
+                            child: CouponDisplayContainerWidget(
+                              couponModel: widget.coupons[index],
+                            ),
                           ),
                         ),
                       );
@@ -141,7 +144,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
                   );
                 },
                 child: Text(
-                  "see more...",
+                  "View all offers",
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.red.shade400,
