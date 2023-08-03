@@ -20,6 +20,7 @@ import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bot
 import '../../models/hotel_detail_model/about_hotel_model.dart';
 import '../../widgets/coupons/coupons_main_widget.dart';
 import '../../widgets/hotel_details_main_widgets/guest_policies_widget.dart';
+import '../../widgets/room_occupancy_details/bookable_details_widget.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -276,7 +277,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
           CouponsMainWidget(
             coupons: coupons ?? [],
-          )
+          ),
+          BookableDetailsWidget(),
         ],
       ),
       bottomNavigationBar: HotelDetailsBottomBar(
