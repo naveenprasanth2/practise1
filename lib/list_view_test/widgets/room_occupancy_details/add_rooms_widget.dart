@@ -12,18 +12,34 @@ class AddRoomsWidget extends StatefulWidget {
 class _AddRoomsWidgetState extends State<AddRoomsWidget> {
   List<RoomModel> rooms = [RoomModel()];
   final ScrollController _scrollController = ScrollController();
+  final listViewKey = GlobalKey();
 
-  // Step 4: Add a new room to the list
   void addRoom() {
     setState(() {
       rooms.add(RoomModel());
-      _scrollController.animateTo(
-        _scrollController.position.minScrollExtent + 200,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeOut,
-      );
+      if(!isItemVisible(rooms.length - 1)) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent + 100);
+      }
     });
   }
+
+
+
+  bool isItemVisible(int index) {
+    var itemKey = GlobalKey();
+    RenderBox? itemRenderBox = itemKey.currentContext?.findRenderObject() as RenderBox?;
+    RenderBox? listRenderBox = listViewKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if(itemRenderBox != null && listRenderBox != null) {
+      double itemStart = itemRenderBox.localToGlobal(Offset.zero, ancestor: listRenderBox).dy;
+      double itemEnd = itemStart + itemRenderBox.size.height;
+
+      return (itemEnd > _scrollController.position.extentBefore) && (itemStart < _scrollController.position.extentAfter);
+    } else {
+      return false;
+    }
+  }
+
 
   // Step 6: Remove a room from the list
   void removeRoom(int index) {
@@ -55,6 +71,7 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
               controller: _scrollController,
               shrinkWrap: true,
               itemCount: rooms.length,
+              key: listViewKey,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(10),
