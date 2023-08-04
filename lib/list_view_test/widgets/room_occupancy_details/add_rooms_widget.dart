@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/room_occupancy/room_model.dart';
 
@@ -10,7 +12,7 @@ class AddRoomsWidget extends StatefulWidget {
 }
 
 class _AddRoomsWidgetState extends State<AddRoomsWidget> {
-  List<RoomModel> rooms = [RoomModel()];
+  late List<RoomModel> rooms;
   final ScrollController _scrollController = ScrollController();
   final listViewKey = GlobalKey();
 
@@ -49,6 +51,14 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //creating a deep copy of the rooms model instead of shallow copy like List.from()
+    rooms = context.read<CountProviders>().roomsInfo.map((room) => room.clone()).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -61,7 +71,10 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
                 height: 100,
               ),
               IconButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  rooms = List.from(Provider.of<CountProviders>(context, listen: false).roomsInfo);
+                  Navigator.pop(context);
+                },
                 icon: const Icon(Icons.close),
               ),
             ],
@@ -208,7 +221,10 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
           Padding(
             padding: const EdgeInsets.only(bottom: 100, left: 10, right: 10),
             child: InkWell(
-              onTap: () => addRoom(),
+              onTap: () {
+                Provider.of<CountProviders>(context, listen: false).setRoomsDetails(rooms);
+                Navigator.pop(context);
+              },
               child: Container(
                 height: 30,
                 // Increase the height to accommodate the content

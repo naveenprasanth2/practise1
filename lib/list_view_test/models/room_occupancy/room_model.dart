@@ -14,6 +14,9 @@ class RoomModel {
     this.adults = 1,
     this.children = 0,
   });
+  RoomModel clone() {
+    return RoomModel(adults: adults, children: children);
+  }
 
   factory RoomModel.fromJson(Map<String, dynamic> json) =>
       _$RoomModelFromJson(json);
