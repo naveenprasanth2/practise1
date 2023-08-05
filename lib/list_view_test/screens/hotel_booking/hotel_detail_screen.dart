@@ -10,6 +10,7 @@ import 'package:practise1/list_view_test/widgets/cancellation/cancellation_polic
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/amenities_main_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
+import 'package:practise1/list_view_test/widgets/house_policies/house_policies.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -279,8 +280,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           CouponsMainWidget(
             coupons: coupons ?? [],
           ),
-          BookableDetailsWidget(),
-          CancellationPolicyWidget(),
+          const BookableDetailsWidget(),
+          const CancellationPolicyWidget(),
+          const HousePoliciesWidget(),
         ],
       ),
       bottomNavigationBar: HotelDetailsBottomBar(
