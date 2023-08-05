@@ -91,7 +91,9 @@ class DateProvider extends ChangeNotifier {
   bool isPastADay() {
     DateTime nineAMToday = DateTime(_dateTimeObject.year, _dateTimeObject.month,
         _dateTimeObject.day, 9, 0, 0);
-    if (_checkInDateInTimeFormat!.isAfter(nineAMToday)) {
+    if (_checkInDateInTimeFormat!
+        .subtract(const Duration(days: 1))
+        .isAfter(nineAMToday)) {
       return true;
     } else {
       return false;
@@ -99,7 +101,8 @@ class DateProvider extends ChangeNotifier {
   }
 
   String setDateInFullLengthFormat() {
-    _dateInFullLengthFormat = DateFormat('d MMMM').format(_checkInDateInTimeFormat!);
+    _dateInFullLengthFormat =
+        DateFormat('d MMMM').format(_checkInDateInTimeFormat!.subtract(const Duration(hours: 12)));
     return _dateInFullLengthFormat!;
   }
 }
