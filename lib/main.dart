@@ -24,7 +24,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (create) => CountProviders()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
         ChangeNotifierProvider(create: (create) => MapProvider()),
-        ChangeNotifierProvider(create: (create) => CouponStateProvider())
+        ChangeNotifierProvider(create: (create) => CouponStateProvider()),
+        ChangeNotifierProxyProvider<DateProvider, CalculationProvider>(
+          create: (context) => CalculationProvider(),
+          update: (context, dateProvider, calculationProvider) {
+            calculationProvider!.setDateProviderData(
+              dateProvider.noOfDays,
+            );
+            return calculationProvider;
+          },
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

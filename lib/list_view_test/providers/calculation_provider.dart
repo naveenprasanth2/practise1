@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/room_occupancy/room_model.dart';
 
 class CalculationProvider extends ChangeNotifier {
   double? _costPerNight;
+  double? _totalCostPerNight;
   double? _discountPercentage;
   double? _discountedPrice;
   double? _pretaxPrice;
@@ -15,8 +17,12 @@ class CalculationProvider extends ChangeNotifier {
   double? _finalPriceWithoutPrepaidDiscount;
   double? _finalPriceWithPrepaidDiscount;
   double? _totalAmount;
+  int? _noOfDays;
+  List<RoomModel> _roomsInfo = [RoomModel(adults: 1, children: 0)];
 
   double? get costPerNight => _costPerNight;
+
+  double? get totalCostPerNight => _totalCostPerNight;
 
   double? get discountPercentage => _discountPercentage;
 
@@ -47,35 +53,97 @@ class CalculationProvider extends ChangeNotifier {
 
   double? get gstPriceWithoutPrepaidDiscount => _gstPriceWithoutPrepaidDiscount;
 
+  List<RoomModel> get roomsInfo => _roomsInfo;
+
+  int? get noOfDays => _noOfDays;
+
+  void setRoomsInfo(List<RoomModel> rooms) {
+    _roomsInfo = rooms;
+    setTotalCostPerNight();
+    setDiscountValueAfterPriceReset();
+    setPreTaxPrice();
+    setPrepaidDiscountValue();
+    setAfterTaxPrice();
+    setFinalPrice();
+    getNumberOfRooms();
+    getNumberOfGuests();
+    notifyListeners();
+  }
+
+  void setDateProviderData(int noOfDays) {
+    _noOfDays = noOfDays;
+    if(_costPerNight!=null){
+      setTotalCostPerNight();
+      setDiscountValueAfterPriceReset();
+      setPreTaxPrice();
+      setPrepaidDiscountValue();
+      setAfterTaxPrice();
+      setFinalPrice();
+      getNumberOfRooms();
+      getNumberOfGuests();
+    }
+    notifyListeners();
+  }
+
+  int getNumberOfRooms() {
+    return _roomsInfo.length;
+  }
+
+  int getNumberOfGuests() {
+    return _roomsInfo
+        .map((roomGuests) => roomGuests.adults + roomGuests.children)
+        .fold(0, (previousValue, element) => previousValue + element);
+  }
+
   void setCostPerNight(int costPerNight) {
     //1. set the cost per night first
     _costPerNight = costPerNight.toDouble();
     notifyListeners();
   }
 
+  void setTotalCostPerNight() {
+    //2. set the total cost per night
+    _totalCostPerNight = _roomsInfo.length * _costPerNight! * noOfDays!;
+    double otherCost = _roomsInfo
+        .where((element) => element.adults > 1)
+        .map((e) => (e.adults - 1) * (.10 * _costPerNight!))
+        .fold(0, (previousValue, element) => previousValue + element);
+    _totalCostPerNight = (_totalCostPerNight! + otherCost);
+    notifyListeners();
+  }
+
   void setDiscountPercentage(int discountPercentage) {
-    //2. set discount percentage next, as GST cannot be calculated without this
+    //3. set discount percentage next, as GST cannot be calculated without this
+    setTotalCostPerNight();
     _discountPercentage = discountPercentage.toDouble();
-    _discountedPrice = (costPerNight! * discountPercentage) / 100;
+    _discountedPrice = (totalCostPerNight! * discountPercentage) / 100;
+    setPreTaxPrice();
+    notifyListeners();
+  }
+
+  void setDiscountValueAfterPriceReset() {
+    //3. set discount percentage next, as GST cannot be calculated without this
+    setTotalCostPerNight();
+    _discountedPrice = (totalCostPerNight! * discountPercentage!) / 100;
     setPreTaxPrice();
     notifyListeners();
   }
 
   void setPreTaxPrice() {
-    //3. cost per night minus gives the pretax cost
-    _pretaxPrice = (costPerNight! - discountedPrice!);
+    //4. cost per night minus gives the pretax cost
+    _pretaxPrice = (totalCostPerNight! - discountedPrice!);
     notifyListeners();
   }
 
   void setPrepaidDiscountPercentage(double prepaidDiscountPercentage) {
-    //4. Calculate the prepaid discount value before GST as it may change with final price
+    //5. Calculate the prepaid discount value before GST as it may change with final price
     _prepaidDiscountPercentage = prepaidDiscountPercentage;
     setPrepaidDiscountValue();
     notifyListeners();
   }
 
   void setPrepaidDiscountValue() {
-    //5. Calculate the total prepaid discount value
+    //6. Calculate the total prepaid discount value
     _prepaidDiscountValue =
         ((_pretaxPrice! * prepaidDiscount!) / 100).roundToDouble();
     setAfterTaxPrice();
@@ -84,11 +152,15 @@ class CalculationProvider extends ChangeNotifier {
   }
 
   void setGstPercentage(double gstPercentage) {
-    //6. GST is now given as per the rules ( as per the _pretax price )
-    _gstPercentage = gstPercentage;
+    //7. GST is now given as per the rules ( as per the _pretax price )
+    if (costPerNight! < 4000) {
+      _gstPercentage = gstPercentage;
+    } else {
+      _gstPercentage = 18;
+    }
+
     notifyListeners();
   }
-
 
   void setAfterTaxPrice() {
     //7. After tax price should be calculated in 2 ways as there are two values to handle discounts

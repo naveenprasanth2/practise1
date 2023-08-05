@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,29 +20,31 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
   void addRoom() {
     setState(() {
       rooms.add(RoomModel());
-      if(!isItemVisible(rooms.length - 1)) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent + 100);
+      if (!isItemVisible(rooms.length - 1)) {
+        _scrollController
+            .jumpTo(_scrollController.position.maxScrollExtent + 100);
       }
     });
   }
 
-
-
   bool isItemVisible(int index) {
     var itemKey = GlobalKey();
-    RenderBox? itemRenderBox = itemKey.currentContext?.findRenderObject() as RenderBox?;
-    RenderBox? listRenderBox = listViewKey.currentContext?.findRenderObject() as RenderBox?;
+    RenderBox? itemRenderBox =
+        itemKey.currentContext?.findRenderObject() as RenderBox?;
+    RenderBox? listRenderBox =
+        listViewKey.currentContext?.findRenderObject() as RenderBox?;
 
-    if(itemRenderBox != null && listRenderBox != null) {
-      double itemStart = itemRenderBox.localToGlobal(Offset.zero, ancestor: listRenderBox).dy;
+    if (itemRenderBox != null && listRenderBox != null) {
+      double itemStart =
+          itemRenderBox.localToGlobal(Offset.zero, ancestor: listRenderBox).dy;
       double itemEnd = itemStart + itemRenderBox.size.height;
 
-      return (itemEnd > _scrollController.position.extentBefore) && (itemStart < _scrollController.position.extentAfter);
+      return (itemEnd > _scrollController.position.extentBefore) &&
+          (itemStart < _scrollController.position.extentAfter);
     } else {
       return false;
     }
   }
-
 
   // Step 6: Remove a room from the list
   void removeRoom(int index) {
@@ -55,7 +58,11 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
     // TODO: implement initState
     super.initState();
     //creating a deep copy of the rooms model instead of shallow copy like List.from()
-    rooms = context.read<CountProviders>().roomsInfo.map((room) => room.clone()).toList();
+    rooms = context
+        .read<CountProviders>()
+        .roomsInfo
+        .map((room) => room.clone())
+        .toList();
   }
 
   @override
@@ -72,7 +79,9 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
               ),
               IconButton(
                 onPressed: () {
-                  rooms = List.from(Provider.of<CountProviders>(context, listen: false).roomsInfo);
+                  rooms = List.from(
+                      Provider.of<CountProviders>(context, listen: false)
+                          .roomsInfo);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.close),
@@ -103,12 +112,25 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Room ${index + 1}: ",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: Colors.grey),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Room ${index + 1}: ",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: Colors.grey),
+                                  ),
+                                  Text(
+                                    "${rooms[index].adults + rooms[index].children} guests",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: Colors.grey),
+                                  )
+                                ],
                               ),
                               _buildRoomSection(
                                 title: 'Adults:',
@@ -222,7 +244,10 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
             padding: const EdgeInsets.only(bottom: 100, left: 10, right: 10),
             child: InkWell(
               onTap: () {
-                Provider.of<CountProviders>(context, listen: false).setRoomsDetails(rooms);
+                Provider.of<CountProviders>(context, listen: false)
+                    .setRoomsDetails(rooms);
+                Provider.of<CalculationProvider>(context, listen: false)
+                    .setRoomsInfo(rooms);
                 Navigator.pop(context);
               },
               child: Container(

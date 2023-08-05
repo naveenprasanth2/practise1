@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'add_rooms_widget.dart';
 
@@ -37,24 +40,31 @@ class BookableDetailsWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(Icons.calendar_month),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("Dates"),
-                          ],
-                        ),
-                        Text(
-                          "Wed, 2nd Aug - Thu, 3rd Aug",
-                          style: TextStyle(fontSize: 13, color: Colors.blue),
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Provider.of<DateProvider>(context, listen: false)
+                            .setDate(context);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(Icons.calendar_month),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Dates"),
+                            ],
+                          ),
+                          Text(
+                            "${Provider.of<DateProvider>(context).checkInDateAndDay} - ${Provider.of<DateProvider>(context).checkOutDateAndDay}",
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.blue),
+                          )
+                        ],
+                      ),
                     ),
                     const Divider(thickness: 1),
                     Row(
@@ -80,9 +90,11 @@ class BookableDetailsWidget extends StatelessWidget {
                               },
                             );
                           },
-                          child: const Text(
-                            "2 rooms . 4 guests",
-                            style: TextStyle(fontSize: 13, color: Colors.blue),
+                          child: Text(
+                            "${Provider.of<CalculationProvider>(context, listen: true).getNumberOfRooms()} rooms . "
+                            "${Provider.of<CalculationProvider>(context, listen: true).getNumberOfGuests()} guests",
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.blue),
                           ),
                         )
                       ],
