@@ -72,7 +72,7 @@ class CalculationProvider extends ChangeNotifier {
 
   void setDateProviderData(int noOfDays) {
     _noOfDays = noOfDays;
-    if(_costPerNight!=null){
+    if (_costPerNight != null) {
       setTotalCostPerNight();
       setDiscountValueAfterPriceReset();
       setPreTaxPrice();
