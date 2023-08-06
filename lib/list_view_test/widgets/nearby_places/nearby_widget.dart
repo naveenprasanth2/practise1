@@ -82,90 +82,93 @@ class _NearByTabViewState extends State<NearByTabView>
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Nearby Places",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            const SizedBox(height: 20,),
-            DefaultTabController(
-              length: 4,
-              child: Container(
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: TabBar(
-                        isScrollable: true,
-                        indicatorColor: Colors.red.shade400,
-                        labelStyle: const TextStyle(fontSize: 13),
-                        labelPadding: const EdgeInsets.only(right: 24.0),
-                        physics: const BouncingScrollPhysics(),
-                        tabs: const [
-                          Tab(text: 'Transport'),
-                          Tab(text: 'Malls & Restaurants'),
-                          Tab(text: 'Popular Places'),
-                          Tab(text: 'Others'),
-                        ],
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Nearby Places",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              const SizedBox(height: 20,),
+              DefaultTabController(
+                length: 4,
+                child: Container(
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.zero,
+                        child: TabBar(
+                          isScrollable: true,
+                          indicatorColor: Colors.red.shade400,
+                          labelStyle: const TextStyle(fontSize: 13),
+                          labelPadding: const EdgeInsets.only(right: 24.0),
+                          physics: const BouncingScrollPhysics(),
+                          tabs: const [
+                            Tab(text: 'Transport'),
+                            Tab(text: 'Malls & Restaurants'),
+                            Tab(text: 'Popular Places'),
+                            Tab(text: 'Others'),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 250, // Set a specific height here
-                      child: TabBarView(
-                        children: [
-                          _buildPlaceListView(
-                            context,
-                            {"transport": widget.nearbyPlacesModel.transport},
-                          ),
-                          _buildPlaceListView(
-                            context,
-                            {
-                              "mallsAndRestaurants":
-                                  widget.nearbyPlacesModel.mallsAndRestaurants
-                            },
-                          ),
-                          _buildPlaceListView(
-                            context,
-                            {
-                              "popularPlaces":
-                                  widget.nearbyPlacesModel.popularPlaces
-                            },
-                          ),
-                          _buildPlaceListView(
-                            context,
-                            {"others": widget.nearbyPlacesModel.others},
-                          ),
-                        ],
+                      SizedBox(
+                        height: 250, // Set a specific height here
+                        child: TabBarView(
+                          children: [
+                            _buildPlaceListView(
+                              context,
+                              {"transport": widget.nearbyPlacesModel.transport},
+                            ),
+                            _buildPlaceListView(
+                              context,
+                              {
+                                "mallsAndRestaurants":
+                                    widget.nearbyPlacesModel.mallsAndRestaurants
+                              },
+                            ),
+                            _buildPlaceListView(
+                              context,
+                              {
+                                "popularPlaces":
+                                    widget.nearbyPlacesModel.popularPlaces
+                              },
+                            ),
+                            _buildPlaceListView(
+                              context,
+                              {"others": widget.nearbyPlacesModel.others},
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => const MapScreen()));
-              },
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(10)),
-                child: const Center(
-                  child: Text("View on Map"),
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (builder) => const MapScreen()));
+                },
+                child: Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Center(
+                    child: Text("View on Map"),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

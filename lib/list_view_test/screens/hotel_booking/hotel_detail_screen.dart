@@ -120,186 +120,189 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        physics: const PageScrollPhysics(),
-        slivers: [
-          HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 5,
+      body: Container(
+        color: Colors.white,
+        child: CustomScrollView(
+          physics: const PageScrollPhysics(),
+          slivers: [
+            HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 5,
+              ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                color: Colors.white,
-                height: 150,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            hotelDetailsModel?.hotelName ??
-                                "Hotel Name Loading...",
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.white,
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              hotelDetailsModel?.hotelName ??
+                                  "Hotel Name Loading...",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Center(
-                            child: Builder(builder: (BuildContext context) {
-                              return IconButton(
-                                onPressed: () {
-                                  showBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return aboutHotelModel != null
-                                          ? HotelDetailsBottomWidget(
-                                              aboutHotelModel: aboutHotelModel!,
-                                            )
-                                          : const SizedBox.shrink();
-                                    },
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.info_outline,
-                                  color: Colors.red.shade400,
-                                ),
-                              );
-                            }),
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            Center(
+                              child: Builder(builder: (BuildContext context) {
+                                return IconButton(
+                                  onPressed: () {
+                                    showBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return aboutHotelModel != null
+                                            ? HotelDetailsBottomWidget(
+                                                aboutHotelModel: aboutHotelModel!,
+                                              )
+                                            : const SizedBox.shrink();
+                                      },
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.info_outline,
+                                    color: Colors.red.shade400,
+                                  ),
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "${widget.hotelSmallDetailsModel.townName},",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: Text(
-                              widget.hotelSmallDetailsModel.cityName,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Flexible(
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (builder) =>
-                                            const MapScreen()));
-                              },
-                              child: const Text(
-                                "Map View",
-                                style: TextStyle(
-                                  color: Colors.blueAccent,
+                      Flexible(
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                "${widget.hotelSmallDetailsModel.townName},",
+                                style: const TextStyle(
+                                  color: Colors.black,
                                   fontSize: 15,
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: hotelRatings != null
-                          ? Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color:
-                                      StarRatingColourUtils.getStarRatingColor(
-                                          hotelRatings!.averageRating),
+                            Flexible(
+                              child: Text(
+                                widget.hotelSmallDetailsModel.cityName,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
                                 ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  hotelRatings!.averageRating.toString(),
-                                  style: TextStyle(
-                                    color: StarRatingColourUtils
-                                        .getStarRatingColor(
-                                            hotelRatings!.averageRating),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Flexible(
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ReviewsScreen(
-                                          averageRatings:
-                                              hotelRatings!.averageRating,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    "$totalRatings ratings",
-                                    style: const TextStyle(color: Colors.blue),
+                                          builder: (builder) =>
+                                              const MapScreen()));
+                                },
+                                child: const Text(
+                                  "Map View",
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
                                   ),
                                 ),
-                              ],
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                  ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: hotelRatings != null
+                            ? Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color:
+                                        StarRatingColourUtils.getStarRatingColor(
+                                            hotelRatings!.averageRating),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    hotelRatings!.averageRating.toString(),
+                                    style: TextStyle(
+                                      color: StarRatingColourUtils
+                                          .getStarRatingColor(
+                                              hotelRatings!.averageRating),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ReviewsScreen(
+                                            averageRatings:
+                                                hotelRatings!.averageRating,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "$totalRatings ratings",
+                                      style: const TextStyle(color: Colors.blue),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          if (amenitiesModel != null && hotelDetailsModel != null)
-            AmenitiesMainWidget(
-              amenitiesModel: amenitiesModel!,
-              hotelDetailsModel: hotelDetailsModel!,
+            if (amenitiesModel != null && hotelDetailsModel != null)
+              AmenitiesMainWidget(
+                amenitiesModel: amenitiesModel!,
+                hotelDetailsModel: hotelDetailsModel!,
+              ),
+            GuestPoliciesMainWidget(
+              guestPolicies: guestPolicies ?? [],
             ),
-          GuestPoliciesMainWidget(
-            guestPolicies: guestPolicies ?? [],
-          ),
-          CouponsMainWidget(
-            coupons: coupons ?? [],
-          ),
-          const BookableDetailsWidget(),
-          RoomTypesWidget(
-            roomTypeModel: roomTypeModel ?? [],
-          ),
-          const CancellationPolicyWidget(),
-          const HousePoliciesWidget(),
-          if (nearbyPlacesModel != null)
-            NearByTabView(
-              nearbyPlacesModel: nearbyPlacesModel!,
+            CouponsMainWidget(
+              coupons: coupons ?? [],
             ),
-        ],
+            const BookableDetailsWidget(),
+            RoomTypesWidget(
+              roomTypeModel: roomTypeModel ?? [],
+            ),
+            const CancellationPolicyWidget(),
+            const HousePoliciesWidget(),
+            if (nearbyPlacesModel != null)
+              NearByTabView(
+                nearbyPlacesModel: nearbyPlacesModel!,
+              ),
+          ],
+        ),
       ),
       bottomNavigationBar: HotelDetailsBottomBar(
         hotelDetailsModel: hotelDetailsModel,

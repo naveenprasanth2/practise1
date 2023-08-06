@@ -22,60 +22,63 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Select a room of your preference",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            DefaultTabController(
-              length: widget.roomTypeModel.length,
-              child: Container(
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.zero,
-                      child: TabBar(
-                        isScrollable: true,
-                        indicatorColor: Colors.red.shade400,
-                        labelStyle: const TextStyle(fontSize: 13),
-                        labelPadding: const EdgeInsets.only(right: 24.0),
-                        physics: const BouncingScrollPhysics(),
-                        tabs: widget.roomTypeModel
-                            .map(
-                              (roomTypes) => Tab(
-                                text: roomTypes.type,
-                              ),
-                            )
-                            .toList(),
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Select a room of your preference",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              DefaultTabController(
+                length: widget.roomTypeModel.length,
+                child: Container(
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.zero,
+                        child: TabBar(
+                          isScrollable: true,
+                          indicatorColor: Colors.red.shade400,
+                          labelStyle: const TextStyle(fontSize: 13),
+                          labelPadding: const EdgeInsets.only(right: 24.0),
+                          physics: const BouncingScrollPhysics(),
+                          tabs: widget.roomTypeModel
+                              .map(
+                                (roomTypes) => Tab(
+                                  text: roomTypes.type,
+                                ),
+                              )
+                              .toList(),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 400, // Set a specific height here
-                      width: MediaQuery.of(context).size.width *  0.80,
-                      child: TabBarView(
-                        children: widget.roomTypeModel
-                            .map(
-                              (roomType) =>
-                                  SelectRoomWidget(roomTypeModel: roomType),
-                            )
-                            .toList(),
+                      SizedBox(
+                        height: 400, // Set a specific height here
+                        width: MediaQuery.of(context).size.width *  0.80,
+                        child: TabBarView(
+                          children: widget.roomTypeModel
+                              .map(
+                                (roomType) =>
+                                    SelectRoomWidget(roomTypeModel: roomType),
+                              )
+                              .toList(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

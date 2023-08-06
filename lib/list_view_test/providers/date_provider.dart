@@ -57,10 +57,10 @@ class DateProvider extends ChangeNotifier {
         _checkOutDate = format.format(value.end);
         _checkInDateAndDay = formatDateWithSuffix(value.start);
         _checkOutDateAndDay = formatDateWithSuffix(value.end);
+        _checkInDateInTimeFormat = value!.start;
       } else {
         date = date ?? initialDate;
       }
-      _checkInDateInTimeFormat = value!.start;
       setDateInFullLengthFormat();
       notifyListeners();
     });

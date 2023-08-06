@@ -18,53 +18,55 @@ class AmenitiesMainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Container(
-            height: 180,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(color: Colors.white),
-            padding: const EdgeInsets.all(10),
-            child: SizedBox(
-              height: 100,
+      child: Container(
+        color: Colors.white,
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Container(
+              height: 180,
               width: MediaQuery.of(context).size.width,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: AmenitiesFrameWidgetOne(
-                    amenitiesModel: amenitiesModel,
+              padding: const EdgeInsets.all(10),
+              child: SizedBox(
+                height: 100,
+                width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: AmenitiesFrameWidgetOne(
+                      amenitiesModel: amenitiesModel,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Builder(builder: (context) {
-              return InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return AmenitiesBottomWidget(
-                        hotelDetailsModel: hotelDetailsModel,
-                      );
-                    },
-                  );
-                },
-                child: Text(
-                  "View All",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.red.shade400,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Builder(builder: (context) {
+                return InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return AmenitiesBottomWidget(
+                          hotelDetailsModel: hotelDetailsModel,
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    "View All",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.red.shade400,
+                    ),
                   ),
-                ),
-              );
-            }),
-          ),
-        ],
+                );
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }
