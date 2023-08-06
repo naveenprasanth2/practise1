@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_model.dart';
-
-import '../images/images_list_view.dart';
+import 'package:practise1/list_view_test/widgets/room_type/room_images_only_widget.dart';
 
 class SelectRoomWidget extends StatelessWidget {
   final RoomTypeModel roomTypeModel;
@@ -20,14 +19,15 @@ class SelectRoomWidget extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (builder) => ImageListView(
-                      allImages: roomTypeModel.imageUrls,
-                      images: roomTypeModel.imageUrls,
-                    ),
-                  ),
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return RoomImagesOnlyWidget(
+                      roomTypeModel: roomTypeModel,
+                      tabName: "Room",
+                    );
+                  },
                 );
               },
               child: Container(
