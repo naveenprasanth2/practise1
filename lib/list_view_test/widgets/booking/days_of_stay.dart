@@ -14,7 +14,7 @@ class DatesOfStayContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      width: MediaQuery.of(context).size.width * 0.95,
+      width: MediaQuery.of(context).size.width * 0.90,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -28,8 +28,8 @@ class DatesOfStayContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +40,7 @@ class DatesOfStayContainer extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 12,
                 ),
               ),
               const SizedBox(height: 4),
@@ -49,7 +49,7 @@ class DatesOfStayContainer extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 12,
                 ),
               ),
               const SizedBox(height: 4),
@@ -57,20 +57,22 @@ class DatesOfStayContainer extends StatelessWidget {
                 "12:00PM",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 12,
                 ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(50.0),
-            child: SizedBox(
-              height: 50,
-              width: 100,
-              child: Icon(
-                Icons.hotel,
-                size: 50,
-                color: Colors.red.shade400,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SizedBox(
+                height: 50,
+                width: 100,
+                child: Icon(
+                  Icons.hotel,
+                  size: 50,
+                  color: Colors.red.shade400,
+                ),
               ),
             ),
           ),
@@ -83,7 +85,7 @@ class DatesOfStayContainer extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 12,
                 ),
               ),
               const SizedBox(height: 4),
@@ -92,7 +94,7 @@ class DatesOfStayContainer extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 12,
                 ),
               ),
               const SizedBox(height: 4),
@@ -100,7 +102,7 @@ class DatesOfStayContainer extends StatelessWidget {
                 "11:00AM",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 18,
+                  fontSize: 12,
                 ),
               ),
             ],

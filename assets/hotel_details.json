@@ -37,7 +37,7 @@
     "latitude": 40.6892,
     "longitude": -74.0445
   },
-  "locationDetails":{
+  "locationDetails": {
     "hotelLocationDetails": {
       "name": "ITC Grand Chola",
       "address": "63, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032",
@@ -188,16 +188,32 @@
     20,
     35
   ],
-  "roomType": {
-    "standardRoom": {
-      "imageUrl": "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",
+  "roomType": [
+    {
+      "type": "Standard",
+      "images": [
+        "https://media.istockphoto.com/id/119926339/photo/resort-swimming-pool.jpg?s=1024x1024&w=is&k=20&c=uzDy4YWgDC1bx7I6V7z4X8jRuIS3GUyF5w2euvucBwA=",
+        "https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=1024x1024&w=is&k=20&c=lNQVwTuYzo9wQZfZzHioQMCJRTHWVzhX1UXmcqgnF5k=",
+        "https://media.istockphoto.com/id/172455485/photo/resort-and-swimming-pool.jpg?s=1024x1024&w=is&k=20&c=zojwwtIL4aigQI1VU6ps_B0pzc-EuXNE5lsnKf9N_Ec="
+      ],
+      "size": 130,
+      "maxPeopleAllowed": 3,
       "price": 2500
     },
-    "doubleRoom": {
-      "imageUrl": "https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=1024x1024&w=is&k=20&c=lNQVwTuYzo9wQZfZzHioQMCJRTHWVzhX1UXmcqgnF5k=",
-      "price": 1650
+    {
+      "type": "Deluxe",
+      "images": [
+        "https://media.istockphoto.com/id/482367041/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=-io2u3x82WO9SXAj1obTFnLDIqPOkRVpPTGyGbsi6Uc=",
+        "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",
+        "https://media.istockphoto.com/id/119926339/photo/resort-swimming-pool.jpg?s=1024x1024&w=is&k=20&c=uzDy4YWgDC1bx7I6V7z4X8jRuIS3GUyF5w2euvucBwA=",
+        "https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=1024x1024&w=is&k=20&c=lNQVwTuYzo9wQZfZzHioQMCJRTHWVzhX1UXmcqgnF5k=",
+        "https://media.istockphoto.com/id/172455485/photo/resort-and-swimming-pool.jpg?s=1024x1024&w=is&k=20&c=zojwwtIL4aigQI1VU6ps_B0pzc-EuXNE5lsnKf9N_Ec="
+      ],
+      "size": 190,
+      "maxPeopleAllowed": 4,
+      "price": 4400
     }
-  },
+  ],
   "amenities": {
     "bedTypeModel": {
       "cot": true,

@@ -5,8 +5,11 @@ class ImageListView extends StatelessWidget {
   final List<String> images;
   final List<String> allImages;
 
-  const ImageListView({Key? key, required this.images, required this.allImages})
-      : super(key: key);
+  const ImageListView({
+    Key? key,
+    required this.images,
+    required this.allImages,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

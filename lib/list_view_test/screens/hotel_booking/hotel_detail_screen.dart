@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_model.dart';
 import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
@@ -25,6 +26,7 @@ import '../../widgets/coupons/coupons_main_widget.dart';
 import '../../widgets/hotel_details_main_widgets/guest_policies_widget.dart';
 import '../../widgets/nearby_places/nearby_widget.dart';
 import '../../widgets/room_occupancy_details/bookable_details_widget.dart';
+import '../../widgets/room_type/room_types_widget.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -47,6 +49,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   HotelDetailsModel? hotelDetailsModel;
   NearbyPlacesModel? nearbyPlacesModel;
   List<CouponModel>? coupons;
+  List<RoomTypeModel>? roomTypeModel;
   int? totalRatings;
   bool _isDataLoaded = false;
 
@@ -68,6 +71,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           guestPolicies = hotelDetailsModel!.guestPolicies;
           aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
           nearbyPlacesModel = hotelDetailsModel!.locationDetails;
+          roomTypeModel = hotelDetailsModel!.roomType;
         });
         // Update price data using Provider.of after data is loaded
         setPriceData();
@@ -105,8 +109,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   setPriceData() {
     final calculationProvider =
         Provider.of<CalculationProvider>(context, listen: false);
+    //need to change the price set value
     calculationProvider
-        .setCostPerNight(hotelDetailsModel?.roomType.standardRoom.price ?? 0);
+        .setCostPerNight(hotelDetailsModel?.roomType[0].roomPrice ?? 0);
     calculationProvider.setDiscountPercentage(0);
     calculationProvider.setGstPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
@@ -116,7 +121,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const PageScrollPhysics(),
         slivers: [
           HotelImagesWithIconsWidget(hotelDetailsModel: hotelDetailsModel),
           const SliverToBoxAdapter(
@@ -285,6 +290,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             coupons: coupons ?? [],
           ),
           const BookableDetailsWidget(),
+          RoomTypesWidget(
+            roomTypeModel: roomTypeModel ?? [],
+          ),
           const CancellationPolicyWidget(),
           const HousePoliciesWidget(),
           if (nearbyPlacesModel != null)
