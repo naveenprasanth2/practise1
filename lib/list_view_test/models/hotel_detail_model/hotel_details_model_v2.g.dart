@@ -20,6 +20,8 @@ HotelDetailsModel _$HotelDetailsModelFromJson(Map<String, dynamic> json) =>
           json['hotelImages'] as Map<String, dynamic>),
       locations:
           LocationsModel.fromJson(json['locations'] as Map<String, dynamic>),
+      locationDetails: NearbyPlacesModel.fromJson(
+          json['locationDetails'] as Map<String, dynamic>),
       highlights: (json['highlights'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -49,6 +51,7 @@ Map<String, dynamic> _$HotelDetailsModelToJson(HotelDetailsModel instance) =>
       'mainImage': instance.mainImage,
       'hotelImages': instance.hotelImages,
       'locations': instance.locations,
+      'locationDetails': instance.locationDetails,
       'highlights': instance.highlights,
       'guestPolicies': instance.guestPolicies,
       'aboutHotel': instance.aboutHotelModel,

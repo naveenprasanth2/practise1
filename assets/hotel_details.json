@@ -37,6 +37,142 @@
     "latitude": 40.6892,
     "longitude": -74.0445
   },
+  "locationDetails":{
+    "hotelLocationDetails": {
+      "name": "ITC Grand Chola",
+      "address": "63, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032",
+      "lat": 13.010771169097396,
+      "lng": 80.22056993747232
+    },
+    "transport": [
+      {
+        "name": "Chennai Central Railway Station",
+        "address": "Park Town, Chennai, Tamil Nadu",
+        "lat": 13.0836,
+        "lng": 80.2785
+      },
+      {
+        "name": "Chennai International Airport",
+        "address": "Meenambakkam, Chennai, Tamil Nadu",
+        "lat": 12.9817,
+        "lng": 80.1633
+      },
+      {
+        "name": "Chennai Egmore Railway Station",
+        "address": "Egmore, Chennai, Tamil Nadu",
+        "lat": 13.0826,
+        "lng": 80.2740
+      },
+      {
+        "name": "Chennai Mofussil Bus Terminus",
+        "address": "Koyambedu, Chennai, Tamil Nadu",
+        "lat": 13.0745,
+        "lng": 80.1831
+      },
+      {
+        "name": "Chennai Metro",
+        "address": "Various Locations, Chennai, Tamil Nadu",
+        "lat": 13.0674,
+        "lng": 80.2376
+      }
+    ],
+    "mallsAndRestaurants": [
+      {
+        "name": "Phoenix MarketCity",
+        "address": "Velachery Main Rd, Indira Gandhi Nagar, Chennai, Tamil Nadu",
+        "lat": 12.9959,
+        "lng": 80.2205
+      },
+      {
+        "name": "Express Avenue Mall",
+        "address": "Royapettah, Chennai, Tamil Nadu",
+        "lat": 13.0614,
+        "lng": 80.2640
+      },
+      {
+        "name": "Forum Vijaya Mall",
+        "address": "Vadapalani, Chennai, Tamil Nadu",
+        "lat": 13.0523,
+        "lng": 80.2129
+      },
+      {
+        "name": "VR Chennai",
+        "address": "Anna Nagar, Chennai, Tamil Nadu",
+        "lat": 13.0893,
+        "lng": 80.2111
+      },
+      {
+        "name": "Ampa Skywalk",
+        "address": "Aminjikarai, Chennai, Tamil Nadu",
+        "lat": 13.0729,
+        "lng": 80.2252
+      }
+    ],
+    "popularPlaces": [
+      {
+        "name": "Marina Beach",
+        "address": "Marina Beach, Chennai, Tamil Nadu",
+        "lat": 13.0496,
+        "lng": 80.2825
+      },
+      {
+        "name": "Kapaleeshwarar Temple",
+        "address": "Mylapore, Chennai, Tamil Nadu",
+        "lat": 13.0337,
+        "lng": 80.2695
+      },
+      {
+        "name": "Government Museum",
+        "address": "Egmore, Chennai, Tamil Nadu",
+        "lat": 13.0826,
+        "lng": 80.2772
+      },
+      {
+        "name": "Guindy National Park",
+        "address": "Guindy, Chennai, Tamil Nadu",
+        "lat": 13.0105,
+        "lng": 80.2200
+      },
+      {
+        "name": "Besant Nagar Beach",
+        "address": "Besant Nagar, Chennai, Tamil Nadu",
+        "lat": 13.0055,
+        "lng": 80.2703
+      }
+    ],
+    "others": [
+      {
+        "name": "VGP Universal Kingdom",
+        "address": "East Coast Road, Injambakkam, Chennai, Tamil Nadu",
+        "lat": 12.8815,
+        "lng": 80.2508
+      },
+      {
+        "name": "Semmozhi Poonga",
+        "address": "Thiruvallikeni, Chennai, Tamil Nadu",
+        "lat": 13.0485,
+        "lng": 80.2706
+      },
+      {
+        "name": "Arignar Anna Zoological Park",
+        "address": "Vandalur, Chennai, Tamil Nadu",
+        "lat": 12.8913,
+        "lng": 80.0811
+      },
+      {
+        "name": "Fort St. George",
+        "address": "Rajaji Salai, Chennai, Tamil Nadu",
+        "lat": 13.0789,
+        "lng": 80.2870
+      },
+      {
+        "name": "St. Thomas Mount",
+        "address": "Saidapet, Chennai, Tamil Nadu",
+        "lat": 13.0114,
+        "lng": 80.2102
+      }
+    ]
+  },
   "highlights": [
     "Free Breakfast",
     "Free Cancellation",

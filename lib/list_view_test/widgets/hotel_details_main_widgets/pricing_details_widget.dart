@@ -21,6 +21,7 @@ class HotelDetailsBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       height: 80,
+      color: Colors.white,
       child: Container(
         decoration: const BoxDecoration(color: Colors.transparent),
         child: Row(

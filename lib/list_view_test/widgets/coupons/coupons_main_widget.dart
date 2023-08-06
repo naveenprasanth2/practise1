@@ -51,7 +51,7 @@ class _CouponsMainWidgetState extends State<CouponsMainWidget> {
               children: [
                 const Text(
                   "Offers to look into",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 SizedBox(
                   height: 100,
