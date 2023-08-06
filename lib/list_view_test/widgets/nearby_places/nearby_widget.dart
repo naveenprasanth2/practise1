@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geodesy/geodesy.dart';
+import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../models/nearby_places_model/place_category_model.dart';
 
@@ -30,6 +31,7 @@ class _NearByTabViewState extends State<NearByTabView>
     final Geodesy geodesy = Geodesy();
 
     return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: List.generate(places.length, (index) {
           PlaceCategoryModel? place = places[index];
@@ -89,6 +91,7 @@ class _NearByTabViewState extends State<NearByTabView>
               "Nearby Places",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
+            const SizedBox(height: 20,),
             DefaultTabController(
               length: 4,
               child: Container(
@@ -114,7 +117,7 @@ class _NearByTabViewState extends State<NearByTabView>
                       ),
                     ),
                     SizedBox(
-                      height: 400, // Set a specific height here
+                      height: 250, // Set a specific height here
                       child: TabBarView(
                         children: [
                           _buildPlaceListView(
@@ -123,11 +126,17 @@ class _NearByTabViewState extends State<NearByTabView>
                           ),
                           _buildPlaceListView(
                             context,
-                            {"mallsAndRestaurants": widget.nearbyPlacesModel.mallsAndRestaurants},
+                            {
+                              "mallsAndRestaurants":
+                                  widget.nearbyPlacesModel.mallsAndRestaurants
+                            },
                           ),
                           _buildPlaceListView(
                             context,
-                            {"popularPlaces": widget.nearbyPlacesModel.popularPlaces},
+                            {
+                              "popularPlaces":
+                                  widget.nearbyPlacesModel.popularPlaces
+                            },
                           ),
                           _buildPlaceListView(
                             context,
@@ -137,6 +146,22 @@ class _NearByTabViewState extends State<NearByTabView>
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => const MapScreen()));
+              },
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Center(
+                  child: Text("View on Map"),
                 ),
               ),
             ),

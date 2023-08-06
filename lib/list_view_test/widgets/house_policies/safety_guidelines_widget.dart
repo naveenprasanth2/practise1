@@ -47,7 +47,7 @@ class SafetyGuidelinesWidget extends StatelessWidget {
                           "Do's",
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(height: 20,),
                         Column(
                           children: snapshot.data!.dos
                               .map((dosText) =>
@@ -59,7 +59,7 @@ class SafetyGuidelinesWidget extends StatelessWidget {
                           "Dont's",
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(height: 20,),
                         Column(
                           children: snapshot.data!.donts
                               .map((dosText) => GuidelinesIndividualWidget(
