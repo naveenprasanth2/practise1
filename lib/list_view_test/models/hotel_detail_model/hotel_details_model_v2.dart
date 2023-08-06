@@ -4,6 +4,7 @@ import 'package:practise1/list_view_test/models/hotel_images_model/hotel_images_
 
 import '../amenities_model/amenities_model.dart';
 import '../guest_policies/guest_policy_model.dart';
+import '../nearby_places_model/nearby_places_model.dart';
 import 'about_hotel_model.dart';
 import 'locations_model.dart';
 
@@ -41,6 +42,9 @@ class HotelDetailsModel {
   @JsonKey(name: 'locations')
   LocationsModel locations;
 
+  @JsonKey(name: 'locationDetails')
+  NearbyPlacesModel locationDetails;
+
   @JsonKey(name: 'highlights')
   List<String> highlights;
 
@@ -70,6 +74,7 @@ class HotelDetailsModel {
       required this.mainImage,
       required this.hotelImages,
       required this.locations,
+      required this.locationDetails,
       required this.highlights,
       required this.guestPolicies,
       required this.aboutHotelModel,
