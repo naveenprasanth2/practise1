@@ -29,50 +29,51 @@ class _NearByTabViewState extends State<NearByTabView>
     );
     final Geodesy geodesy = Geodesy();
 
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: places.length,
-      itemBuilder: (context, index) {
-        PlaceCategoryModel? place = places[index];
-        num placeDistance = geodesy.distanceBetweenTwoGeoPoints(
-          LatLng(fixedLocation.latitude, fixedLocation.longitude),
-          LatLng(place.lat, place.lng),
-        );
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              if (placesDetails.keys.first == "others")
-                const Icon(Icons.location_pin),
-              if (placesDetails.keys.first == "transport")
-                const Icon(Icons.emoji_transportation),
-              if (placesDetails.keys.first == "mallsAndRestaurants")
-                const Icon(Icons.restaurant),
-              if (placesDetails.keys.first == "popularPlaces")
-                const Icon(Icons.place_outlined),
-              const SizedBox(width: 30),
-              // add some space between icon and text
-              Flexible(
-                fit: FlexFit.loose,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      place.name,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      '${(placeDistance / 1000).toStringAsFixed(2)} km',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+    return SingleChildScrollView(
+      child: Column(
+        children: List.generate(places.length, (index) {
+          PlaceCategoryModel? place = places[index];
+          num placeDistance = geodesy.distanceBetweenTwoGeoPoints(
+            LatLng(fixedLocation.latitude, fixedLocation.longitude),
+            LatLng(place.lat, place.lng),
+          );
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                if (placesDetails.keys.first == "others")
+                  const Icon(Icons.location_pin),
+                if (placesDetails.keys.first == "transport")
+                  const Icon(Icons.emoji_transportation),
+                if (placesDetails.keys.first == "mallsAndRestaurants")
+                  const Icon(Icons.restaurant),
+                if (placesDetails.keys.first == "popularPlaces")
+                  const Icon(Icons.place_outlined),
+                const SizedBox(width: 30),
+                // add some space between icon and text
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        place.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        '${(placeDistance / 1000).toStringAsFixed(2)} km',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -83,7 +84,6 @@ class _NearByTabViewState extends State<NearByTabView>
         padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text(
               "Nearby Places",
@@ -95,40 +95,44 @@ class _NearByTabViewState extends State<NearByTabView>
                 color: Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 16),
-                    TabBar(
-                      isScrollable: true,
-                      indicatorColor: Colors.red.shade400,
-                      labelStyle: const TextStyle(fontSize: 13),
-                      physics: const BouncingScrollPhysics(),
-                      indicatorPadding: EdgeInsets.zero,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                      tabs: const [
-                        Tab(text: 'Transport'),
-                        Tab(text: 'Malls & Restaurants'),
-                        Tab(text: 'Popular Places'),
-                        Tab(text: 'Others'),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.zero,
+                      child: TabBar(
+                        isScrollable: true,
+                        indicatorColor: Colors.red.shade400,
+                        labelStyle: const TextStyle(fontSize: 13),
+                        labelPadding: const EdgeInsets.only(right: 24.0),
+                        physics: const BouncingScrollPhysics(),
+                        tabs: const [
+                          Tab(text: 'Transport'),
+                          Tab(text: 'Malls & Restaurants'),
+                          Tab(text: 'Popular Places'),
+                          Tab(text: 'Others'),
+                        ],
+                      ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.3, // Set a specific height here
+                      height: 400, // Set a specific height here
                       child: TabBarView(
                         children: [
-                          _buildPlaceListView(context,
-                              {"transport": widget.nearbyPlacesModel.transport}),
-                          _buildPlaceListView(context, {
-                            "mallsAndRestaurants":
-                                widget.nearbyPlacesModel.mallsAndRestaurants
-                          }),
-                          _buildPlaceListView(context, {
-                            "popularPlaces":
-                                widget.nearbyPlacesModel.popularPlaces
-                          }),
-                          _buildPlaceListView(context,
-                              {"others": widget.nearbyPlacesModel.others}),
+                          _buildPlaceListView(
+                            context,
+                            {"transport": widget.nearbyPlacesModel.transport},
+                          ),
+                          _buildPlaceListView(
+                            context,
+                            {"mallsAndRestaurants": widget.nearbyPlacesModel.mallsAndRestaurants},
+                          ),
+                          _buildPlaceListView(
+                            context,
+                            {"popularPlaces": widget.nearbyPlacesModel.popularPlaces},
+                          ),
+                          _buildPlaceListView(
+                            context,
+                            {"others": widget.nearbyPlacesModel.others},
+                          ),
                         ],
                       ),
                     ),
