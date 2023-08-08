@@ -181,7 +181,7 @@ class BookingWidget extends StatelessWidget {
           ),
           SizedBox(
             height: 200,
-            width: MediaQuery.of(context).size.width * 0.95,
+            width: MediaQuery.of(context).size.width * 0.90,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,7 +194,7 @@ class BookingWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 50,
+            height: 30,
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -202,11 +202,11 @@ class BookingWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  height: 70,
-                  width: 180,
+                  height: 50,
+                  width: 150,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade400,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
                     child: Column(
@@ -230,11 +230,11 @@ class BookingWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  height: 70,
-                  width: 180,
+                  height: 50,
+                  width: 150,
                   decoration: BoxDecoration(
                     color: Colors.red.shade400,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
                     child: Column(

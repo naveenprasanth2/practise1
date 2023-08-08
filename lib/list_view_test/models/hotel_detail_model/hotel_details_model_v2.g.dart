@@ -33,8 +33,9 @@ HotelDetailsModel _$HotelDetailsModelFromJson(Map<String, dynamic> json) =>
       discountsApplicable: (json['discountsApplicable'] as List<dynamic>)
           .map((e) => e as int)
           .toList(),
-      roomType:
-          RoomTypeModel.fromJson(json['roomType'] as Map<String, dynamic>),
+      roomType: (json['roomType'] as List<dynamic>)
+          .map((e) => RoomTypeModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       amenities:
           AmenitiesModel.fromJson(json['amenities'] as Map<String, dynamic>),
     );
