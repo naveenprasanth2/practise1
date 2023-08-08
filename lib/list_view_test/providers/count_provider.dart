@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:practise1/list_view_test/models/room_occupancy/room_model.dart';
 
 class CountProviders extends ChangeNotifier {
   int _adultCount = 2;
   int _tempAdultCount = 2;
+  List<RoomModel> roomsInfo = [RoomModel()];
 
   int get adultCount => _adultCount;
   int get tempAdultCount => _tempAdultCount;
@@ -47,5 +49,9 @@ class CountProviders extends ChangeNotifier {
   void notifyChildListeners(){
     _childCount = _tempChildCount;
     notifyListeners();
+  }
+
+  void setRoomsDetails(List<RoomModel> roomsInfo){
+    this.roomsInfo = roomsInfo;
   }
 }

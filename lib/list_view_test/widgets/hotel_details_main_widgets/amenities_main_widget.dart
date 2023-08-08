@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
@@ -25,7 +24,7 @@ class AmenitiesMainWidget extends StatelessWidget {
           Container(
             height: 180,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(color: Colors.grey.shade200),
+            decoration: const BoxDecoration(color: Colors.white),
             padding: const EdgeInsets.all(10),
             child: SizedBox(
               height: 100,
@@ -50,7 +49,7 @@ class AmenitiesMainWidget extends StatelessWidget {
                     isScrollControlled: true,
                     builder: (context) {
                       return AmenitiesBottomWidget(
-                        hotelDetailsModel: hotelDetailsModel!,
+                        hotelDetailsModel: hotelDetailsModel,
                       );
                     },
                   );

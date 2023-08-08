@@ -4,11 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
 import 'package:practise1/list_view_test/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
+import 'package:practise1/list_view_test/widgets/cancellation/cancellation_policy.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/amenities_main_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
+import 'package:practise1/list_view_test/widgets/house_policies/house_policies.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -20,6 +23,8 @@ import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bot
 import '../../models/hotel_detail_model/about_hotel_model.dart';
 import '../../widgets/coupons/coupons_main_widget.dart';
 import '../../widgets/hotel_details_main_widgets/guest_policies_widget.dart';
+import '../../widgets/nearby_places/nearby_widget.dart';
+import '../../widgets/room_occupancy_details/bookable_details_widget.dart';
 import '../reviews/reviews_screen.dart';
 
 class HotelDetailScreen extends StatefulWidget {
@@ -40,6 +45,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   List<GuestPolicyModel>? guestPolicies;
   StarRatingAverageModel? hotelRatings;
   HotelDetailsModel? hotelDetailsModel;
+  NearbyPlacesModel? nearbyPlacesModel;
   List<CouponModel>? coupons;
   int? totalRatings;
   bool _isDataLoaded = false;
@@ -61,6 +67,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           amenitiesModel = hotelDetailsModel!.amenities;
           guestPolicies = hotelDetailsModel!.guestPolicies;
           aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
+          nearbyPlacesModel = hotelDetailsModel!.locationDetails;
         });
         // Update price data using Provider.of after data is loaded
         setPriceData();
@@ -276,7 +283,14 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           ),
           CouponsMainWidget(
             coupons: coupons ?? [],
-          )
+          ),
+          const BookableDetailsWidget(),
+          const CancellationPolicyWidget(),
+          const HousePoliciesWidget(),
+          if (nearbyPlacesModel != null)
+            NearByTabView(
+              nearbyPlacesModel: nearbyPlacesModel!,
+            ),
         ],
       ),
       bottomNavigationBar: HotelDetailsBottomBar(

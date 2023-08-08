@@ -1,0 +1,19 @@
+{
+  "roomOccupancyDetails": {
+    "rooms": [
+      {
+        "adults": 2,
+        "children": 1
+      },
+      {
+        "adults": 2,
+        "children": 1
+      },
+      {
+        "adults": 2,
+        "children": 1
+      }
+    ],
+    "primaryGuest": "naveen"
+  }
+}
