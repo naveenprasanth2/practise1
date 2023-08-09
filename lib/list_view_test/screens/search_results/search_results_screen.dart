@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -13,7 +14,12 @@ import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../widgets/hotel_results/hotel_results_widget.dart';
 
 class SearchResultsScreen extends StatefulWidget {
-  const SearchResultsScreen({Key? key}) : super(key: key);
+  final String cityAndState;
+
+  const SearchResultsScreen({
+    Key? key,
+    required this.cityAndState,
+  }) : super(key: key);
 
   @override
   State<SearchResultsScreen> createState() => _SearchResultsScreenState();
@@ -29,11 +35,20 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   }
 
   Stream<List<HotelSearchModel>> loadHotelSearchResultsJson() async* {
-    final value =
-        await rootBundle.loadString("assets/hotel_search_details.json");
-    final jsonData = json.decode(value) as List<dynamic>;
-    final List<HotelSearchModel> hotelSearchList = jsonData
-        .map((jsonObject) => HotelSearchModel.fromJson(jsonObject))
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection(widget.cityAndState.split(",")[1].trim().toLowerCase())
+        .doc(widget.cityAndState.split(",")[0].trim().toLowerCase())
+        .collection("hotels")
+        .get();
+    List<dynamic> valuesList = querySnapshot.docs
+        .map((doc) {
+          return doc.data().values;
+        })
+        .expand((value) => value)
+        .toList();
+
+    List<HotelSearchModel> hotelSearchList = valuesList
+        .map((element) => HotelSearchModel.fromJson(element))
         .toList();
 
     yield hotelSearchList;

@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final int itemCount = 4;
   final double scrollDuration = 2.0;
   final TextEditingController _searchController = TextEditingController();
+  late TextEditingController _resultsController = TextEditingController();
   final List<String> _dataList = LocationConstants.citiesList;
   List<String> _searchResults = [];
 
@@ -128,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               MaterialPageRoute(
                                 builder: (context) => SearchPage(
                                   homeSearchController: _searchController,
+                                  resultsController: _resultsController,
                                 ),
                               ),
                             );
@@ -274,25 +276,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Flexible(
                           child: InkWell(
-                            // onTap: () {
-                            //   Navigator.of(context).push(
-                            //     MaterialPageRoute(
-                            //       builder: (builder) => HotelDetailScreen(
-                            //         hotelSmallDetailsModel: HotelSmallDetailsModel(
-                            //             hotelName: "Naveen Hotels",
-                            //             townName: "hebbal",
-                            //             cityName: "Bangalore",
-                            //             mapViewData: "Near Bangalore"),
-                            //       ),
-                            //     ),
-                            //   );
-                            // },
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (builder) =>
-                                      const SearchResultsScreen(),
+                                  builder: (builder) => SearchResultsScreen(
+                                    cityAndState: _resultsController.text,
+                                  ),
                                 ),
                               );
                             },
