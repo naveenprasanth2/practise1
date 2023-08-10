@@ -10,12 +10,12 @@ class HighLights extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: Container(
-        height: 300,
+        height: 30,
         margin: const EdgeInsets.all(2.0),
         width: MediaQuery.of(context).size.width * 0.22,
         decoration: BoxDecoration(
           color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: Text(

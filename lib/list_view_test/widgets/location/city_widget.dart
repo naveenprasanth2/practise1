@@ -1,15 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/screens/search_results/search_results_screen.dart';
 
 class CityWidget extends StatelessWidget {
   final String cityName;
-  final VoidCallback? onPressed;
 
-  const CityWidget({super.key, required this.cityName, this.onPressed});
+  const CityWidget({
+    super.key,
+    required this.cityName,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: () {
+        String cityAndStateName = "";
+        if (getCityName() == "Chennai") {
+          cityAndStateName = "${getCityName()} , Tamilnadu";
+        } else if (getCityName() == "Bangalore") {
+          cityAndStateName += "${getCityName()} , Karnataka";
+        } else if (getCityName() == "Delhi") {
+          cityAndStateName += "${getCityName()} , Delhi";
+        } else if (getCityName() == "Hyderabad") {
+          cityAndStateName += "${getCityName()} , Telangana";
+        } else if (getCityName() == "Kolkata") {
+          cityAndStateName += "${getCityName()} , West Bengal";
+        } else if (getCityName() == "Mumbai") {
+          cityAndStateName += "${getCityName()} , Maharastra";
+        } else if (getCityName() == "Trivandrum") {
+          cityAndStateName += "${getCityName()} , Kerala";
+        }
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (builder) =>
+                    SearchResultsScreen(cityAndState: cityAndStateName)));
+      },
       child: Container(
         margin: const EdgeInsets.all(8.0),
         width: 110,
@@ -26,11 +52,7 @@ class CityWidget extends StatelessWidget {
                   cityName), // Set the background color of the circular widget
             ),
             Text(
-              cityName.split("/")[1].split(".")[0].substring(0, 1).toUpperCase() +
-                  cityName
-                      .split("/")[1]
-                      .split(".")[0]
-                      .substring(1, cityName.split("/")[1].split(".")[0].length),
+              getCityName(),
               style: const TextStyle(
                 color: Colors.black, // Set the text color
                 fontSize: 18, // Set the font size
@@ -41,5 +63,13 @@ class CityWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getCityName() {
+    return cityName.split("/")[1].split(".")[0].substring(0, 1).toUpperCase() +
+        cityName
+            .split("/")[1]
+            .split(".")[0]
+            .substring(1, cityName.split("/")[1].split(".")[0].length);
   }
 }

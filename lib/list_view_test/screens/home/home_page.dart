@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final int itemCount = 4;
   final double scrollDuration = 2.0;
   final TextEditingController _searchController = TextEditingController();
-  late TextEditingController _resultsController = TextEditingController();
+  final TextEditingController _resultsController = TextEditingController();
   final List<String> _dataList = LocationConstants.citiesList;
   List<String> _searchResults = [];
 
@@ -38,6 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
+    _resultsController.dispose();
     super.dispose();
   }
 
@@ -319,7 +321,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return CityWidget(
                         cityName: LocationConstants.locationImages[index],
-                        onPressed: () {},
                       );
                     },
                   ),

@@ -77,10 +77,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     // Use a null-aware operator to avoid null errors
-                    "Hotel Name Loading...",
-                    style: TextStyle(color: Colors.white),
+                    widget.cityAndState,
+                    style: const TextStyle(color: Colors.white),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -139,14 +139,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return SliverFillRemaining(
+                return const SliverFillRemaining(
                   child: Center(
-                    child: Text('Error: ${snapshot.error}'),
+                    child: Text("No Hotels Found"),
                   ),
                 );
               } else {
                 final hotelSearchModel = snapshot.data;
-                if (hotelSearchModel != null) {
+                if (hotelSearchModel != null && hotelSearchModel.isNotEmpty) {
                   // Data is available, build the SliverList with HotelResultsWidget
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
@@ -168,7 +168,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                             );
                           },
                           child: Container(
-                            height: 400,
+                            height: 450,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black26),
@@ -186,7 +186,13 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   // Data is null (error or empty), display a message
                   return const SliverFillRemaining(
                     child: Center(
-                      child: Text('No data available'),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("No Hotels Found"),
+                          Text("Don't worry, we are rapidly expanding"),
+                        ],
+                      ),
                     ),
                   );
                 }
