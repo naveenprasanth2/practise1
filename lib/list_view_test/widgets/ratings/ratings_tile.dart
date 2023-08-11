@@ -45,13 +45,14 @@ class RatingsTile extends StatelessWidget {
                         Icon(
                           Icons.verified,
                           color: Colors.green.shade500,
+                          size: 12,
                         ),
                         const SizedBox(
                           width: 3,
                         ),
                         const Text(
                           "Verified Stay",
-                          style: TextStyle(fontSize: 13),
+                          style: TextStyle(fontSize: 10),
                         ),
                       ],
                     ),

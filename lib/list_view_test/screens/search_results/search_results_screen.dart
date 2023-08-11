@@ -157,13 +157,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (builder) => HotelDetailScreen(
-                                  hotelSmallDetailsModel:
-                                      HotelSmallDetailsModel(
-                                          cityName: "Chennai",
-                                          hotelName: "M Plaza",
-                                          mapViewData: "",
-                                          townName: "Marathalli"),
-                                ),
+                                    hotelSearchModel: hotelSearchModel[index]),
                               ),
                             );
                           },
