@@ -157,7 +157,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (builder) => HotelDetailScreen(
-                                    hotelSearchModel: hotelSearchModel[index]),
+                                  hotelSearchModel: hotelSearchModel[index],
+                                  cityAndState: widget.cityAndState,
+                                ),
                               ),
                             );
                           },
