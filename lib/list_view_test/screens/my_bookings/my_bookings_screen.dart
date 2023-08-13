@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
 import '../../models/booking_history_model/booking_history_model.dart';
 import '../../models/hotel_search/hotel_search_model.dart';
@@ -18,11 +19,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<BookingHistoryModel> myBookingHistoryList = [];
-  List<BookingHistoryModel> myUpcomingList = [];
-  List<BookingHistoryModel> myCheckedOutList = [];
-  List<BookingHistoryModel> myCancelledList = [];
-  Stream<HotelSearchModel?>? _hotelSearchModel;
-  HotelSearchModel? _hotelSearchModelValue;
+  List<BookingHistoryDisplayModel> myUpcomingList = [];
+  List<BookingHistoryDisplayModel> myCheckedOutList = [];
+  List<BookingHistoryDisplayModel> myCancelledList = [];
+  late HotelSearchModel _hotelSearchModelValue;
 
   @override
   void initState() {
@@ -33,43 +33,59 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Future<void> getDetailedRatingsFromJson() async {
     final value = await rootBundle.loadString("assets/my_bookings_data.json");
-    setState(() {
+    setState(() async {
       final dynamic ratingsDetailsData = json.decode(value);
 
       for (var json in ratingsDetailsData) {
         myBookingHistoryList.add(BookingHistoryModel.fromJson(json));
       }
-      myUpcomingList = myBookingHistoryList
-          .where((element) => element.checkOutStatus == "booked")
-          .toList();
+      await Future.forEach(
+          myBookingHistoryList
+              .where((element) => element.checkOutStatus == "booked"),
+          (element) async {
+        final hotelDetails = await getHotelDetails(element);
+        myUpcomingList.add(BookingHistoryDisplayModel(
+          bookingHistoryModel: element,
+          hotelSearchModel: hotelDetails,
+        ));
+      });
 
-      myCheckedOutList = myBookingHistoryList
-          .where((element) => element.checkOutStatus == "checkedOut")
-          .toList();
+      await Future.forEach(
+          myBookingHistoryList
+              .where((element) => element.checkOutStatus == "checkedOut"),
+          (element) async {
+        final hotelDetails = await getHotelDetails(element);
+        myCheckedOutList.add(BookingHistoryDisplayModel(
+          bookingHistoryModel: element,
+          hotelSearchModel: hotelDetails,
+        ));
+      });
 
-      myCancelledList = myBookingHistoryList
-          .where((element) => element.checkOutStatus == "cancelled")
-          .toList();
+      await Future.forEach(
+          myBookingHistoryList
+              .where((element) => element.checkOutStatus == "cancelled"),
+          (element) async {
+        final hotelDetails = await getHotelDetails(element);
+        myCancelledList.add(BookingHistoryDisplayModel(
+          bookingHistoryModel: element,
+          hotelSearchModel: hotelDetails,
+        ));
+      });
     });
   }
 
-  Future<HotelSearchModel?> getHotelDetails(BookingHistoryModel bookingHistoryModel) async {
+  Future<HotelSearchModel> getHotelDetails(
+      BookingHistoryModel bookingHistoryModel) async {
     final querySnapshot = await FirebaseFirestore.instance
-        .collection(bookingHistoryModel.cityAndState
-        .split(",")[1]
-        .trim()
-        .toLowerCase())
-        .doc(bookingHistoryModel.cityAndState
-        .split(",")[0]
-        .trim()
-        .toLowerCase())
+        .collection(
+            bookingHistoryModel.cityAndState.split(",")[1].trim().toLowerCase())
+        .doc(
+            bookingHistoryModel.cityAndState.split(",")[0].trim().toLowerCase())
         .collection("hotels")
         .doc(bookingHistoryModel.hotelId)
         .get();
-    setState(() {
       _hotelSearchModelValue = HotelSearchModel.fromJson(querySnapshot
           .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
-    });
     return _hotelSearchModelValue;
   }
 
@@ -89,10 +105,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
             backgroundColor: Colors.red.shade400,
             title: const Text(
               "My Bookings",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             centerTitle: true,
             bottom: TabBar(
@@ -149,17 +163,15 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                        return Builder(
-                          builder: (context) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: MyBookingsWidget(
-                                bookingHistoryModel: myUpcomingList[index],
-                              ),
-                            );
-                          }
-                        );
+                      (BuildContext context, int index) {
+                        return Builder(builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: MyBookingsWidget(
+                              bookingHistoryDisplayModel: myUpcomingList[index],
+                            ),
+                          );
+                        });
                       },
                       childCount: myUpcomingList.length,
                     ),
@@ -174,7 +186,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: MyBookingsWidget(
-                            bookingHistoryModel: myCheckedOutList[index],
+                            bookingHistoryDisplayModel: myCheckedOutList[index],
                           ),
                         );
                       },
@@ -187,11 +199,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 slivers: [
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: MyBookingsWidget(
-                            bookingHistoryModel: myCancelledList[index],
+                            bookingHistoryDisplayModel: myCancelledList[index],
                           ),
                         );
                       },

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
 
-import '../../models/booking_history_model/booking_history_model.dart';
+import '../../models/booking_history_model/booking_history_display_model.dart';
 
 class MyBookingsWidget extends StatefulWidget {
-  final BookingHistoryModel bookingHistoryModel;
+  final BookingHistoryDisplayModel bookingHistoryDisplayModel;
 
   const MyBookingsWidget({
     Key? key,
-    required this.bookingHistoryModel,
+    required this.bookingHistoryDisplayModel,
   }) : super(key: key);
 
   @override
@@ -82,7 +81,7 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                         Row(
                           children: [
                             Text(
-                              '${widget.bookingHistoryModel.checkInDate} - ${widget.bookingHistoryModel.checkOutDate}  ',
+                              '${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkInDate} - ${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate}  ',
                             ),
                             Container(
                               height: 5,
@@ -94,7 +93,7 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                               ),
                             ),
                             Text(
-                              "  ${widget.bookingHistoryModel.guestsCount} Guests",
+                              "  ${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
                             ),
                           ],
                         ),
@@ -137,7 +136,9 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                       ],
                     ),
                   ),
-                  if (widget.bookingHistoryModel.checkOutStatus == "booked")
+                  if (widget.bookingHistoryDisplayModel.bookingHistoryModel
+                          .checkOutStatus ==
+                      "booked")
                     Container(
                       height: 50,
                       width: 120,
@@ -156,9 +157,12 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                         ],
                       ),
                     ),
-                  if (widget.bookingHistoryModel.checkOutStatus ==
+                  if (widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .checkOutStatus ==
                           "checkedOut" &&
-                      widget.bookingHistoryModel.rated == false)
+                      widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .rated ==
+                          false)
                     InkWell(
                       onTap: () => RatingDialogHelper.openRatingDialog(context),
                       child: Container(
@@ -180,9 +184,12 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                         ),
                       ),
                     ),
-                  if (widget.bookingHistoryModel.checkOutStatus ==
+                  if (widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .checkOutStatus ==
                           "checkedOut" &&
-                      widget.bookingHistoryModel.rated == true)
+                      widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .rated ==
+                          true)
                     Container(
                       height: 50,
                       width: 120,
