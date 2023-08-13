@@ -4,14 +4,12 @@ part 'booking_history_model.g.dart';
 
 @JsonSerializable()
 class BookingHistoryModel {
-  @JsonKey(name: 'hotelName')
-  final String hotelName;
-  @JsonKey(name: 'doorNumber')
-  final String doorNumber;
-  @JsonKey(name: 'streetNumber')
-  final String streetNumber;
-  @JsonKey(name: 'cityName')
-  final String cityName;
+  @JsonKey(name: 'hotelId')
+  final String hotelId;
+  @JsonKey(name: 'cityAndState')
+  final String cityAndState;
+  @JsonKey(name: 'roomsCount')
+  final int roomsCount;
   @JsonKey(name: 'guestsCount')
   final int guestsCount;
   @JsonKey(name: 'checkInDate')
@@ -34,14 +32,13 @@ class BookingHistoryModel {
   final int amountPaid;
   @JsonKey(name: 'discount')
   final int discount;
-  @JsonKey(name: 'iconImage')
-  final String iconImage;
+  @JsonKey(name: 'discountCoupon')
+  final String discountCoupon;
 
   BookingHistoryModel({
-    required this.hotelName,
-    required this.doorNumber,
-    required this.streetNumber,
-    required this.cityName,
+    required this.hotelId,
+    required this.cityAndState,
+    required this.roomsCount,
     required this.guestsCount,
     required this.checkInDate,
     required this.checkInTime,
@@ -53,7 +50,7 @@ class BookingHistoryModel {
     required this.reservedFor,
     required this.amountPaid,
     required this.discount,
-    required this.iconImage,
+    required this.discountCoupon,
   });
 
   factory BookingHistoryModel.fromJson(Map<String, dynamic> json) =>

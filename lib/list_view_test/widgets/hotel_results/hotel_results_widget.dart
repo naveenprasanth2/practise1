@@ -130,7 +130,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.hotelSearchModel.hotelName,
+                  widget.hotelSearchModel.hotelLocationDetails.name,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

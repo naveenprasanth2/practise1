@@ -6,7 +6,6 @@ import '../amenities_model/amenities_model.dart';
 import '../guest_policies/guest_policy_model.dart';
 import '../nearby_places_model/nearby_places_model.dart';
 import 'about_hotel_model.dart';
-import 'locations_model.dart';
 
 part 'hotel_details_model_v2.g.dart';
 
@@ -39,9 +38,6 @@ class HotelDetailsModel {
   @JsonKey(name: 'hotelImages')
   HotelImagesModel hotelImages;
 
-  @JsonKey(name: 'locations')
-  LocationsModel locations;
-
   @JsonKey(name: 'locationDetails')
   NearbyPlacesModel locationDetails;
 
@@ -73,7 +69,6 @@ class HotelDetailsModel {
       required this.noOfRatings,
       required this.mainImage,
       required this.hotelImages,
-      required this.locations,
       required this.locationDetails,
       required this.highlights,
       required this.guestPolicies,

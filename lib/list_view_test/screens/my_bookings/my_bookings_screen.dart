@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
 import '../../models/booking_history_model/booking_history_model.dart';
+import '../../models/hotel_search/hotel_search_model.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({Key? key}) : super(key: key);
@@ -19,6 +21,8 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   List<BookingHistoryModel> myUpcomingList = [];
   List<BookingHistoryModel> myCheckedOutList = [];
   List<BookingHistoryModel> myCancelledList = [];
+  Stream<HotelSearchModel?>? _hotelSearchModel;
+  HotelSearchModel? _hotelSearchModelValue;
 
   @override
   void initState() {
@@ -47,6 +51,26 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           .where((element) => element.checkOutStatus == "cancelled")
           .toList();
     });
+  }
+
+  Future<HotelSearchModel?> getHotelDetails(BookingHistoryModel bookingHistoryModel) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection(bookingHistoryModel.cityAndState
+        .split(",")[1]
+        .trim()
+        .toLowerCase())
+        .doc(bookingHistoryModel.cityAndState
+        .split(",")[0]
+        .trim()
+        .toLowerCase())
+        .collection("hotels")
+        .doc(bookingHistoryModel.hotelId)
+        .get();
+    setState(() {
+      _hotelSearchModelValue = HotelSearchModel.fromJson(querySnapshot
+          .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
+    });
+    return _hotelSearchModelValue;
   }
 
   @override
@@ -88,7 +112,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     child: Text(
                       'Upcoming',
                       style: TextStyle(
-                        fontSize: 16.0,
                         color: Colors.white,
                       ),
                     ),
@@ -100,7 +123,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     child: Text(
                       'Checked Out',
                       style: TextStyle(
-                        fontSize: 16.0,
                         color: Colors.white,
                       ),
                     ),
@@ -112,7 +134,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     child: Text(
                       'Cancelled',
                       style: TextStyle(
-                        fontSize: 16.0,
                         color: Colors.white,
                       ),
                     ),
@@ -129,11 +150,15 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: MyBookingsWidget(
-                            bookingHistoryModel: myUpcomingList[index],
-                          ),
+                        return Builder(
+                          builder: (context) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: MyBookingsWidget(
+                                bookingHistoryModel: myUpcomingList[index],
+                              ),
+                            );
+                          }
                         );
                       },
                       childCount: myUpcomingList.length,

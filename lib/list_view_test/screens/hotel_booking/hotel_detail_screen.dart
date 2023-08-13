@@ -173,7 +173,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.hotelSearchModel.hotelName,
+                                            widget.hotelSearchModel.hotelLocationDetails.name,
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 20,

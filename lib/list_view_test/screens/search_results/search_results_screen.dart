@@ -139,9 +139,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return const SliverFillRemaining(
+                return SliverFillRemaining(
                   child: Center(
-                    child: Text("No Hotels Found"),
+                    child: Text(snapshot.error.toString() + "error"),
                   ),
                 );
               } else {

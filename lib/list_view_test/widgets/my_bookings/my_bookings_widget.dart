@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
 
 import '../../models/booking_history_model/booking_history_model.dart';
 
-class MyBookingsWidget extends StatelessWidget {
+class MyBookingsWidget extends StatefulWidget {
   final BookingHistoryModel bookingHistoryModel;
 
-  const MyBookingsWidget({Key? key, required this.bookingHistoryModel})
-      : super(key: key);
+  const MyBookingsWidget({
+    Key? key,
+    required this.bookingHistoryModel,
+  }) : super(key: key);
+
+  @override
+  State<MyBookingsWidget> createState() => _MyBookingsWidgetState();
+}
+
+class _MyBookingsWidgetState extends State<MyBookingsWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +55,9 @@ class MyBookingsWidget extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image(
-                        image: NetworkImage(bookingHistoryModel.iconImage),
+                      child: const Image(
+                        image: NetworkImage(
+                            "widget.hotelSearchModel.hotelImages[0]"),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -52,12 +67,12 @@ class MyBookingsWidget extends StatelessWidget {
                   ),
                   Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          bookingHistoryModel.cityName,
-                          style: const TextStyle(
+                        const Text(
+                          "summa",
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -67,7 +82,7 @@ class MyBookingsWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              '${bookingHistoryModel.checkInDate} - ${bookingHistoryModel.checkOutDate}  ',
+                              '${widget.bookingHistoryModel.checkInDate} - ${widget.bookingHistoryModel.checkOutDate}  ',
                             ),
                             Container(
                               height: 5,
@@ -79,15 +94,15 @@ class MyBookingsWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "  ${bookingHistoryModel.guestsCount} Guests",
+                              "  ${widget.bookingHistoryModel.guestsCount} Guests",
                             ),
                           ],
                         ),
-                        Text(bookingHistoryModel.hotelName),
-                        SizedBox(
+                        const Text("test"),
+                        const SizedBox(
                           height: 40, // Adjust the height as needed
                           child: Text(
-                            "${bookingHistoryModel.doorNumber}, ${bookingHistoryModel.streetNumber}",
+                            "${32}, ${"plot 33"}",
                             softWrap: true,
                           ),
                         ),
@@ -100,11 +115,10 @@ class MyBookingsWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
                     height: 50,
-                    width: 120,
                     margin: const EdgeInsets.all(2),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -113,6 +127,9 @@ class MyBookingsWidget extends StatelessWidget {
                           Icons.calendar_month,
                           color: Colors.black,
                         ),
+                        SizedBox(
+                          width: 2,
+                        ),
                         Text(
                           "Book again",
                           style: TextStyle(color: Colors.black),
@@ -120,7 +137,7 @@ class MyBookingsWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (bookingHistoryModel.checkOutStatus == "booked")
+                  if (widget.bookingHistoryModel.checkOutStatus == "booked")
                     Container(
                       height: 50,
                       width: 120,
@@ -139,8 +156,9 @@ class MyBookingsWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
-                      bookingHistoryModel.rated == false)
+                  if (widget.bookingHistoryModel.checkOutStatus ==
+                          "checkedOut" &&
+                      widget.bookingHistoryModel.rated == false)
                     InkWell(
                       onTap: () => RatingDialogHelper.openRatingDialog(context),
                       child: Container(
@@ -162,8 +180,9 @@ class MyBookingsWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
-                      bookingHistoryModel.rated == true)
+                  if (widget.bookingHistoryModel.checkOutStatus ==
+                          "checkedOut" &&
+                      widget.bookingHistoryModel.rated == true)
                     Container(
                       height: 50,
                       width: 120,
