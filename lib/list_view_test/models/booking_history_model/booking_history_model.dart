@@ -20,7 +20,7 @@ class BookingHistoryModel {
   final String checkOutDate;
   @JsonKey(name: 'checkOutTime')
   final String checkOutTime;
-  @JsonKey(name: 'BookingId')
+  @JsonKey(name: 'bookingId')
   final String bookingId;
   @JsonKey(name: 'checkOutStatus')
   final String checkOutStatus;
