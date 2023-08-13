@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
+import 'package:practise1/list_view_test/widgets/booking/booking_cancel.dart';
 
 import '../../models/booking_history_model/booking_history_display_model.dart';
 
@@ -162,22 +163,36 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                   if (widget.bookingHistoryDisplayModel.bookingHistoryModel
                           .checkOutStatus ==
                       "booked")
-                    Container(
-                      height: 50,
-                      width: 120,
-                      margin: const EdgeInsets.all(2),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.close,
-                            color: Colors.black,
-                          ),
-                          Text(
-                            "Cancel",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ],
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BookingCancelWidget(
+                              bookingHistoryModel: widget
+                                  .bookingHistoryDisplayModel
+                                  .bookingHistoryModel,
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 120,
+                        margin: const EdgeInsets.all(2),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.close,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   if (widget.bookingHistoryDisplayModel.bookingHistoryModel

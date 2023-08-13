@@ -23,7 +23,7 @@ class BookingHistoryModel {
   @JsonKey(name: 'bookingId')
   final String bookingId;
   @JsonKey(name: 'checkOutStatus')
-  final String checkOutStatus;
+  String checkOutStatus;
   @JsonKey(name: 'rated')
   final bool rated;
   @JsonKey(name: 'reservedFor')
