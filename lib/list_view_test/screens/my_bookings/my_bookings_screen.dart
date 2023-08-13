@@ -19,10 +19,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<BookingHistoryModel> myBookingHistoryList = [];
-  List<BookingHistoryDisplayModel> myUpcomingList = [];
-  List<BookingHistoryDisplayModel> myCheckedOutList = [];
-  List<BookingHistoryDisplayModel> myCancelledList = [];
-  late HotelSearchModel _hotelSearchModelValue;
 
   @override
   void initState() {
@@ -33,45 +29,55 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Future<void> getDetailedRatingsFromJson() async {
     final value = await rootBundle.loadString("assets/my_bookings_data.json");
-    setState(() async {
+    setState(() {
       final dynamic ratingsDetailsData = json.decode(value);
 
       for (var json in ratingsDetailsData) {
         myBookingHistoryList.add(BookingHistoryModel.fromJson(json));
       }
-      await Future.forEach(
-          myBookingHistoryList
-              .where((element) => element.checkOutStatus == "booked"),
-          (element) async {
-        final hotelDetails = await getHotelDetails(element);
-        myUpcomingList.add(BookingHistoryDisplayModel(
-          bookingHistoryModel: element,
-          hotelSearchModel: hotelDetails,
-        ));
-      });
-
-      await Future.forEach(
-          myBookingHistoryList
-              .where((element) => element.checkOutStatus == "checkedOut"),
-          (element) async {
-        final hotelDetails = await getHotelDetails(element);
-        myCheckedOutList.add(BookingHistoryDisplayModel(
-          bookingHistoryModel: element,
-          hotelSearchModel: hotelDetails,
-        ));
-      });
-
-      await Future.forEach(
-          myBookingHistoryList
-              .where((element) => element.checkOutStatus == "cancelled"),
-          (element) async {
-        final hotelDetails = await getHotelDetails(element);
-        myCancelledList.add(BookingHistoryDisplayModel(
-          bookingHistoryModel: element,
-          hotelSearchModel: hotelDetails,
-        ));
-      });
     });
+  }
+
+  Future<List<BookingHistoryDisplayModel>> getUpcomingList() async {
+    List<BookingHistoryDisplayModel> upcomingList = [];
+    for (var element in myBookingHistoryList) {
+      if (element.checkOutStatus == "booked") {
+        final hotelDetails = await getHotelDetails(element);
+        upcomingList.add(BookingHistoryDisplayModel(
+          bookingHistoryModel: element,
+          hotelSearchModel: hotelDetails,
+        ));
+      }
+    }
+    return upcomingList;
+  }
+
+  Future<List<BookingHistoryDisplayModel>> getCheckedOutList() async {
+    List<BookingHistoryDisplayModel> checkedOutList = [];
+    for (var element in myBookingHistoryList) {
+      if (element.checkOutStatus == "checkedOut") {
+        final hotelDetails = await getHotelDetails(element);
+        checkedOutList.add(BookingHistoryDisplayModel(
+          bookingHistoryModel: element,
+          hotelSearchModel: hotelDetails,
+        ));
+      }
+    }
+    return checkedOutList;
+  }
+
+  Future<List<BookingHistoryDisplayModel>> getCancelledList() async {
+    List<BookingHistoryDisplayModel> cancelledList = [];
+    for (var element in myBookingHistoryList) {
+      if (element.checkOutStatus == "cancelled") {
+        final hotelDetails = await getHotelDetails(element);
+        cancelledList.add(BookingHistoryDisplayModel(
+          bookingHistoryModel: element,
+          hotelSearchModel: hotelDetails,
+        ));
+      }
+    }
+    return cancelledList;
   }
 
   Future<HotelSearchModel> getHotelDetails(
@@ -84,9 +90,16 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         .collection("hotels")
         .doc(bookingHistoryModel.hotelId)
         .get();
-      _hotelSearchModelValue = HotelSearchModel.fromJson(querySnapshot
-          .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
-    return _hotelSearchModelValue;
+    return HotelSearchModel.fromJson(querySnapshot
+        .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
+  }
+
+  Stream<List<List<BookingHistoryDisplayModel>>> getAllStreams() async* {
+    final upcomingList = await getUpcomingList();
+    final checkedOutList = await getCheckedOutList();
+    final cancelledList = await getCancelledList();
+
+    yield [upcomingList, checkedOutList, cancelledList];
   }
 
   @override
@@ -156,66 +169,48 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               ],
             ),
           ),
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              CustomScrollView(
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Builder(builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: MyBookingsWidget(
-                              bookingHistoryDisplayModel: myUpcomingList[index],
-                            ),
-                          );
-                        });
-                      },
-                      childCount: myUpcomingList.length,
-                    ),
-                  ),
-                ],
-              ),
-              CustomScrollView(
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: MyBookingsWidget(
-                            bookingHistoryDisplayModel: myCheckedOutList[index],
-                          ),
-                        );
-                      },
-                      childCount: myCheckedOutList.length,
-                    ),
-                  ),
-                ],
-              ),
-              CustomScrollView(
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: MyBookingsWidget(
-                            bookingHistoryDisplayModel: myCancelledList[index],
-                          ),
-                        );
-                      },
-                      childCount: myCancelledList.length,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          body: StreamBuilder<List<List<BookingHistoryDisplayModel>>>(
+            stream: getAllStreams(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              } else {
+                final allData = snapshot.data;
+                return TabBarView(
+                  controller: _tabController,
+                  children: [
+                    buildTabView(allData![0]),
+                    buildTabView(allData[1]),
+                    buildTabView(allData[2]),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildTabView(List<BookingHistoryDisplayModel> data) {
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: MyBookingsWidget(
+                  bookingHistoryDisplayModel: data[index],
+                ),
+              );
+            },
+            childCount: data.length,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -77,7 +77,7 @@
     "checkOutDate": "13-Jul",
     "checkOutTime": "11:00AM",
     "BookingId": "W4SX4526",
-    "checkOutStatus": "booked",
+    "checkOutStatus": "cancelled",
     "rated": false,
     "reservedFor": "Naveen Prasanth",
     "amountPaid": 1203,

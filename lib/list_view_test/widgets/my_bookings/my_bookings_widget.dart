@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
 
 import '../../models/booking_history_model/booking_history_display_model.dart';
@@ -27,7 +28,6 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
-        height: 190,
         width: double.infinity,
         decoration: const BoxDecoration(
           border: Border(
@@ -45,19 +45,33 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black26),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: const Image(
-                        image: NetworkImage(
-                            "widget.hotelSearchModel.hotelImages[0]"),
-                        fit: BoxFit.fill,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => HotelDetailScreen(
+                              hotelSearchModel: widget
+                                  .bookingHistoryDisplayModel.hotelSearchModel,
+                              cityAndState: widget.bookingHistoryDisplayModel
+                                  .bookingHistoryModel.cityAndState),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image(
+                          image: NetworkImage(widget.bookingHistoryDisplayModel
+                              .hotelSearchModel.hotelImages[0]),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
@@ -69,9 +83,10 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "summa",
-                          style: TextStyle(
+                        Text(
+                          widget.bookingHistoryDisplayModel.hotelSearchModel
+                              .hotelLocationDetails.name,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -97,14 +112,8 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                             ),
                           ],
                         ),
-                        const Text("test"),
-                        const SizedBox(
-                          height: 40, // Adjust the height as needed
-                          child: Text(
-                            "${32}, ${"plot 33"}",
-                            softWrap: true,
-                          ),
-                        ),
+                        Text(widget.bookingHistoryDisplayModel.hotelSearchModel
+                            .hotelLocationDetails.address),
                       ],
                     ),
                   ),
@@ -114,26 +123,40 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 50,
-                    margin: const EdgeInsets.all(2),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.calendar_month,
-                          color: Colors.black,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => HotelDetailScreen(
+                              hotelSearchModel: widget
+                                  .bookingHistoryDisplayModel.hotelSearchModel,
+                              cityAndState: widget.bookingHistoryDisplayModel
+                                  .bookingHistoryModel.cityAndState),
                         ),
-                        SizedBox(
-                          width: 2,
-                        ),
-                        Text(
-                          "Book again",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      margin: const EdgeInsets.all(2),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.calendar_month,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            "Book again",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   if (widget.bookingHistoryDisplayModel.bookingHistoryModel
