@@ -99,6 +99,15 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                             Text(
                               '${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkInDate} - ${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate}  ',
                             ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
+                            ),
+                            const SizedBox(width: 10,),
                             Container(
                               height: 5,
                               width: 5,
@@ -109,7 +118,7 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                               ),
                             ),
                             Text(
-                              "  ${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
+                              "  ${widget.bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms",
                             ),
                           ],
                         ),

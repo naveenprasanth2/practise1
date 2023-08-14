@@ -218,9 +218,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   return TabBarView(
                     controller: _tabController,
                     children: [
-                      buildTabView(bookingDataProvider.upcomingList),
-                      buildTabView(bookingDataProvider.checkedOutList),
-                      buildTabView(bookingDataProvider.cancelledList),
+                      buildTabView(bookingDataProvider.upcomingList, "Upcoming"),
+                      buildTabView(bookingDataProvider.checkedOutList, "Checked Out"),
+                      buildTabView(bookingDataProvider.cancelledList, "Cancelled"),
                     ],
                   );
                 }),
@@ -229,23 +229,24 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     );
   }
 
-  Widget buildTabView(List<BookingHistoryDisplayModel> data) {
-    return CustomScrollView(
-      slivers: [
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: MyBookingsWidget(
-                  bookingHistoryDisplayModel: data[index],
-                ),
-              );
-            },
-            childCount: data.length,
-          ),
-        ),
-      ],
+  Widget buildTabView(List<BookingHistoryDisplayModel> data, String listType) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 700), // Adjust the duration as needed
+      child: data.isEmpty
+          ? Center(
+        child: Text("No $listType details available."),
+      )
+          : ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: MyBookingsWidget(
+              bookingHistoryDisplayModel: data[index],
+            ),
+          );
+        },
+      ),
     );
   }
 }
