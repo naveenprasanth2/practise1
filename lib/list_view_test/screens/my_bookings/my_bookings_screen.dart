@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
+import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
+import 'package:provider/provider.dart';
 import '../../models/booking_history_model/booking_history_model.dart';
 import '../../models/hotel_search/hotel_search_model.dart';
 
@@ -17,8 +16,10 @@ class MyBookingsScreen extends StatefulWidget {
 
 class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   late TabController _tabController;
   List<BookingHistoryModel> myBookingHistoryList = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -28,61 +29,108 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   }
 
   Future<void> getDetailedRatingsFromJson() async {
-    final value = await rootBundle.loadString("assets/my_bookings_data.json");
-    setState(() {
-      final dynamic ratingsDetailsData = json.decode(value);
+    // Navigate to the bookings collection of the dummy user document
+    final bookingsCollection = _firebaseFirestore
+        .collection("users")
+        .doc("dummy")
+        .collection("bookings");
 
-      for (var json in ratingsDetailsData) {
-        myBookingHistoryList.add(BookingHistoryModel.fromJson(json));
-      }
+    // Fetch all the documents from the bookings collection
+    final QuerySnapshot bookingsSnapshot = await bookingsCollection.get();
+    List<dynamic> allValues = [];
+
+    for (var doc in bookingsSnapshot.docs) {
+      Map<String, dynamic> dataMap = doc.data() as Map<String, dynamic>;
+      allValues.addAll(dataMap.values);
+    }
+
+    myBookingHistoryList.addAll(
+        allValues.map((value) => BookingHistoryModel.fromJson(value)).toList());
+    getUpcomingList();
+    getCheckedOutList();
+    getCancelledList();
+    setState(() {
+      _isLoading = false;
     });
   }
 
-  Future<List<BookingHistoryDisplayModel>> getUpcomingList() async {
+  Future<void> getUpcomingList() async {
     List<BookingHistoryDisplayModel> upcomingList = [];
+    List<Future> tasks = []; // List to hold all our future tasks
+
     for (var element in myBookingHistoryList) {
       if (element.checkOutStatus == "booked") {
-        final hotelDetails = await getHotelDetails(element);
-        upcomingList.add(BookingHistoryDisplayModel(
-          bookingHistoryModel: element,
-          hotelSearchModel: hotelDetails,
-        ));
+        tasks.add(
+          getHotelDetails(element).then(
+            (hotelDetails) => upcomingList.add(
+              BookingHistoryDisplayModel(
+                bookingHistoryModel: element,
+                hotelSearchModel: hotelDetails,
+              ),
+            ),
+          ),
+        );
       }
     }
-    return upcomingList;
+    // Wait for all tasks to complete
+    await Future.wait(tasks).then((value) =>
+        Provider.of<BookingDataProvider>(context, listen: false)
+            .setUpcomingList(upcomingList));
   }
 
-  Future<List<BookingHistoryDisplayModel>> getCheckedOutList() async {
+  Future<void> getCheckedOutList() async {
     List<BookingHistoryDisplayModel> checkedOutList = [];
+    List<Future> tasks = []; // List to hold all our future tasks
+
     for (var element in myBookingHistoryList) {
       if (element.checkOutStatus == "checkedOut") {
-        final hotelDetails = await getHotelDetails(element);
-        checkedOutList.add(BookingHistoryDisplayModel(
-          bookingHistoryModel: element,
-          hotelSearchModel: hotelDetails,
-        ));
+        tasks.add(
+          getHotelDetails(element).then(
+            (hotelDetails) => checkedOutList.add(
+              BookingHistoryDisplayModel(
+                bookingHistoryModel: element,
+                hotelSearchModel: hotelDetails,
+              ),
+            ),
+          ),
+        );
       }
     }
-    return checkedOutList;
+
+    // Wait for all tasks to complete
+    await Future.wait(tasks).then((value) =>
+        Provider.of<BookingDataProvider>(context, listen: false)
+            .setCheckedOutList(checkedOutList));
   }
 
-  Future<List<BookingHistoryDisplayModel>> getCancelledList() async {
+  Future<void> getCancelledList() async {
     List<BookingHistoryDisplayModel> cancelledList = [];
+    List<Future> tasks = []; // List to hold all our future tasks
+
     for (var element in myBookingHistoryList) {
       if (element.checkOutStatus == "cancelled") {
-        final hotelDetails = await getHotelDetails(element);
-        cancelledList.add(BookingHistoryDisplayModel(
-          bookingHistoryModel: element,
-          hotelSearchModel: hotelDetails,
-        ));
+        tasks.add(
+          getHotelDetails(element).then(
+            (hotelDetails) => cancelledList.add(
+              BookingHistoryDisplayModel(
+                bookingHistoryModel: element,
+                hotelSearchModel: hotelDetails,
+              ),
+            ),
+          ),
+        );
       }
     }
-    return cancelledList;
+
+    // Wait for all tasks to complete
+    await Future.wait(tasks).then((value) =>
+        Provider.of<BookingDataProvider>(context, listen: false)
+            .setCancelledList(cancelledList));
   }
 
   Future<HotelSearchModel> getHotelDetails(
       BookingHistoryModel bookingHistoryModel) async {
-    final querySnapshot = await FirebaseFirestore.instance
+    final querySnapshot = await _firebaseFirestore
         .collection(
             bookingHistoryModel.cityAndState.split(",")[1].trim().toLowerCase())
         .doc(
@@ -94,14 +142,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
   }
 
-  Stream<List<List<BookingHistoryDisplayModel>>> getAllStreams() async* {
-    final upcomingList = await getUpcomingList();
-    final checkedOutList = await getCheckedOutList();
-    final cancelledList = await getCancelledList();
-
-    yield [upcomingList, checkedOutList, cancelledList];
-  }
-
   @override
   void dispose() {
     _tabController.dispose();
@@ -111,86 +151,81 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.red.shade400,
-            title: const Text(
-              "My Bookings",
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            centerTitle: true,
-            bottom: TabBar(
-              controller: _tabController,
-              indicator: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.white,
-                    width: 3.0,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.red.shade400,
+                  title: const Text(
+                    "My Bookings",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  centerTitle: true,
+                  bottom: TabBar(
+                    controller: _tabController,
+                    indicator: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.white,
+                          width: 3.0,
+                        ),
+                      ),
+                    ),
+                    tabs: const [
+                      Tab(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Upcoming',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Checked Out',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancelled',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                body: Consumer<BookingDataProvider>(
+                    builder: (context, bookingDataProvider, _) {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: [
+                      buildTabView(bookingDataProvider.upcomingList),
+                      buildTabView(bookingDataProvider.checkedOutList),
+                      buildTabView(bookingDataProvider.cancelledList),
+                    ],
+                  );
+                }),
               ),
-              tabs: const [
-                Tab(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Upcoming',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Checked Out',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Cancelled',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
-          ),
-          body: StreamBuilder<List<List<BookingHistoryDisplayModel>>>(
-            stream: getAllStreams(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
-              } else {
-                final allData = snapshot.data;
-                return TabBarView(
-                  controller: _tabController,
-                  children: [
-                    buildTabView(allData![0]),
-                    buildTabView(allData[1]),
-                    buildTabView(allData[2]),
-                  ],
-                );
-              }
-            },
-          ),
-        ),
-      ),
     );
   }
 

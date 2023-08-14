@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
+import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/common_helper/general_utils.dart';
 
@@ -56,7 +58,7 @@ class BookingCancelWidget extends StatelessWidget {
                     color: Colors.red.shade400,
                     onTap: () {
                       // Handle button press
-                      cancelBooking();
+                      cancelBooking(context);
                       GeneralUtils.showSuccessSnackBar(context,
                           "Cancel Successful \nRefund will be processed in 4 working days");
                       Navigator.pop(context);
@@ -113,7 +115,7 @@ class BookingCancelWidget extends StatelessWidget {
     );
   }
 
-  void cancelBooking() {
+  void cancelBooking(BuildContext context) {
     bookingHistoryModel.checkOutStatus = "cancelled";
     FirebaseFirestore.instance
         .collection("users")
@@ -123,5 +125,8 @@ class BookingCancelWidget extends StatelessWidget {
         .set({
       bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
     });
+    Provider.of<BookingDataProvider>(context, listen: false)
+        .swapDataFromUpcomingToCancelledList(
+            bookingHistoryModel.bookingId.toString());
   }
 }
