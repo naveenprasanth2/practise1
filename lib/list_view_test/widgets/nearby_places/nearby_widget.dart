@@ -152,7 +152,7 @@ class _NearByTabViewState extends State<NearByTabView>
                   ),
                 ),
               ),
-              SizedBoxHelper.sizedBox20,
+              SizedBoxHelper.sizedBox30,
               InkWell(
                 onTap: () {
                   Navigator.push(context,
