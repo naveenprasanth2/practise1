@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     textAlign: TextAlign.center,
                                     decoration: InputDecoration(
                                       hintText:
-                                          "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                                          "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
                                       hintStyle: const TextStyle(
                                           color: Colors.black54, fontSize: 13),
                                       border: OutlineInputBorder(

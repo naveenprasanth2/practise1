@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_model.dart';
 import 'package:practise1/list_view_test/models/room_occupancy/room_model.dart';
+import 'package:practise1/list_view_test/screens/hotel_booking/room_selection.dart';
 
 class CalculationProvider extends ChangeNotifier {
   double? _costPerNight;
@@ -56,9 +58,22 @@ class CalculationProvider extends ChangeNotifier {
   List<RoomModel> get roomsInfo => _roomsInfo;
 
   int? get noOfDays => _noOfDays;
+  final RoomSelection roomSelection = RoomSelection();
 
   void setRoomsInfo(List<RoomModel> rooms) {
     _roomsInfo = rooms;
+    setTotalCostPerNight();
+    setDiscountValueAfterPriceReset();
+    setPreTaxPrice();
+    setPrepaidDiscountValue();
+    setAfterTaxPrice();
+    setFinalPrice();
+    getNumberOfRooms();
+    getNumberOfGuests();
+    notifyListeners();
+  }
+  void setRoomType(RoomTypeModel roomTypeModel){
+    _costPerNight = roomTypeModel.roomPrice;
     setTotalCostPerNight();
     setDiscountValueAfterPriceReset();
     setPreTaxPrice();
@@ -95,10 +110,9 @@ class CalculationProvider extends ChangeNotifier {
         .fold(0, (previousValue, element) => previousValue + element);
   }
 
-  void setCostPerNight(int costPerNight) {
-    //1. set the cost per night first
-    _costPerNight = costPerNight.toDouble();
-    notifyListeners();
+  void setRoomInfo(RoomTypeModel roomTypeModel){
+    _costPerNight = roomTypeModel.roomPrice;
+    roomSelection.setRoomType(roomTypeModel);
   }
 
   void setTotalCostPerNight() {

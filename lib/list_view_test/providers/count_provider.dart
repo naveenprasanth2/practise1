@@ -1,10 +1,26 @@
 import 'package:flutter/widgets.dart';
 import 'package:practise1/list_view_test/models/room_occupancy/room_model.dart';
 
-class CountProviders extends ChangeNotifier {
+class CountProvider extends ChangeNotifier {
   int _adultCount = 2;
-  int _tempAdultCount = 2;
+  int _tempAdultCount = 1;
   List<RoomModel> roomsInfo = [RoomModel()];
+
+  void setRoomsDetails(List<RoomModel> roomsInfo){
+    this.roomsInfo = roomsInfo;
+  }
+
+  void setMaximumAdultCount(int adultCount){
+    _adultCount = adultCount;
+    setMaximumAdultAllowed();
+    notifyListeners();
+  }
+
+  void setMaximumAdultAllowed(){
+    for (var roomData in roomsInfo) {
+      roomData.adults = roomData.adults > adultCount ? adultCount : roomData.adults;
+    }
+  }
 
   int get adultCount => _adultCount;
   int get tempAdultCount => _tempAdultCount;
@@ -49,9 +65,5 @@ class CountProviders extends ChangeNotifier {
   void notifyChildListeners(){
     _childCount = _tempChildCount;
     notifyListeners();
-  }
-
-  void setRoomsDetails(List<RoomModel> roomsInfo){
-    this.roomsInfo = roomsInfo;
   }
 }

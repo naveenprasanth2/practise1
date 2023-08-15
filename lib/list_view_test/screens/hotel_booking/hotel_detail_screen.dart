@@ -9,6 +9,7 @@ import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_mod
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/screens/hotel_booking/room_selection.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
 import 'package:practise1/list_view_test/widgets/cancellation/cancellation_policy.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/amenities_main_widget.dart';
@@ -119,12 +120,10 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     });
   }
 
-  setPriceData() {
+  setPriceData() async {
     final calculationProvider =
-        Provider.of<CalculationProvider>(context, listen: false);
-    //need to change the price set value
-    calculationProvider
-        .setCostPerNight(hotelDetailsModel?.roomType[0].roomPrice ?? 0);
+    Provider.of<CalculationProvider>(context, listen: false);
+    calculationProvider.setRoomInfo(hotelDetailsModel!.roomType.first);
     calculationProvider.setDiscountPercentage(0);
     calculationProvider.setGstPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
@@ -173,7 +172,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.hotelSearchModel.hotelLocationDetails.name,
+                                            widget.hotelSearchModel
+                                                .hotelLocationDetails.name,
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 20,
@@ -220,7 +220,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          "${hotelDetailsModel?.locationDetails.hotelLocationDetails.address},",
+                                          "${hotelDetailsModel.locationDetails.hotelLocationDetails.address},",
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,

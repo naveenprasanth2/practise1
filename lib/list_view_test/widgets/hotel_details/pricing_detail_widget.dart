@@ -63,14 +63,14 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                   ),
                   const SizedBox(width: 20),
                   Text(
-                    "${Provider.of<CountProviders>(context).adultCount} Adult",
+                    "${Provider.of<CountProvider>(context).adultCount} Adult",
                     style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
                   const SizedBox(width: 20),
                   Text(
-                    "${Provider.of<CountProviders>(context).childCount} Child",
+                    "${Provider.of<CountProvider>(context).childCount} Child",
                     style: const TextStyle(
                       fontSize: 15,
                     ),

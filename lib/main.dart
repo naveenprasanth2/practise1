@@ -25,19 +25,24 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (create) => DateProvider()),
-        ChangeNotifierProvider(create: (create) => CountProviders()),
+        ChangeNotifierProvider(create: (create) => CountProvider()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
         ChangeNotifierProvider(create: (create) => MapProvider()),
         ChangeNotifierProvider(create: (create) => CouponStateProvider()),
         ChangeNotifierProvider(create: (create) => BookingDataProvider()),
-        ChangeNotifierProxyProvider<DateProvider, CalculationProvider>(
+        ChangeNotifierProxyProvider2<DateProvider, CountProvider,
+            CalculationProvider>(
           create: (context) => CalculationProvider(),
-          update: (context, dateProvider, calculationProvider) {
-            calculationProvider!.setDateProviderData(
-              dateProvider.noOfDays,
-            );
-            return calculationProvider;
+          update: (context, dateProvider, countProvider, calculationProvider) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (calculationProvider != null) {
+                calculationProvider.setDateProviderData(dateProvider.noOfDays);
+                countProvider.setMaximumAdultCount(calculationProvider.roomSelection.maxPeopleAllowed);
+              }
+            });
+            return calculationProvider ?? CalculationProvider(); // Return a default value if calculationProvider is null
           },
+
         ),
       ],
       child: MaterialApp(

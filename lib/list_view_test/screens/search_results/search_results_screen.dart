@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:provider/provider.dart';
@@ -95,7 +91,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                           );
                         },
                         child: Text(
-                          "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                          "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
                           style: const TextStyle(
                             fontSize: 15,
                             color: Colors.white,

@@ -50,7 +50,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Provider.of<CountProviders>(context, listen: false)
+                        Provider.of<CountProvider>(context, listen: false)
                             .decrementAdultCount();
                       },
                       child: Container(
@@ -65,7 +65,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
                       width: 10,
                     ),
                     Text(
-                      Provider.of<CountProviders>(context, listen: true)
+                      Provider.of<CountProvider>(context, listen: true)
                           .tempAdultCount
                           .toString(),
                       style: const TextStyle(fontSize: 18),
@@ -75,7 +75,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
                     ),
                     InkWell(
                       onTap: () {
-                        Provider.of<CountProviders>(context, listen: false)
+                        Provider.of<CountProvider>(context, listen: false)
                             .incrementAdultCount();
                       },
                       child: Container(
@@ -104,7 +104,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
                   children: [
                     InkWell(
                       onTap: () {
-                        Provider.of<CountProviders>(context, listen: false)
+                        Provider.of<CountProvider>(context, listen: false)
                             .decrementChildCount();
                       },
                       child: Container(
@@ -119,7 +119,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
                       width: 10,
                     ),
                     Text(
-                      Provider.of<CountProviders>(context, listen: false)
+                      Provider.of<CountProvider>(context, listen: false)
                           .tempChildCount
                           .toString(),
                       style: const TextStyle(fontSize: 18),
@@ -129,7 +129,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
                     ),
                     InkWell(
                       onTap: () {
-                        Provider.of<CountProviders>(context, listen: false)
+                        Provider.of<CountProvider>(context, listen: false)
                             .incrementChildCount();
                       },
                       child: Container(
@@ -149,9 +149,9 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
             ),
             InkWell(
               onTap: () {
-                Provider.of<CountProviders>(context, listen: false)
+                Provider.of<CountProvider>(context, listen: false)
                     .notifyAdultListeners();
-                Provider.of<CountProviders>(context, listen: false)
+                Provider.of<CountProvider>(context, listen: false)
                     .notifyChildListeners();
                 Navigator.pop(context);
               },
