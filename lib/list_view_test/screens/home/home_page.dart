@@ -8,6 +8,7 @@ import '../../constants/location_constants.dart';
 import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../providers/count_provider.dart';
 import '../../widgets/left_drawer/my_drawer.dart';
+import '../../widgets/room_occupancy_details/add_rooms_widget.dart';
 import 'city_search_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -221,54 +222,58 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Flexible(
-                              child: InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return const AdultChildBottomSheet();
+                              child: Builder(
+                                builder: (context) {
+                                  return InkWell(
+                                    onTap: () {
+                                      showBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const AddRoomsWidget();
+                                        },
+                                      );
                                     },
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 30),
-                                  child: TextField(
-                                    style: const TextStyle(color: Colors.black),
-                                    textAlign: TextAlign.center,
-                                    decoration: InputDecoration(
-                                      hintText:
-                                          "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
-                                      hintStyle: const TextStyle(
-                                          color: Colors.black54, fontSize: 13),
-                                      border: OutlineInputBorder(
-                                          borderSide:
-                                              Divider.createBorderSide(context),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide:
-                                              Divider.createBorderSide(context),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              Divider.createBorderSide(context),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              Divider.createBorderSide(context),
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      filled: false,
-                                      contentPadding: const EdgeInsets.all(8),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 30),
+                                      child: TextField(
+                                        style: const TextStyle(color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                          hintText:
+                                              "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
+                                          hintStyle: const TextStyle(
+                                              color: Colors.black54, fontSize: 13),
+                                          border: OutlineInputBorder(
+                                              borderSide:
+                                                  Divider.createBorderSide(context),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide:
+                                                  Divider.createBorderSide(context),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide:
+                                                  Divider.createBorderSide(context),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          disabledBorder: OutlineInputBorder(
+                                              borderSide:
+                                                  Divider.createBorderSide(context),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          filled: false,
+                                          contentPadding: const EdgeInsets.all(8),
+                                        ),
+                                        keyboardType: TextInputType.text,
+                                        obscureText: false,
+                                        enabled: false,
+                                      ),
                                     ),
-                                    keyboardType: TextInputType.text,
-                                    obscureText: false,
-                                    enabled: false,
-                                  ),
-                                ),
+                                  );
+                                }
                               ),
                             ),
                           ],

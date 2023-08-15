@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
               if (calculationProvider != null) {
                 calculationProvider.setDateProviderData(dateProvider.noOfDays);
                 countProvider.setMaximumAdultCount(calculationProvider.roomSelection.maxPeopleAllowed);
+                countProvider.setAdultAndChildCount(calculationProvider.roomsInfo);
               }
             });
             return calculationProvider ?? CalculationProvider(); // Return a default value if calculationProvider is null

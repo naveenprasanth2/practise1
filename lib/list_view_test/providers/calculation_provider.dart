@@ -58,21 +58,25 @@ class CalculationProvider extends ChangeNotifier {
   List<RoomModel> get roomsInfo => _roomsInfo;
 
   int? get noOfDays => _noOfDays;
+
   final RoomSelection roomSelection = RoomSelection();
 
   void setRoomsInfo(List<RoomModel> rooms) {
     _roomsInfo = rooms;
-    setTotalCostPerNight();
-    setDiscountValueAfterPriceReset();
-    setPreTaxPrice();
-    setPrepaidDiscountValue();
-    setAfterTaxPrice();
-    setFinalPrice();
+    if (roomSelection.roomTypeModel != null) {
+      setTotalCostPerNight();
+      setDiscountValueAfterPriceReset();
+      setPreTaxPrice();
+      setPrepaidDiscountValue();
+      setAfterTaxPrice();
+      setFinalPrice();
+    }
     getNumberOfRooms();
     getNumberOfGuests();
     notifyListeners();
   }
-  void setRoomType(RoomTypeModel roomTypeModel){
+
+  void setRoomType(RoomTypeModel roomTypeModel) {
     _costPerNight = roomTypeModel.roomPrice;
     roomSelection.setRoomType(roomTypeModel);
     setTotalCostPerNight();
@@ -111,7 +115,7 @@ class CalculationProvider extends ChangeNotifier {
         .fold(0, (previousValue, element) => previousValue + element);
   }
 
-  void setRoomInfo(RoomTypeModel roomTypeModel){
+  void setRoomInfo(RoomTypeModel roomTypeModel) {
     _costPerNight = roomTypeModel.roomPrice;
     roomSelection.setRoomType(roomTypeModel);
   }
@@ -194,7 +198,9 @@ class CalculationProvider extends ChangeNotifier {
     // final price and after tax values are same here.
     _finalPriceWithoutPrepaidDiscount = _afterTaxPriceWithoutPrepaidDiscount;
     _finalPriceWithPrepaidDiscount =
-        (_afterTaxPriceWithPrepaidDiscount! - _prepaidDiscountValue!).round().toDouble();
+        (_afterTaxPriceWithPrepaidDiscount! - _prepaidDiscountValue!)
+            .round()
+            .toDouble();
     notifyListeners();
   }
 

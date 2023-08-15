@@ -2,9 +2,10 @@ import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_mod
 
 class RoomSelection {
   String? _roomType;
-  int _maxPeopleAllowed = 1;
+  int _maxPeopleAllowed = 2;
   double? _price;
   RoomTypeModel? roomTypeModel;
+  int dataSetCount = 0;
 
   String get roomType => _roomType!;
 
@@ -17,5 +18,6 @@ class RoomSelection {
     _roomType = roomTypeModel.type;
     _maxPeopleAllowed = roomTypeModel.maxPeopleAllowed;
     _price = roomTypeModel.roomPrice;
+    dataSetCount++;
   }
 }
