@@ -5,6 +5,7 @@ import 'package:practise1/list_view_test/providers/maps_provider.dart';
 import 'package:provider/provider.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../models/nearby_places_model/place_category_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class NearByPlacesTabView extends StatefulWidget {
   final NearbyPlacesModel nearbyPlacesModel;
@@ -58,7 +59,7 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
                 const Icon(Icons.restaurant),
               if (placesDetails.keys.first == "popularPlaces")
                 const Icon(Icons.place_outlined),
-              const SizedBox(width: 30),
+              SizedBoxHelper.sizedBox_30,
               // add some space between icon and text
               Expanded(
                 child: InkWell(
@@ -109,7 +110,7 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16), // A
+            SizedBoxHelper.sizedBox16, // A
             Center(
               child: Container(
                 width: 20, // Customize the width of the indicator

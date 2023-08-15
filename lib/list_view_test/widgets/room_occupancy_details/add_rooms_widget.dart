@@ -4,6 +4,7 @@ import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/room_occupancy/room_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class AddRoomsWidget extends StatefulWidget {
   const AddRoomsWidget({super.key});
@@ -184,7 +185,7 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
                                     painter: DottedLinePainter(),
                                   ),
                                 ),
-                                if (index == 0) const SizedBox(height: 30),
+                                if (index == 0) SizedBoxHelper.sizedBox30,
                                 if (index != 0)
                                   InkWell(
                                     onTap: () => removeRoom(index),
@@ -197,7 +198,7 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
                                             Icons.delete,
                                             color: Colors.red.shade300,
                                           ),
-                                          const SizedBox(width: 5),
+                                          SizedBoxHelper.sizedBox_5,
                                           Text(
                                             'Remove Room',
                                             style: TextStyle(
@@ -314,12 +315,14 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
                 onPressed: onIncrement,
                 icon: Icon(
                   Icons.add,
-                  color: (count <
-                          Provider.of<CalculationProvider>(context)
-                              .roomSelection
-                              .maxPeopleAllowed)
-                      ? Colors.black
-                      : Colors.grey,
+                  color: title == "Adults:"
+                      ? ((count <
+                              Provider.of<CalculationProvider>(context)
+                                  .roomSelection
+                                  .maxPeopleAllowed)
+                          ? Colors.black
+                          : Colors.grey)
+                      : (count < 1 ? Colors.black : Colors.grey),
                 ),
                 iconSize: 18,
               ),

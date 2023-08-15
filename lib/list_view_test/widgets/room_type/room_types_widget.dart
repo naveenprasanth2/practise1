@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_model.dart';
+import 'package:practise1/list_view_test/utils/string_utils.dart';
 import 'package:practise1/list_view_test/widgets/room_type/select_room_widget.dart';
 
 class RoomTypesWidget extends StatefulWidget {
@@ -55,7 +56,7 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
                           tabs: widget.roomTypeModel
                               .map(
                                 (roomTypes) => Tab(
-                                  text: roomTypes.type,
+                                  text: StringUtils.convertToSentenceCase(roomTypes.type),
                                 ),
                               )
                               .toList(),

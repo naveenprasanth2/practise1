@@ -4,6 +4,8 @@ import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/widgets/room_type/room_images_only_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class SelectRoomWidget extends StatelessWidget {
   final RoomTypeModel roomTypeModel;
 
@@ -121,7 +123,7 @@ class SelectRoomWidget extends StatelessWidget {
                                 roomTypeModel.type)
                             ? const Text("Selected", style: TextStyle(fontWeight: FontWeight.bold),)
                             : const Text("Select", style: TextStyle(fontWeight: FontWeight.bold),),
-                        const SizedBox(width: 5,),
+                        SizedBoxHelper.sizedBox_5,
                         if (calculationProvider
                                 .roomSelection.roomTypeModel?.type ==
                             roomTypeModel.type)

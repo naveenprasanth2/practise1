@@ -4,6 +4,7 @@ import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helpe
 import 'package:practise1/list_view_test/widgets/booking/booking_cancel.dart';
 
 import '../../models/booking_history_model/booking_history_display_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class MyBookingsWidget extends StatefulWidget {
   final BookingHistoryDisplayModel bookingHistoryDisplayModel;
@@ -107,7 +108,7 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                             Text(
                               "${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
                             ),
-                            const SizedBox(width: 10,),
+                            SizedBoxHelper.sizedBox_10,
                             Container(
                               height: 5,
                               width: 5,

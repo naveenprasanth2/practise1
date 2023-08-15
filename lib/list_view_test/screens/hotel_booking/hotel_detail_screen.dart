@@ -9,8 +9,8 @@ import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_mod
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
-import 'package:practise1/list_view_test/utils/logics/room_selection.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
+import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/cancellation/cancellation_policy.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/amenities_main_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
@@ -184,7 +184,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
+                                    SizedBoxHelper.sizedBox_10,
                                     Center(
                                       child: Builder(
                                         builder: (BuildContext context) {

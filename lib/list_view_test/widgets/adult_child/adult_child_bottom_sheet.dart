@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class AdultChildBottomSheet extends StatefulWidget {
   const AdultChildBottomSheet({super.key});
 
@@ -37,7 +39,7 @@ class AdultChildBottomSheetState extends State<AdultChildBottomSheet> {
               ],
             ),
 
-            const SizedBox(height: 30,),
+            SizedBoxHelper.sizedBox30,
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -3,6 +3,7 @@ import 'package:geodesy/geodesy.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
 import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../models/nearby_places_model/place_category_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class NearByTabView extends StatefulWidget {
   final NearbyPlacesModel nearbyPlacesModel;
@@ -53,7 +54,7 @@ class _NearByTabViewState extends State<NearByTabView>
                   const Icon(Icons.restaurant),
                 if (placesDetails.keys.first == "popularPlaces")
                   const Icon(Icons.place_outlined),
-                const SizedBox(width: 30),
+                SizedBoxHelper.sizedBox_30,
                 // add some space between icon and text
                 Flexible(
                   fit: FlexFit.loose,
@@ -93,7 +94,7 @@ class _NearByTabViewState extends State<NearByTabView>
                 "Nearby Places",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
-              const SizedBox(height: 20,),
+              SizedBoxHelper.sizedBox20,
               DefaultTabController(
                 length: 4,
                 child: Container(
@@ -151,6 +152,7 @@ class _NearByTabViewState extends State<NearByTabView>
                   ),
                 ),
               ),
+              SizedBoxHelper.sizedBox20,
               InkWell(
                 onTap: () {
                   Navigator.push(context,

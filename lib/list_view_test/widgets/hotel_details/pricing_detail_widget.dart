@@ -6,6 +6,8 @@ import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class PricingDetailsWidget extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
 
@@ -51,7 +53,7 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBoxHelper.sizedBox10,
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -61,14 +63,14 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                       fontSize: 15,
                     ),
                   ),
-                  const SizedBox(width: 20),
+          SizedBoxHelper.sizedBox_20,
                   Text(
                     "${Provider.of<CountProvider>(context).adultCount} Adult",
                     style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
-                  const SizedBox(width: 20),
+          SizedBoxHelper.sizedBox_20,
                   Text(
                     "${Provider.of<CountProvider>(context).childCount} Child",
                     style: const TextStyle(
@@ -208,7 +210,7 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                                           fontSize: 12
                                       ),
                                     ),
-                                    const SizedBox(width: 2,),
+                                    SizedBoxHelper.sizedBox_2,
                                     const Text(
                                       "applied",
                                       style: TextStyle(
