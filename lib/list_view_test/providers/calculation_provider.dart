@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_model.dart';
 import 'package:practise1/list_view_test/models/room_occupancy/room_model.dart';
-import 'package:practise1/list_view_test/screens/hotel_booking/room_selection.dart';
+import 'package:practise1/list_view_test/utils/logics/room_selection.dart';
 
 class CalculationProvider extends ChangeNotifier {
   double? _costPerNight;
@@ -74,6 +74,7 @@ class CalculationProvider extends ChangeNotifier {
   }
   void setRoomType(RoomTypeModel roomTypeModel){
     _costPerNight = roomTypeModel.roomPrice;
+    roomSelection.setRoomType(roomTypeModel);
     setTotalCostPerNight();
     setDiscountValueAfterPriceReset();
     setPreTaxPrice();
@@ -193,7 +194,7 @@ class CalculationProvider extends ChangeNotifier {
     // final price and after tax values are same here.
     _finalPriceWithoutPrepaidDiscount = _afterTaxPriceWithoutPrepaidDiscount;
     _finalPriceWithPrepaidDiscount =
-        (_afterTaxPriceWithPrepaidDiscount! - _prepaidDiscountValue!);
+        (_afterTaxPriceWithPrepaidDiscount! - _prepaidDiscountValue!).round().toDouble();
     notifyListeners();
   }
 
