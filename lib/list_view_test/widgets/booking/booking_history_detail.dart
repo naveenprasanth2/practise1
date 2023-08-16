@@ -24,8 +24,17 @@ class BookingHistoryDetailWidget extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBoxHelper.sizedBox50,
+              const SizedBox(
+                height: 80,
+                child: Center(
+                  child: Text(
+                    "Booking Details",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -72,17 +81,15 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                               bookingHistoryDisplayModel
                                   .hotelSearchModel.hotelLocationDetails.name,
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15
-                              ),
+                                  fontWeight: FontWeight.bold, fontSize: 15),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Column(
                               children: [
-                                Text(bookingHistoryDisplayModel
-                                    .hotelSearchModel.hotelLocationDetails.address),
+                                Text(bookingHistoryDisplayModel.hotelSearchModel
+                                    .hotelLocationDetails.address),
                               ],
                             ),
                           ],
@@ -273,7 +280,8 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                             SizedBoxHelper.sizedBox_10,
                             Text(
                               "₹ ${bookingHistoryDisplayModel.bookingHistoryModel.amountPaid}",
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
