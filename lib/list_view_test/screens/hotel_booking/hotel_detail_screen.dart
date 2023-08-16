@@ -56,6 +56,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   NearbyPlacesModel? nearbyPlacesModel;
   List<CouponModel>? coupons;
   List<RoomTypeModel>? roomTypeModel;
+  RoomTypeModel? defaultRoomSelection;
   int? totalRatings;
   bool _isDataLoaded = false;
 
@@ -125,18 +126,21 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     final calculationProvider =
         Provider.of<CalculationProvider>(context, listen: false);
     try {
-      calculationProvider.setRoomInfo(hotelDetailsModel!.roomType
+      defaultRoomSelection = hotelDetailsModel!.roomType
           .where((element) =>
               element.maxPeopleAllowed >=
               (Provider.of<CountProvider>(context, listen: false).adultCount))
-          .first);
+          .first;
+      calculationProvider.setRoomInfo(defaultRoomSelection!);
     } catch (e) {
       var maxValue = hotelDetailsModel!.roomType
           .map((e) => e.maxPeopleAllowed)
           .reduce(
               (maxValue, element) => maxValue > element ? maxValue : element);
-      calculationProvider.setRoomInfo(hotelDetailsModel!.roomType
-          .where((element) => element.maxPeopleAllowed <= maxValue).last);
+      defaultRoomSelection = hotelDetailsModel!.roomType
+          .where((element) => element.maxPeopleAllowed <= maxValue)
+          .last;
+      calculationProvider.setRoomInfo(defaultRoomSelection!);
     }
     calculationProvider.setDiscountPercentage(0);
     calculationProvider.setGstPercentage(12);
@@ -349,6 +353,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       const BookableDetailsWidget(),
                       RoomTypesWidget(
                         roomTypeModel: roomTypeModel ?? [],
+                        defaultRoomSelection:
+                            defaultRoomSelection ?? roomTypeModel![0],
                       ),
                       const CancellationPolicyWidget(),
                       const HousePoliciesWidget(),
