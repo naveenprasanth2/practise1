@@ -2,13 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
-import 'package:practise1/list_view_test/utils/logics/room_selection.dart';
 import 'package:practise1/list_view_test/widgets/room_occupancy_details/add_rooms_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/count_provider.dart';
 import '../../providers/date_provider.dart';
-import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../widgets/hotel_results/hotel_results_widget.dart';
 
 class SearchResultsScreen extends StatefulWidget {
@@ -143,7 +141,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               } else if (snapshot.hasError) {
                 return SliverFillRemaining(
                   child: Center(
-                    child: Text(snapshot.error.toString() + "error"),
+                    child: Text("${snapshot.error}error"),
                   ),
                 );
               } else {

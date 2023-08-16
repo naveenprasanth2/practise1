@@ -67,7 +67,6 @@ class DateProvider extends ChangeNotifier {
         _checkOutDateAndDay = formatDateWithSuffix(value.end);
         _checkInDateWithYear = formatWithYear.format(value.start);
         _checkOutDateWithYear = formatWithYear.format(value.end);
-        print(_checkInDateWithYear);
         _checkInDateInTimeFormat = value.start;
       } else {
         date = date ?? initialDate;
@@ -90,7 +89,6 @@ class DateProvider extends ChangeNotifier {
     setDateInFullLengthFormat();
     _checkInDateWithYear = formatWithYear.format(_dateTimeObject.add(const Duration(days: 1)));
     _checkOutDateWithYear = formatWithYear.format(_dateTimeObject.add(const Duration(days: 2)));
-    print(_checkInDateWithYear);
     notifyListeners();
   }
 

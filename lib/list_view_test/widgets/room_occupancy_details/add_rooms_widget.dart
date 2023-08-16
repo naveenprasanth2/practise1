@@ -77,9 +77,7 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
           children: [
             Row(
               children: [
-                const SizedBox(
-                  height: 100,
-                ),
+                SizedBoxHelper.sizedBox100,
                 IconButton(
                   onPressed: () {
                     rooms = List.from(

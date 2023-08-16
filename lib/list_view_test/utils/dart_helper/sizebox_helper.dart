@@ -8,6 +8,7 @@ class SizedBoxHelper {
   static SizedBox sizedBox20 = const SizedBox(height: 20);
   static SizedBox sizedBox30 = const SizedBox(height: 30);
   static SizedBox sizedBox50 = const SizedBox(height: 50);
+  static SizedBox sizedBox100 = const SizedBox(height: 100);
 
   static SizedBox sizedBox_2 = const SizedBox(width: 2);
   static SizedBox sizedBox_4 = const SizedBox(width: 4);

@@ -9,6 +9,16 @@ class GeneralUtils {
     });
   }
 
+  static void copyBookingIdToClipboard(BuildContext context, String id) {
+    FlutterClipboard.copy(id).then((value) {
+      const snackBar = SnackBar(
+        content: Text('Booking id copied'),
+        backgroundColor: Colors.green,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
+  }
+
   static void showSuccessSnackBar(BuildContext context, String message) {
     SnackBar snackBar = SnackBar(
       content: Text(

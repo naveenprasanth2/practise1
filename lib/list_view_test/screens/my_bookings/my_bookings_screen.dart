@@ -19,6 +19,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   late TabController _tabController;
   List<BookingHistoryModel> myBookingHistoryList = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLoading = true;
 
   @override
@@ -151,6 +152,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -243,6 +245,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: MyBookingsWidget(
               bookingHistoryDisplayModel: data[index],
+              scaffoldKey: _scaffoldKey,
             ),
           );
         },

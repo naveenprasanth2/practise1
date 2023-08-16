@@ -5,7 +5,6 @@ import 'package:practise1/list_view_test/widgets/location/city_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/location_constants.dart';
-import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../providers/count_provider.dart';
 import '../../widgets/left_drawer/my_drawer.dart';
 import '../../widgets/room_occupancy_details/add_rooms_widget.dart';
