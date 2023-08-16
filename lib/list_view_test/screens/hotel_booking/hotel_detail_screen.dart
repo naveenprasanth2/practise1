@@ -9,6 +9,7 @@ import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_mod
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/cancellation/cancellation_policy.dart';
@@ -122,8 +123,21 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 
   setPriceData() async {
     final calculationProvider =
-    Provider.of<CalculationProvider>(context, listen: false);
-    calculationProvider.setRoomInfo(hotelDetailsModel!.roomType.first);
+        Provider.of<CalculationProvider>(context, listen: false);
+    try {
+      calculationProvider.setRoomInfo(hotelDetailsModel!.roomType
+          .where((element) =>
+              element.maxPeopleAllowed >=
+              (Provider.of<CountProvider>(context, listen: false).adultCount))
+          .first);
+    } catch (e) {
+      var maxValue = hotelDetailsModel!.roomType
+          .map((e) => e.maxPeopleAllowed)
+          .reduce(
+              (maxValue, element) => maxValue > element ? maxValue : element);
+      calculationProvider.setRoomInfo(hotelDetailsModel!.roomType
+          .where((element) => element.maxPeopleAllowed <= maxValue).last);
+    }
     calculationProvider.setDiscountPercentage(0);
     calculationProvider.setGstPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
