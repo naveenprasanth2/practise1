@@ -7,6 +7,12 @@ class DateHelper {
     );
   }
 
+  static String formatDateWithDayAndYear(String date) {
+    return DateFormat('EEE, MMM-dd-yy').format(
+      DateFormat('dd-MMM-yyyy').parse(date),
+    );
+  }
+
   static int getNoOfDaysInBetween(String fromDate, String toDate) {
     return DateFormat('dd-MMM-yyyy').parse(toDate).difference(DateFormat('dd-MMM-yyyy').parse(fromDate)).inDays;
   }

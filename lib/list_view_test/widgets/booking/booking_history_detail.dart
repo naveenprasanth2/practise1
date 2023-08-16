@@ -17,7 +17,7 @@ class BookingHistoryDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      margin: const EdgeInsets.all(8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: Colors.transparent),
       child: Column(
@@ -25,7 +25,7 @@ class BookingHistoryDetailWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBoxHelper.sizedBox100,
+              SizedBoxHelper.sizedBox50,
               IconButton(
                 onPressed: () {
                   Navigator.pop(context);
@@ -37,58 +37,188 @@ class BookingHistoryDetailWidget extends StatelessWidget {
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black26),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image(
-                        image: NetworkImage(bookingHistoryDisplayModel
-                            .hotelSearchModel.hotelImages[0]),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  SizedBoxHelper.sizedBox_10,
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          bookingHistoryDisplayModel
-                              .hotelSearchModel.hotelLocationDetails.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black26),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image(
+                            image: NetworkImage(bookingHistoryDisplayModel
+                                .hotelSearchModel.hotelImages[0]),
+                            fit: BoxFit.fill,
                           ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
+                      ),
+                      SizedBoxHelper.sizedBox_10,
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${bookingHistoryDisplayModel.bookingHistoryModel.checkInDate} - ${bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate}  ',
+                              bookingHistoryDisplayModel
+                                  .hotelSearchModel.hotelLocationDetails.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Column(
+                              children: [
+                                Text(bookingHistoryDisplayModel
+                                    .hotelSearchModel.hotelLocationDetails.address),
+                              ],
                             ),
                           ],
                         ),
-                        Row(
+                      ),
+                    ],
+                  ),
+                  SizedBoxHelper.sizedBox20,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => HotelDetailScreen(
+                              hotelSearchModel:
+                                  bookingHistoryDisplayModel.hotelSearchModel,
+                              cityAndState: bookingHistoryDisplayModel
+                                  .bookingHistoryModel.cityAndState),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade400,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Book again ",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBoxHelper.sizedBox20,
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                  ShowCheckInCheckOutDetailsWidget(
+                    bookingHistoryDisplayModel: bookingHistoryDisplayModel,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Booking ID",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(bookingHistoryDisplayModel
+                                .bookingHistoryModel.bookingId),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            onPressed: () {
+                              GeneralUtils.copyBookingIdToClipboard(
+                                  context,
+                                  bookingHistoryDisplayModel
+                                      .bookingHistoryModel.bookingId);
+                            },
+                            icon: const Icon(Icons.copy),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Reserved for",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(bookingHistoryDisplayModel
+                            .bookingHistoryModel.reservedFor),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Rooms & Guests",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
                           children: [
                             Text(
-                              "${bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
-                            ),
+                                "${bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms"),
                             SizedBoxHelper.sizedBox_10,
                             Container(
                               height: 5,
@@ -101,175 +231,110 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                             ),
                             SizedBoxHelper.sizedBox_10,
                             Text(
-                              "${bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms",
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text(bookingHistoryDisplayModel
-                                .hotelSearchModel.hotelLocationDetails.address),
+                                "${bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests"),
                           ],
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-              SizedBoxHelper.sizedBox20,
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => HotelDetailScreen(
-                          hotelSearchModel:
-                              bookingHistoryDisplayModel.hotelSearchModel,
-                          cityAndState: bookingHistoryDisplayModel
-                              .bookingHistoryModel.cityAndState),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade400,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "Book again ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.white),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
                     ),
                   ),
-                ),
-              ),
-              SizedBoxHelper.sizedBox20,
-              SizedBox(
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: DottedLinePainter(),
-                ),
-              ),
-              ShowCheckInCheckOutDetailsWidget(
-                bookingHistoryDisplayModel: bookingHistoryDisplayModel,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: DottedLinePainter(),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          "Booking ID",
+                          "Payment Details",
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(bookingHistoryDisplayModel
-                            .bookingHistoryModel.bookingId),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text("Amount paid"),
+                                SizedBoxHelper.sizedBox_10,
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.info_outline),
+                                ),
+                              ],
+                            ),
+                            SizedBoxHelper.sizedBox_10,
+                            Text(
+                              "₹ ${bookingHistoryDisplayModel.bookingHistoryModel.amountPaid}",
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {
-                          GeneralUtils.copyBookingIdToClipboard(
-                              context,
-                              bookingHistoryDisplayModel
-                                  .bookingHistoryModel.bookingId);
-                        },
-                        icon: const Icon(Icons.copy),
-                      ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: DottedLinePainter(),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Reserved for",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(bookingHistoryDisplayModel
-                        .bookingHistoryModel.reservedFor),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: DottedLinePainter(),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Rooms & Guests",
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${bookingHistoryDisplayModel
-                            .bookingHistoryModel.roomsCount} Rooms"),
-                        SizedBoxHelper.sizedBox_10,
-                        Container(
-                          height: 5,
-                          width: 5,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.black,
-                            border: Border.all(color: Colors.black),
+                        const Text(
+                          "Contact us",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBoxHelper.sizedBox_10,
-                        Text("${bookingHistoryDisplayModel
-                            .bookingHistoryModel.guestsCount} Guests"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Contact BookAny"),
+                            IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.arrow_forward_ios)),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Contact Property Desk"),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.arrow_forward_ios)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                width: double.infinity,
-                child: CustomPaint(
-                  painter: DottedLinePainter(),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),

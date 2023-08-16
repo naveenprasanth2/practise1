@@ -29,7 +29,7 @@ class ShowCheckInCheckOutDetailsWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateHelper.formatDateWithDay(
+                    DateHelper.formatDateWithDayAndYear(
                       bookingHistoryDisplayModel
                           .bookingHistoryModel.checkInDate,
                     ),
@@ -69,7 +69,7 @@ class ShowCheckInCheckOutDetailsWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateHelper.formatDateWithDay(
+                    DateHelper.formatDateWithDayAndYear(
                       bookingHistoryDisplayModel
                           .bookingHistoryModel.checkOutDate,
                     ),
