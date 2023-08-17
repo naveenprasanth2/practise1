@@ -5,6 +5,7 @@ class CountProvider extends ChangeNotifier {
   int _adultCount = 1;
   int _tempAdultCount = 1;
   List<RoomModel> roomsInfo = [RoomModel()];
+  int _maxAdultCountByCustomer = 1;
 
   void setRoomsDetails(List<RoomModel> roomsInfo) {
     this.roomsInfo = roomsInfo;
@@ -20,6 +21,9 @@ class CountProvider extends ChangeNotifier {
     _adultCount = roomsInfo
         .map((roomGuests) => roomGuests.adults)
         .fold(0, (previousValue, element) => previousValue + element);
+    _maxAdultCountByCustomer = roomsInfo
+        .map((roomGuests) => roomGuests.adults)
+        .reduce((maxValue, element) => maxValue > element ? maxValue : element);
     _childCount = roomsInfo
         .map((roomGuests) => roomGuests.children)
         .fold(0, (previousValue, element) => previousValue + element);
@@ -36,6 +40,8 @@ class CountProvider extends ChangeNotifier {
   int get adultCount => _adultCount;
 
   int get tempAdultCount => _tempAdultCount;
+
+  int get maxAdultCountByCustomer => _maxAdultCountByCustomer;
 
   void incrementAdultCount() {
     _tempAdultCount++;

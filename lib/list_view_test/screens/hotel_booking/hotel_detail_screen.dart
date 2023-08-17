@@ -125,11 +125,12 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   setPriceData() async {
     final calculationProvider =
         Provider.of<CalculationProvider>(context, listen: false);
+    //the below code takes maximum adult count for a room and then uses it ( not total adult count )
     try {
       defaultRoomSelection = hotelDetailsModel!.roomType
           .where((element) =>
               element.maxPeopleAllowed >=
-              (Provider.of<CountProvider>(context, listen: false).adultCount))
+              (Provider.of<CountProvider>(context, listen: false).maxAdultCountByCustomer))
           .first;
       calculationProvider.setRoomInfo(defaultRoomSelection!);
     } catch (e) {
