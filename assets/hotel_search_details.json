@@ -26,6 +26,7 @@
       "Pay at hotel"
     ],
     "price": 2360,
+    "discountedPrice": 1799,
     "averageRatings": 3.5,
     "noOfRatings": 30,
     "hotelId": "BAN235687"
@@ -57,6 +58,7 @@
       "Pay at hotel"
     ],
     "price": 2540,
+    "discountedPrice": 1799,
     "averageRatings": 3.9,
     "noOfRatings": 50,
     "hotelId": "CHE23543"
@@ -88,6 +90,7 @@
       "Pay at hotel"
     ],
     "price": 3450,
+    "discountedPrice": 1799,
     "averageRatings": 5,
     "noOfRatings": 199,
     "hotelId": "KOL235687"
@@ -119,6 +122,7 @@
       "Pay at hotel"
     ],
     "price": 8976,
+    "discountedPrice": 1799,
     "averageRatings": 4.5,
     "noOfRatings": 77,
     "hotelId": "HYD835687"

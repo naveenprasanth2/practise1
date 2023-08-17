@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/list_view_test/utils/price_helper/price_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/hotel_results/highligths_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -95,27 +97,10 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                 width: 10,
               ),
               Text(
-                "${widget.hotelSearchModel.noOfRatings} Reviews",
-                style: TextStyle(
-                  color: Colors.grey.shade600),
-                ),
+                "(${widget.hotelSearchModel.noOfRatings})",
+                style: TextStyle(color: Colors.grey.shade600),
+              ),
             ],
-          ),
-        ),
-        Container(
-          height: 30,
-          width: double.infinity,
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: widget.hotelSearchModel.highlights
-                .map(
-                  (value) => HighLights(
-                    value: value,
-                  ),
-                )
-                .toList(),
           ),
         ),
         Container(
@@ -132,23 +117,50 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                 Text(
                   widget.hotelSearchModel.hotelLocationDetails.name,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
-                Text(
-                  "₹ ${widget.hotelSearchModel.price.toString()}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                Container(
+                  height: 30,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: widget.hotelSearchModel.highlights
+                        .map(
+                          (value) => HighLights(
+                        value: value,
+                      ),
+                    )
+                        .toList(),
                   ),
                 ),
-                const Text(
-                  "inclusive of all taxes",
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontSize: 15,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      "₹${widget.hotelSearchModel.discountedPrice}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                    SizedBoxHelper.sizedBox_10,
+                    Text(
+                      "₹${widget.hotelSearchModel.price}",
+                      style: const TextStyle(
+                          fontSize: 15,
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.black),
+                    ),
+                    SizedBoxHelper.sizedBox_10,
+                    Text(
+                      "${PriceHelper.findPriceDiffInPercentage(widget.hotelSearchModel.price.toDouble(), widget.hotelSearchModel.discountedPrice.toDouble())}%",
+                      style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.green),
+                    ),
+                  ],
                 ),
               ],
             ),
