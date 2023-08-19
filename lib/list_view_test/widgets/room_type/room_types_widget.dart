@@ -86,9 +86,10 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
                     ),
                     SizedBox(
                       height: 400,
-                      width: MediaQuery.of(context).size.width * 0.80,
+                      width: MediaQuery.of(context).size.width * 0.90,
                       child: TabBarView(
                         controller: _tabController,
+                        viewportFraction: 0.8,
                         children: widget.roomTypeModel
                             .map(
                               (roomType) =>

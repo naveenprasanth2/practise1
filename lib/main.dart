@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
+import 'package:practise1/list_view_test/providers/auth_provider.dart';
 import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (create) => AuthProvider()),
         ChangeNotifierProvider(create: (create) => DateProvider()),
         ChangeNotifierProvider(create: (create) => CountProvider()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'BookAny',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

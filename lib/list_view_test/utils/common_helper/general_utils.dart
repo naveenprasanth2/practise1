@@ -29,4 +29,15 @@ class GeneralUtils {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  static void showFailureSnackBar(BuildContext context, String message) {
+    SnackBar snackBar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
