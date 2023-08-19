@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+import 'package:practise1/list_view_test/providers/auth_provider.dart';
+import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
+import 'package:practise1/list_view_test/widgets/authentication/authentication_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/dart_helper/sizebox_helper.dart';
 
@@ -15,16 +20,38 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  String? otpCode;
+
   @override
   Widget build(BuildContext context) {
+    final bool isLoading =
+        Provider
+            .of<AuthProvider>(context, listen: true)
+            .isLoading;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Center(
+          child: isLoading == true
+              ? const Center(
+            child: CircularProgressIndicator(
+              color: Colors.red,
+            ),
+          )
+              : Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 35),
+              padding: const EdgeInsets.symmetric(
+                  vertical: 25, horizontal: 35),
               child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(Icons.arrow_back_ios),
+                    ),
+                  ),
                   Container(
                     width: 200,
                     height: 200,
@@ -49,6 +76,68 @@ class _OtpScreenState extends State<OtpScreen> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBoxHelper.sizedBox20,
+                  Pinput(
+                    length: 6,
+                    showCursor: true,
+                    defaultPinTheme: PinTheme(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.red),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    onSubmitted: (value) {
+                      setState(() {
+                        otpCode = value;
+                      });
+                    },
+                  ),
+                  SizedBoxHelper.sizedBox20,
+                  SizedBox(
+                    height: 50,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    child: AuthenticationButton(
+                      onPressed: () {
+                        if (otpCode != null) {
+                          verifyOtp(context, otpCode!);
+                        } else {
+                          GeneralUtils.showFailureSnackBar(
+                              context, "Please enter 6-digit Code");
+                        }
+                      },
+                      text: "Verify",
+                    ),
+                  ),
+                  SizedBoxHelper.sizedBox20,
+                  const Text(
+                    "Didn't receive any code?",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.black38),
+                  ),
+                  SizedBoxHelper.sizedBox10,
+                  InkWell(
+                    onTap: () async {
+                      Provider.of<AuthProvider>(context, listen: false)
+                          .resendOtp(context);
+                    },
+                    child: const Text(
+                      "Resend New Code",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.red),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -56,5 +145,17 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
       ),
     );
+  }
+
+  void verifyOtp(BuildContext context, String userOtp) {
+    final AuthProvider authProvider = Provider.of<AuthProvider>(
+        context, listen: false);
+    authProvider.verifyOtp(context: context,
+        verificationId: widget.verificationId,
+        userOtp: userOtp,
+        onSuccess: () {
+      //checking whether user exists in db or not
+          
+        });
   }
 }

@@ -150,7 +150,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: AuthenticationButton(
                         onPressed: () {
                           sendPhoneNumber();
-                        }, text: "Send OTP"),
+                        },
+                        text: "Send OTP"),
                   ),
                 ],
               ),
@@ -164,8 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void sendPhoneNumber() {
     final AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    String phoneNumber = phoneController.text.trim();
-    authProvider.signInWithPhone(
-        context, "+${_selectedCountry.phoneCode}$phoneNumber");
+    String phoneNumber =
+        "+${_selectedCountry.phoneCode}${phoneController.text.trim()}";
+    authProvider.setPhoneNumber(phoneNumber);
+    authProvider.signInWithPhone(context, phoneNumber);
   }
 }
