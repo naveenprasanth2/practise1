@@ -70,7 +70,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                     onChanged: (value) {
                       setState(() {
                         phoneController.text = value;
@@ -81,10 +82,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(
                       hintText: "Enter Phone Number",
                       hintStyle: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Colors.grey.shade600
-                      ),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: Colors.grey.shade600),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: const BorderSide(color: Colors.black12),
@@ -94,7 +94,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderSide: const BorderSide(color: Colors.black12),
                       ),
                       prefixIcon: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 20.0),
                         child: InkWell(
                           onTap: () {
                             showCountryPicker(
@@ -119,8 +120,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       suffixIcon: phoneController.text.length == 10
                           ? Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Container(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Container(
                                 height: 5,
                                 width: 5,
                                 decoration: const BoxDecoration(
@@ -135,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                               ),
-                          )
+                            )
                           : const SizedBox(
                               height: 10,
                               width: 10,
@@ -146,7 +147,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     width: double.infinity,
                     height: 50,
-                    child: AuthenticationButton(onPressed: () {}, text: "Send OTP"),
+                    child: AuthenticationButton(
+                        onPressed: () {
+                          sendPhoneNumber();
+                        }, text: "Send OTP"),
                   ),
                 ],
               ),
@@ -157,8 +161,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void sendPhoneNumber(){
-    final AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+  void sendPhoneNumber() {
+    final AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     String phoneNumber = phoneController.text.trim();
+    authProvider.signInWithPhone(
+        context, "+${_selectedCountry.phoneCode}$phoneNumber");
   }
 }
