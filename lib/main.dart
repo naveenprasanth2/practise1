@@ -7,6 +7,7 @@ import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
 import 'package:practise1/list_view_test/providers/maps_provider.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'list_view_test/providers/coupon_state_provider.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (create) => AuthProvider()),
+        ChangeNotifierProvider(create: (create) => ProfileProvider()),
         ChangeNotifierProvider(create: (create) => DateProvider()),
         ChangeNotifierProvider(create: (create) => CountProvider()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),

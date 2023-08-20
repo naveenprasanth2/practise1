@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
+import 'package:practise1/list_view_test/screens/home/home_page.dart';
+import 'package:practise1/list_view_test/screens/profile/profile_screen.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:practise1/list_view_test/widgets/authentication/authentication_button.dart';
 import 'package:provider/provider.dart';
@@ -30,14 +32,14 @@ class _OtpScreenState extends State<OtpScreen> {
             .isLoading;
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: isLoading == true
-              ? const Center(
-            child: CircularProgressIndicator(
-              color: Colors.red,
-            ),
-          )
-              : Center(
+        child: isLoading == true
+            ? const Center(
+          child: CircularProgressIndicator(
+            color: Colors.red,
+          ),
+        )
+            : SingleChildScrollView(
+          child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(
                   vertical: 25, horizontal: 35),
@@ -96,6 +98,11 @@ class _OtpScreenState extends State<OtpScreen> {
                         otpCode = value;
                       });
                     },
+                    onChanged: (value) {
+                      setState(() {
+                        otpCode = value;
+                      });
+                    },
                   ),
                   SizedBoxHelper.sizedBox20,
                   SizedBox(
@@ -148,14 +155,28 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void verifyOtp(BuildContext context, String userOtp) {
-    final AuthProvider authProvider = Provider.of<AuthProvider>(
-        context, listen: false);
-    authProvider.verifyOtp(context: context,
+    final AuthProvider authProvider =
+    Provider.of<AuthProvider>(context, listen: false);
+    authProvider.verifyOtp(
+        context: context,
         verificationId: widget.verificationId,
         userOtp: userOtp,
         onSuccess: () {
-      //checking whether user exists in db or not
-          
+          //checking whether user exists in db or not
+          authProvider.checkExistingUser().then((value) {
+            if (value == true) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const HomeScreen(),
+                  ),
+                      (route) => false);
+            } else {
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                  builder: (builder) => const ProfilePage()), (route) => false);
+              print("user not exists friend");
+            }
+          });
         });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/screens/authentication/otp_screen.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthProvider extends ChangeNotifier {
   bool _isSignedIn = false;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   String? _phoneNumber;
   bool _isLoading = false;
   String? _uid;
@@ -102,15 +104,27 @@ class AuthProvider extends ChangeNotifier {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: userOtp);
       User? user = (await _firebaseAuth.signInWithCredential(credential)).user;
-      if(user !=null){
+      if (user != null) {
         //carry out logic
-      _uid = user.uid;
-      onSuccess();
-      }else{
-      }
+        _uid = user.uid;
+        onSuccess();
+      } else {}
     } on FirebaseAuthException catch (e) {
       GeneralUtils.showFailureSnackBar(context, e.message.toString());
     }
     setIsLoading(false);
+  }
+
+  Future<bool> checkExistingUser() async {
+    DocumentSnapshot documentSnapshot =
+        await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
+
+    if(documentSnapshot.exists){
+      print("user exists");
+      return true;
+    }else{
+      print("user not exists");
+      return false;
+    }
   }
 }
