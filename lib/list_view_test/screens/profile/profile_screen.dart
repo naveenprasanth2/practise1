@@ -21,6 +21,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _dateOfBirthController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static const List<String> _genderOptions = ['Male', 'Female', 'Undisclosed'];
+  static const List<String> _maritalStatusOptions = [
+    'Married',
+    'Unmarried',
+    'Undisclosed',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -100,80 +105,82 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         // Distribute space evenly
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border:
-                                    profileProvider.gender == _genderOptions[2]
-                                        ? Border.all(color: Colors.black)
-                                        : const Border.symmetric(
-                                            vertical: BorderSide.none,
-                                            horizontal: BorderSide.none),
-                                borderRadius: BorderRadius.circular(30),
+                        children: _genderOptions.map((gender) {
+                          return Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                profileProvider.setGender(gender);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: profileProvider.gender == gender
+                                      ? Border.all(color: Colors.black)
+                                      : const Border.symmetric(
+                                          vertical: BorderSide.none,
+                                          horizontal: BorderSide.none),
+                                  color: profileProvider.gender == gender
+                                      ? Colors.white
+                                      : Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(child: Text(gender)),
                               ),
-                              child: Center(child: Text(_genderOptions[0])),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border:
-                                    profileProvider.gender == _genderOptions[2]
-                                        ? Border.all(color: Colors.black)
-                                        : const Border.symmetric(
-                                            vertical: BorderSide.none,
-                                            horizontal: BorderSide.none),
-                                color:
-                                    profileProvider.gender == _genderOptions[2]
-                                        ? Colors.white
-                                        : Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(child: Text(_genderOptions[1])),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border:
-                                    profileProvider.gender == _genderOptions[2]
-                                        ? Border.all(color: Colors.black)
-                                        : const Border.symmetric(
-                                            vertical: BorderSide.none,
-                                            horizontal: BorderSide.none),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Center(child: Text(_genderOptions[2])),
-                            ),
-                          ),
-                        ],
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],
                 ),
                 SizedBoxHelper.sizedBox10,
-                DropdownButtonFormField(
-                  value: _maritalStatus,
-                  items: [
-                    'Married',
-                    'Unmarried',
-                    'Undisclosed',
-                  ].map((status) {
-                    return DropdownMenuItem(
-                      value: status,
-                      child: Text(status),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _maritalStatus = value.toString();
-                    });
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Marital Status',
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Marital status: ',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBoxHelper.sizedBox10,
+                    Container(
+                      height: 40,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // Distribute space evenly
+                        children: _maritalStatusOptions.map((maritalStatus) {
+                          return Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                profileProvider.setMaritalStatus(maritalStatus);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: profileProvider.maritalStatus == maritalStatus
+                                      ? Border.all(color: Colors.black)
+                                      : const Border.symmetric(
+                                      vertical: BorderSide.none,
+                                      horizontal: BorderSide.none),
+                                  color: profileProvider.maritalStatus == maritalStatus
+                                      ? Colors.white
+                                      : Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Center(child: Text(maritalStatus)),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
+
+                SizedBoxHelper.sizedBox20,
                 ElevatedButton(
                   onPressed: () {
                     // Save or submit the data

@@ -73,5 +73,6 @@ class ProfileProvider extends ChangeNotifier {
 
   void setMaritalStatus(String value) {
     _maritalStatus = value;
+    notifyListeners();
   }
 }
