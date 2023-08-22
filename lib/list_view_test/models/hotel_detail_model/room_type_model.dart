@@ -1,20 +1,32 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:practise1/list_view_test/models/hotel_detail_model/room_info_model.dart';
 
 part 'room_type_model.g.dart';
 
 @JsonSerializable()
 class RoomTypeModel {
-  @JsonKey(name: 'standardRoom')
-  RoomInfoModel standardRoom;
+  @JsonKey(name: 'type')
+  final String type;
 
-  @JsonKey(name: 'doubleRoom')
-  RoomInfoModel doubleRoom;
+  @JsonKey(name: 'images')
+  final List<String> imageUrls;
 
-  RoomTypeModel({required this.standardRoom, required this.doubleRoom});
+  @JsonKey(name: 'size')
+  final int size;
 
-  factory RoomTypeModel.fromJson(Map<String, dynamic> json) =>
-      _$RoomTypeModelFromJson(json);
+  @JsonKey(name: 'maxPeopleAllowed')
+  final int maxPeopleAllowed;
 
+  @JsonKey(name: 'price')
+  final int roomPrice;
+
+  RoomTypeModel({
+    required this.type,
+    required this.imageUrls,
+    required this.size,
+    required this.maxPeopleAllowed,
+    required this.roomPrice,
+  });
+
+  factory RoomTypeModel.fromJson(Map<String, dynamic> json) => _$RoomTypeModelFromJson(json);
   Map<String, dynamic> toJson() => _$RoomTypeModelToJson(this);
 }
