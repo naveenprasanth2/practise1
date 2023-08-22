@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
+import '../screens/authentication/register_screen.dart';
 import '../screens/home/home_page.dart';
 
 class MySplashScreen extends StatefulWidget {
@@ -19,7 +22,15 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
   void navigateToHomeScreen() async {
     await Future.delayed(const Duration(seconds: 1)).then((value) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (builder)=> const HomeScreen()));
+      final authenticationProvider =
+          Provider.of<AuthProvider>(context, listen: false);
+      if (authenticationProvider.isSignedIn) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (builder) => const HomeScreen()));
+      } else {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (builder) => const RegisterScreen()));
+      }
     });
   }
 

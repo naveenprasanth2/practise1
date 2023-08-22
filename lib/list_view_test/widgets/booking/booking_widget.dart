@@ -131,7 +131,7 @@ class BookingWidget extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   child: Text(
-                    Provider.of<CountProviders>(context).adultCount.toString(),
+                    Provider.of<CountProvider>(context).adultCount.toString(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,
@@ -166,7 +166,7 @@ class BookingWidget extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   child: Text(
-                    Provider.of<CountProviders>(context).childCount.toString(),
+                    Provider.of<CountProvider>(context).childCount.toString(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.black,

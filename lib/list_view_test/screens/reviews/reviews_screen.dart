@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
 import '../../models/star_ratings_model/star_rating_details_model.dart';
@@ -88,7 +89,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                       StarRatingColourUtils.getStarRatingColor(
                                           widget.averageRatings),
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBoxHelper.sizedBox_6,
                                 Text(
                                   widget.averageRatings.toString(),
                                   style: TextStyle(

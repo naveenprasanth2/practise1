@@ -4,6 +4,8 @@ import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
 import 'package:practise1/list_view_test/widgets/coupons/coupon_detail_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class CouponDisplayContainerWidget extends StatelessWidget {
   final CouponModel couponModel;
 
@@ -38,7 +40,7 @@ class CouponDisplayContainerWidget extends StatelessWidget {
               fit: BoxFit.fill,
               height: 40,
             ),
-            const SizedBox(width: 10),
+          SizedBoxHelper.sizedBox_10,
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class RatingView extends StatefulWidget {
   const RatingView({super.key});
 
@@ -75,7 +77,7 @@ class _RatingViewState extends State<RatingView> {
               child: const Text("skip"),
             ),
           ),
-          const SizedBox(height: 10,),
+          SizedBoxHelper.sizedBox10,
           // Animated stars
           AnimatedPositioned(
             top: _starPosition,
@@ -139,10 +141,10 @@ class _RatingViewState extends State<RatingView> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 30,),
+        SizedBoxHelper.sizedBox30,
         const Text("We'd love to hear your feedback"),
         const Text("How was your experience?"),
-        const SizedBox(height: 50,),
+        SizedBoxHelper.sizedBox50,
       ],
     );
   }

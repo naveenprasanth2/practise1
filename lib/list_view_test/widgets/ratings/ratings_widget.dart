@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
 import '../../utils/star_rating_colour_utils.dart';
 
 class RatingStatsWidget extends StatelessWidget {
@@ -79,7 +80,7 @@ class RatingStatsWidget extends StatelessWidget {
                   Icons.star,
                   color: color,
                 ),
-                const SizedBox(width: 4),
+                SizedBoxHelper.sizedBox_4,
                 Text(
                   '($value)',
                 ),
@@ -109,7 +110,7 @@ class RatingStatsWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 5),
+          SizedBoxHelper.sizedBox_5,
           Text('$count'),
         ],
       ),
