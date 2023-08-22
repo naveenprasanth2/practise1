@@ -5,12 +5,17 @@ import '../utils/string_utils.dart';
 
 class DateProvider extends ChangeNotifier {
   final DateTime _dateTimeObject = DateTime.now();
+  DateFormat format = DateFormat("MMM-dd");
+  DateFormat formatWithYear = DateFormat("dd-MMM-yyyy");
   DateTime? _checkInDateInTimeFormat;
   String? date;
   String? initialDate;
   int noOfDays = 1;
   String? _checkInDate;
   String? _checkOutDate;
+  //this can be used for booking history
+  String? _checkInDateWithYear;
+  String? _checkOutDateWithYear;
 
   String? _checkInDateAndDay;
   String? _checkOutDateAndDay;
@@ -23,6 +28,10 @@ class DateProvider extends ChangeNotifier {
   String get checkInDate => _checkInDate!;
 
   String get checkOutDate => _checkOutDate!;
+
+  String get checkInDateWithYear => _checkInDateWithYear!;
+
+  String get checkOutDateWithYear => _checkOutDateWithYear!;
 
   String get checkInDateAndDay => _checkInDateAndDay!;
 
@@ -49,7 +58,6 @@ class DateProvider extends ChangeNotifier {
         );
       },
     ).then((value) {
-      DateFormat format = DateFormat("MMM-dd");
       if (value != null) {
         date = "${format.format(value.start)} - ${format.format(value.end)}";
         noOfDays = value.end.difference(value.start).inDays;
@@ -57,7 +65,10 @@ class DateProvider extends ChangeNotifier {
         _checkOutDate = format.format(value.end);
         _checkInDateAndDay = formatDateWithSuffix(value.start);
         _checkOutDateAndDay = formatDateWithSuffix(value.end);
-        _checkInDateInTimeFormat = value!.start;
+        _checkInDateWithYear = formatWithYear.format(value.start);
+        _checkOutDateWithYear = formatWithYear.format(value.end);
+        print(_checkInDateWithYear);
+        _checkInDateInTimeFormat = value.start;
       } else {
         date = date ?? initialDate;
       }
@@ -67,7 +78,6 @@ class DateProvider extends ChangeNotifier {
   }
 
   void seInitialDate() {
-    DateFormat format = DateFormat("MMM-dd");
     _checkInDateInTimeFormat = _dateTimeObject;
     initialDate =
         "${format.format(_dateTimeObject.add(const Duration(days: 1)))} - ${format.format(_dateTimeObject.add(const Duration(days: 2)))}";
@@ -78,6 +88,9 @@ class DateProvider extends ChangeNotifier {
     _checkOutDateAndDay =
         formatDateWithSuffix(_dateTimeObject.add(const Duration(days: 2)));
     setDateInFullLengthFormat();
+    _checkInDateWithYear = formatWithYear.format(_dateTimeObject.add(const Duration(days: 1)));
+    _checkOutDateWithYear = formatWithYear.format(_dateTimeObject.add(const Duration(days: 2)));
+    print(_checkInDateWithYear);
     notifyListeners();
   }
 

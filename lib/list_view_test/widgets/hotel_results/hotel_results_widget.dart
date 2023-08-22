@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/hotel_results/highligths_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -77,9 +78,32 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Icon(
+                Icons.star,
+                color: StarRatingColourUtils.getStarRatingColor(
+                    widget.hotelSearchModel.averageRatings),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(widget.hotelSearchModel.averageRatings.toString()),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                "${widget.hotelSearchModel.noOfRatings} Reviews",
+                style: TextStyle(
+                  color: Colors.grey.shade600),
+                ),
+            ],
+          ),
+        ),
         Container(
-          height: 40,
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          height: 30,
           width: double.infinity,
           color: Colors.white,
           child: Row(
@@ -106,7 +130,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.hotelSearchModel.hotelName,
+                  widget.hotelSearchModel.hotelLocationDetails.name,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,

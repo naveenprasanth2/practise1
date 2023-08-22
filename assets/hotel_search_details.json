@@ -14,7 +14,12 @@
       "https://media.istockphoto.com/id/482367041/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=-io2u3x82WO9SXAj1obTFnLDIqPOkRVpPTGyGbsi6Uc=",
       "https://media.istockphoto.com/id/179082342/photo/swimming-pool-at-the-luxury-hotel-peloponnes-greece.jpg?s=1024x1024&w=is&k=20&c=UVAPoGmuXlz78sHE9l6FMsbniPp7mbVdeVyvETD83Eg="
     ],
-    "hotelName": "MPlaza Hotel",
+    "hotelLocationDetails": {
+      "name": "ITC Grand Chola",
+      "address": "63, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032",
+      "lat": 13.010771169097396,
+      "lng": 80.22056993747232
+    },
     "highlights": [
       "Free Breakfast",
       "Free Cancellation",
@@ -40,7 +45,12 @@
       "https://media.istockphoto.com/id/482367041/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=-io2u3x82WO9SXAj1obTFnLDIqPOkRVpPTGyGbsi6Uc=",
       "https://media.istockphoto.com/id/179082342/photo/swimming-pool-at-the-luxury-hotel-peloponnes-greece.jpg?s=1024x1024&w=is&k=20&c=UVAPoGmuXlz78sHE9l6FMsbniPp7mbVdeVyvETD83Eg="
     ],
-    "hotelName": "Town house hotel",
+    "hotelLocationDetails": {
+      "name": "Hotel Jyothi",
+      "address": "73, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032",
+      "lat": 13.010771169097396,
+      "lng": 80.22056993747232
+    },
     "highlights": [
       "Free Breakfast",
       "Couple Friendly",
@@ -66,7 +76,12 @@
       "https://media.istockphoto.com/id/119926339/photo/resort-swimming-pool.jpg?s=1024x1024&w=is&k=20&c=uzDy4YWgDC1bx7I6V7z4X8jRuIS3GUyF5w2euvucBwA=",
       "https://media.istockphoto.com/id/179082342/photo/swimming-pool-at-the-luxury-hotel-peloponnes-greece.jpg?s=1024x1024&w=is&k=20&c=UVAPoGmuXlz78sHE9l6FMsbniPp7mbVdeVyvETD83Eg="
     ],
-    "hotelName": "Hotel Jyothi",
+    "hotelLocationDetails": {
+      "name": "Hotel Jyothi",
+      "address": "73, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032",
+      "lat": 13.010771169097396,
+      "lng": 80.22056993747232
+    },
     "highlights": [
       "Free Breakfast",
       "Local Id Allowed",
@@ -92,7 +107,12 @@
       "https://media.istockphoto.com/id/482367041/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=-io2u3x82WO9SXAj1obTFnLDIqPOkRVpPTGyGbsi6Uc=",
       "https://media.istockphoto.com/id/179082342/photo/swimming-pool-at-the-luxury-hotel-peloponnes-greece.jpg?s=1024x1024&w=is&k=20&c=UVAPoGmuXlz78sHE9l6FMsbniPp7mbVdeVyvETD83Eg="
     ],
-    "hotelName": "Seasons Hotel",
+    "hotelLocationDetails": {
+      "name": "Seasons Hotel",
+      "address": "73, Anna Salai, Little Mount, Guindy, Chennai, Tamil Nadu 600032",
+      "lat": 13.010771169097396,
+      "lng": 80.22056993747232
+    },
     "highlights": [
       "Couple Friendly",
       "Free Cancellation",

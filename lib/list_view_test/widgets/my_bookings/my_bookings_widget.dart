@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
+import 'package:practise1/list_view_test/widgets/booking/booking_cancel.dart';
 
-import '../../models/booking_history_model/booking_history_model.dart';
+import '../../models/booking_history_model/booking_history_display_model.dart';
 
-class MyBookingsWidget extends StatelessWidget {
-  final BookingHistoryModel bookingHistoryModel;
+class MyBookingsWidget extends StatefulWidget {
+  final BookingHistoryDisplayModel bookingHistoryDisplayModel;
 
-  const MyBookingsWidget({Key? key, required this.bookingHistoryModel})
-      : super(key: key);
+  const MyBookingsWidget({
+    Key? key,
+    required this.bookingHistoryDisplayModel,
+  }) : super(key: key);
+
+  @override
+  State<MyBookingsWidget> createState() => _MyBookingsWidgetState();
+}
+
+class _MyBookingsWidgetState extends State<MyBookingsWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
-        height: 190,
         width: double.infinity,
         decoration: const BoxDecoration(
           border: Border(
@@ -32,18 +46,33 @@ class MyBookingsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black26),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image(
-                        image: NetworkImage(bookingHistoryModel.iconImage),
-                        fit: BoxFit.fill,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => HotelDetailScreen(
+                              hotelSearchModel: widget
+                                  .bookingHistoryDisplayModel.hotelSearchModel,
+                              cityAndState: widget.bookingHistoryDisplayModel
+                                  .bookingHistoryModel.cityAndState),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image(
+                          image: NetworkImage(widget.bookingHistoryDisplayModel
+                              .hotelSearchModel.hotelImages[0]),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
@@ -52,11 +81,12 @@ class MyBookingsWidget extends StatelessWidget {
                   ),
                   Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          bookingHistoryModel.cityName,
+                          widget.bookingHistoryDisplayModel.hotelSearchModel
+                              .hotelLocationDetails.name,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -67,8 +97,17 @@ class MyBookingsWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              '${bookingHistoryModel.checkInDate} - ${bookingHistoryModel.checkOutDate}  ',
+                              '${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkInDate} - ${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate}  ',
                             ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
+                            ),
+                            const SizedBox(width: 10,),
                             Container(
                               height: 5,
                               width: 5,
@@ -79,18 +118,12 @@ class MyBookingsWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "  ${bookingHistoryModel.guestsCount} Guests",
+                              "  ${widget.bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms",
                             ),
                           ],
                         ),
-                        Text(bookingHistoryModel.hotelName),
-                        SizedBox(
-                          height: 40, // Adjust the height as needed
-                          child: Text(
-                            "${bookingHistoryModel.doorNumber}, ${bookingHistoryModel.streetNumber}",
-                            softWrap: true,
-                          ),
-                        ),
+                        Text(widget.bookingHistoryDisplayModel.hotelSearchModel
+                            .hotelLocationDetails.address),
                       ],
                     ),
                   ),
@@ -102,45 +135,81 @@ class MyBookingsWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    height: 50,
-                    width: 120,
-                    margin: const EdgeInsets.all(2),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.calendar_month,
-                          color: Colors.black,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => HotelDetailScreen(
+                              hotelSearchModel: widget
+                                  .bookingHistoryDisplayModel.hotelSearchModel,
+                              cityAndState: widget.bookingHistoryDisplayModel
+                                  .bookingHistoryModel.cityAndState),
                         ),
-                        Text(
-                          "Book again",
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (bookingHistoryModel.checkOutStatus == "booked")
-                    Container(
+                      );
+                    },
+                    child: Container(
                       height: 50,
-                      width: 120,
                       margin: const EdgeInsets.all(2),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Icon(
-                            Icons.close,
+                            Icons.calendar_month,
                             color: Colors.black,
                           ),
+                          SizedBox(
+                            width: 2,
+                          ),
                           Text(
-                            "Cancel",
+                            "Book again",
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
                       ),
                     ),
-                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
-                      bookingHistoryModel.rated == false)
+                  ),
+                  if (widget.bookingHistoryDisplayModel.bookingHistoryModel
+                          .checkOutStatus ==
+                      "booked")
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BookingCancelWidget(
+                              bookingHistoryModel: widget
+                                  .bookingHistoryDisplayModel
+                                  .bookingHistoryModel,
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 120,
+                        margin: const EdgeInsets.all(2),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.close,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .checkOutStatus ==
+                          "checkedOut" &&
+                      widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .rated ==
+                          false)
                     InkWell(
                       onTap: () => RatingDialogHelper.openRatingDialog(context),
                       child: Container(
@@ -162,8 +231,12 @@ class MyBookingsWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (bookingHistoryModel.checkOutStatus == "checkedOut" &&
-                      bookingHistoryModel.rated == true)
+                  if (widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .checkOutStatus ==
+                          "checkedOut" &&
+                      widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .rated ==
+                          true)
                     Container(
                       height: 50,
                       width: 120,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/coupon_model/coupon_model.dart';
+import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
 import 'package:practise1/list_view_test/widgets/coupons/coupon_detail_widget.dart';
+import 'package:provider/provider.dart';
 
 class CouponDisplayContainerWidget extends StatelessWidget {
   final CouponModel couponModel;
@@ -56,7 +58,29 @@ class CouponDisplayContainerWidget extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios),
+            if (Provider.of<CouponStateProvider>(context, listen: true)
+                    .couponCode !=
+                couponModel.couponCode)
+              const Icon(Icons.arrow_forward_ios),
+            if (Provider.of<CouponStateProvider>(context, listen: true)
+                    .couponCode ==
+                couponModel.couponCode)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 20,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.black),
+                  child: const Center(
+                    child: Text(
+                      "Applied",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
