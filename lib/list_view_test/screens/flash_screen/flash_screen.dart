@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/authentication/register_screen.dart';
-import '../screens/home/home_page.dart';
+import '../authentication/register_screen.dart';
+import '../home/home_page.dart';
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({super.key});
@@ -17,6 +17,13 @@ class _MySplashScreenState extends State<MySplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _initAuthProvider();
+  }
+
+  void _initAuthProvider() async {
+    final authenticationProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    await authenticationProvider.init();
     navigateToHomeScreen();
   }
 
@@ -25,11 +32,17 @@ class _MySplashScreenState extends State<MySplashScreen> {
       final authenticationProvider =
           Provider.of<AuthProvider>(context, listen: false);
       if (authenticationProvider.isSignedIn) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (builder) => const HomeScreen()));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (builder) => const HomeScreen(),
+          ),
+        );
       } else {
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (builder) => const RegisterScreen()));
+          MaterialPageRoute(
+            builder: (builder) => const RegisterScreen(),
+          ),
+        );
       }
     });
   }

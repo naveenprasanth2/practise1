@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../screens/my_bookings/my_bookings_screen.dart';
 
@@ -10,45 +11,77 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  Future<String?> getUserName() async {
+    final SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+    return sharedPreferences.getString("name");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: [
-          SizedBox(
-            height: 100,
-            child: DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.red.shade400,
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hello,',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
+          FutureBuilder<String?>(
+            future: getUserName(),
+            builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return SizedBox(
+                  height: 100,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade400,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Hello,',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
+                        ),
+                        Text(
+                          snapshot.data!.split(" ").first.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    'Naveen',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+                );
+              } else if (snapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return SizedBox(
+                  height: 100,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade400,
                     ),
+                    child: const CircularProgressIndicator(),
                   ),
-                ],
-              ),
-            ),
+                );
+              } else {
+                return SizedBox(
+                  height: 100,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade400,
+                    ),
+                    child: Text('Error: ${snapshot.error}'),
+                  ),
+                );
+              }
+            },
           ),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
-              // Handle drawer item tap for home
               Navigator.pop(context); // Close the drawer
-              // Add your logic for navigating to the home page
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),
@@ -57,14 +90,12 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: const Icon(Icons.luggage),
             title: const Text('My Bookings'),
             onTap: () {
-              // Handle drawer item tap for home
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (builder) => const MyBookingsScreen(),
                 ),
-              ); // Close the drawer
-              // Add your logic for navigating to the home page
+              );
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),

@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
 import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
@@ -11,6 +10,7 @@ import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'list_view_test/providers/coupon_state_provider.dart';
+import 'list_view_test/screens/flash_screen/flash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

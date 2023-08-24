@@ -6,14 +6,14 @@ import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart'
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
-  bool _isSignedIn = false;
+  bool? _isSignedIn;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   String? _phoneNumber;
   bool _isLoading = false;
   String? _uid;
 
-  bool get isSignedIn => _isSignedIn;
+  bool get isSignedIn => _isSignedIn!;
 
   bool get isLoading => _isLoading;
 
@@ -22,7 +22,11 @@ class AuthProvider extends ChangeNotifier {
   String get uid => _uid!;
 
   AuthProvider() {
-    checkSignIn();
+    init();
+  }
+
+  Future<void> init() async {
+    await checkSignIn();
   }
 
   setPhoneNumber(String phoneNumber) {
@@ -34,7 +38,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void checkSignIn() async {
+  Future<void> checkSignIn() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     _isSignedIn = sharedPreferences.getBool("isSignedIn") ?? false;
@@ -42,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void signInWithPhone(BuildContext context, String phoneNumber) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -50,7 +55,6 @@ class AuthProvider extends ChangeNotifier {
         },
         verificationFailed: (error) {
           GeneralUtils.showFailureSnackBar(context, error.message.toString());
-          print(error.message.toString());
         },
         codeSent: (String verificationId, int? forceResendingToken) {
           Navigator.push(
@@ -63,11 +67,13 @@ class AuthProvider extends ChangeNotifier {
         codeAutoRetrievalTimeout: (verificationId) {},
       );
     } on FirebaseAuthException catch (e) {
-      GeneralUtils.showFailureSnackBar(context, e.message.toString());
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, e.message.toString());
     }
   }
 
   Future<void> resendOtp(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -90,7 +96,8 @@ class AuthProvider extends ChangeNotifier {
         timeout: const Duration(seconds: 60),
       );
     } catch (e) {
-      GeneralUtils.showFailureSnackBar(context, "An error occurred: $e");
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, "An error occurred: $e");
     }
   }
 
@@ -100,6 +107,7 @@ class AuthProvider extends ChangeNotifier {
       required String userOtp,
       required Function onSuccess}) async {
     setIsLoading(true);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: userOtp);
@@ -110,7 +118,8 @@ class AuthProvider extends ChangeNotifier {
         onSuccess();
       } else {}
     } on FirebaseAuthException catch (e) {
-      GeneralUtils.showFailureSnackBar(context, e.message.toString());
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, e.message.toString());
     }
     setIsLoading(false);
   }
@@ -118,12 +127,9 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> checkExistingUser() async {
     DocumentSnapshot documentSnapshot =
         await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
-
-    if(documentSnapshot.exists){
-      print("user exists");
+    if (documentSnapshot.exists) {
       return true;
-    }else{
-      print("user not exists");
+    } else {
       return false;
     }
   }

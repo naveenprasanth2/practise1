@@ -49,9 +49,6 @@ class ProfileTextField extends StatelessWidget {
           return "Please enter your name";
         }
       },
-      onChanged: (value) {
-        Provider.of<ProfileProvider>(context).setName(value);
-      },
     );
   }
 }

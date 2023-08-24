@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/screens/home/home_page.dart';
 import 'package:practise1/list_view_test/screens/profile/profile_screen.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
@@ -27,136 +28,131 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isLoading =
-        Provider
-            .of<AuthProvider>(context, listen: true)
-            .isLoading;
+        Provider.of<AuthProvider>(context, listen: true).isLoading;
     return Scaffold(
       body: SafeArea(
         child: isLoading == true
             ? const Center(
-          child: CircularProgressIndicator(
-            color: Colors.red,
-          ),
-        )
+                child: CircularProgressIndicator(
+                  color: Colors.red,
+                ),
+              )
             : SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 25, horizontal: 35),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(Icons.arrow_back_ios),
-                    ),
-                  ),
-                  Container(
-                    width: 200,
-                    height: 200,
-                    padding: const EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red.shade500,
-                    ),
-                    child: Image.asset("assets/verification.png"),
-                  ),
-                  SizedBoxHelper.sizedBox20,
-                  const Text(
-                    "Verification",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBoxHelper.sizedBox10,
-                  const Text(
-                    "Please enter your code",
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBoxHelper.sizedBox20,
-                  Pinput(
-                    length: 6,
-                    showCursor: true,
-                    defaultPinTheme: PinTheme(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.red),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 25, horizontal: 35),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(Icons.arrow_back_ios),
+                          ),
                         ),
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    onSubmitted: (value) {
-                      setState(() {
-                        otpCode = value;
-                      });
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        otpCode = value;
-                      });
-                    },
-                  ),
-                  SizedBoxHelper.sizedBox20,
-                  SizedBox(
-                    height: 50,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    child: AuthenticationButton(
-                      onPressed: () {
-                        if (otpCode != null) {
-                          verifyOtp(context, otpCode!);
-                        } else {
-                          GeneralUtils.showFailureSnackBar(
-                              context, "Please enter 6-digit Code");
-                        }
-                      },
-                      text: "Verify",
+                        Container(
+                          width: 200,
+                          height: 200,
+                          padding: const EdgeInsets.all(20.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red.shade500,
+                          ),
+                          child: Image.asset("assets/verification.png"),
+                        ),
+                        SizedBoxHelper.sizedBox20,
+                        const Text(
+                          "Verification",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBoxHelper.sizedBox10,
+                        const Text(
+                          "Please enter your code",
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBoxHelper.sizedBox20,
+                        Pinput(
+                          length: 6,
+                          showCursor: true,
+                          defaultPinTheme: PinTheme(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.red),
+                              ),
+                              textStyle: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          onSubmitted: (value) {
+                            setState(() {
+                              otpCode = value;
+                            });
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              otpCode = value;
+                            });
+                          },
+                        ),
+                        SizedBoxHelper.sizedBox20,
+                        SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          child: AuthenticationButton(
+                            onPressed: () {
+                              if (otpCode != null) {
+                                verifyOtp(context, otpCode!);
+                              } else {
+                                GeneralUtils.showFailureSnackBar(
+                                    context, "Please enter 6-digit Code");
+                              }
+                            },
+                            text: "Verify",
+                          ),
+                        ),
+                        SizedBoxHelper.sizedBox20,
+                        const Text(
+                          "Didn't receive any code?",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.black38),
+                        ),
+                        SizedBoxHelper.sizedBox10,
+                        InkWell(
+                          onTap: () async {
+                            Provider.of<AuthProvider>(context, listen: false)
+                                .resendOtp(context);
+                          },
+                          child: const Text(
+                            "Resend New Code",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.red),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBoxHelper.sizedBox20,
-                  const Text(
-                    "Didn't receive any code?",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.black38),
-                  ),
-                  SizedBoxHelper.sizedBox10,
-                  InkWell(
-                    onTap: () async {
-                      Provider.of<AuthProvider>(context, listen: false)
-                          .resendOtp(context);
-                    },
-                    child: const Text(
-                      "Resend New Code",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.red),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
 
   void verifyOtp(BuildContext context, String userOtp) {
     final AuthProvider authProvider =
-    Provider.of<AuthProvider>(context, listen: false);
+        Provider.of<AuthProvider>(context, listen: false);
     authProvider.verifyOtp(
         context: context,
         verificationId: widget.verificationId,
@@ -165,16 +161,23 @@ class _OtpScreenState extends State<OtpScreen> {
           //checking whether user exists in db or not
           authProvider.checkExistingUser().then((value) {
             if (value == true) {
+              Provider.of<ProfileProvider>(context, listen: false).setSignIn(true);
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (builder) => const HomeScreen(),
                   ),
-                      (route) => false);
+                  (route) => false);
             } else {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                  builder: (builder) => const ProfilePage()), (route) => false);
-              print("user not exists friend");
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (builder) => const ProfilePage()),
+                  (route) => false);
+              Provider.of<ProfileProvider>(context, listen: false).setUid(
+                  Provider.of<AuthProvider>(context, listen: false).uid);
+              Provider.of<ProfileProvider>(context, listen: false).setMobileNo(
+                  Provider.of<AuthProvider>(context, listen: false)
+                      .phoneNumber);
             }
           });
         });
