@@ -91,7 +91,7 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
                       height: 450,
                       child: TabBarView(
                         controller: _tabController,
-                        viewportFraction: 0.85,
+                        viewportFraction: 0.90,
                         children: widget.roomTypeModel
                             .map(
                               (roomType) =>
