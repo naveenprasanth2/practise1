@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/providers/profile_provider.dart';
-import 'package:provider/provider.dart';
 
 class ProfileTextField extends StatelessWidget {
   final String labelText;

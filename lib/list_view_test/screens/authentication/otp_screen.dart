@@ -153,6 +153,8 @@ class _OtpScreenState extends State<OtpScreen> {
   void verifyOtp(BuildContext context, String userOtp) {
     final AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     authProvider.verifyOtp(
         context: context,
         verificationId: widget.verificationId,
@@ -161,7 +163,7 @@ class _OtpScreenState extends State<OtpScreen> {
           //checking whether user exists in db or not
           authProvider.checkExistingUser().then((value) {
             if (value == true) {
-              Provider.of<ProfileProvider>(context, listen: false).setSignIn(true);
+              profileProvider.setSignIn(true);
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -173,11 +175,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   context,
                   MaterialPageRoute(builder: (builder) => const ProfilePage()),
                   (route) => false);
-              Provider.of<ProfileProvider>(context, listen: false).setUid(
-                  Provider.of<AuthProvider>(context, listen: false).uid);
-              Provider.of<ProfileProvider>(context, listen: false).setMobileNo(
-                  Provider.of<AuthProvider>(context, listen: false)
-                      .phoneNumber);
+              profileProvider.setUid(authProvider.uid);
+              profileProvider.setMobileNo(authProvider.phoneNumber);
             }
           });
         });

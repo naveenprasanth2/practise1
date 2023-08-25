@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
 import 'package:practise1/list_view_test/providers/profile_provider.dart';

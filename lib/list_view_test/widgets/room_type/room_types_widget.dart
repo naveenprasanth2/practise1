@@ -44,6 +44,7 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SliverToBoxAdapter(
       child: Container(
         color: Colors.white,
@@ -51,6 +52,7 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
           padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 "Select a room of your preference",
@@ -61,6 +63,7 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
               ),
               Container(
                 color: Colors.white,
+                width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -85,11 +88,10 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
                       ),
                     ),
                     SizedBox(
-                      height: 400,
-                      width: MediaQuery.of(context).size.width * 0.90,
+                      height: 450,
                       child: TabBarView(
                         controller: _tabController,
-                        viewportFraction: 0.8,
+                        viewportFraction: 0.85,
                         children: widget.roomTypeModel
                             .map(
                               (roomType) =>
