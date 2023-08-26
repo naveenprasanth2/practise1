@@ -4,7 +4,6 @@ import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/utils/string_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/count_provider.dart';
 import '../../screens/hotel_booking/images_categorization_page.dart';
 import '../images/image_stack.dart';
 
@@ -87,25 +86,28 @@ class _HotelImagesWithIconsWidgetState
                 bottom: 15,
                 left: 0,
                 right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: hotelPicTypes
-                      .map((picType) => widget.hotelDetailsModel != null
-                              ? Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  child: imageStack(
-                                      StringUtils.convertToSentenceCase(
-                                          picType),
-                                      widget.hotelDetailsModel!.hotelImages
-                                          .getImageFromType(picType)[0],
-                                      widget.hotelDetailsModel!,
-                                      context),
-                                )
-                              : Container() // or another placeholder widget for when hotelDetailsModel is null
-                          )
-                      .toList(),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: hotelPicTypes
+                        .map((picType) => widget.hotelDetailsModel != null
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 2),
+                                    child: imageStack(
+                                        StringUtils.convertToSentenceCase(
+                                            picType),
+                                        widget.hotelDetailsModel!.hotelImages
+                                            .getImageFromType(picType)[0],
+                                        widget.hotelDetailsModel!,
+                                        context),
+                                  )
+                                : Container() // or another placeholder widget for when hotelDetailsModel is null
+                            )
+                        .toList(),
+                  ),
                 ),
               ),
               Positioned(

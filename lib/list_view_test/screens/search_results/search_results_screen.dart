@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
+import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/room_occupancy_details/add_rooms_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -81,41 +82,43 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Builder(builder: (context) {
-                        return InkWell(
-                          onTap: () {
-                            showBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const AddRoomsWidget();
-                              },
-                            );
+                      Expanded(
+                        child: Builder(builder: (context) {
+                          return InkWell(
+                            onTap: () {
+                              showBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const AddRoomsWidget();
+                                },
+                              );
+                            },
+                            child: Text(
+                              "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                      SizedBoxHelper.sizedBox_5,
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            Provider.of<DateProvider>(context, listen: false)
+                                .setDate(context);
                           },
                           child: Text(
-                            "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
+                            Provider.of<DateProvider>(context, listen: true)
+                                    .date ??
+                                Provider.of<DateProvider>(context, listen: true)
+                                    .initialDate!,
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 14,
                               color: Colors.white,
                             ),
-                          ),
-                        );
-                      }),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          Provider.of<DateProvider>(context, listen: false)
-                              .setDate(context);
-                        },
-                        child: Text(
-                          Provider.of<DateProvider>(context, listen: true)
-                                  .date ??
-                              Provider.of<DateProvider>(context, listen: true)
-                                  .initialDate!,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
                           ),
                         ),
                       ),
