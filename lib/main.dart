@@ -41,14 +41,25 @@ class MyApp extends StatelessWidget {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (calculationProvider != null) {
                 calculationProvider.setDateProviderData(dateProvider.noOfDays);
-                countProvider.setMaximumAdultCount(calculationProvider.roomSelection.maxPeopleAllowed);
-                countProvider.setAdultAndChildCount(calculationProvider.roomsInfo);
+                countProvider.setMaximumAdultCount(
+                    calculationProvider.roomSelection.maxPeopleAllowed);
+                countProvider
+                    .setAdultAndChildCount(calculationProvider.roomsInfo);
               }
             });
-            return calculationProvider ?? CalculationProvider(); // Return a default value if calculationProvider is null
+            return calculationProvider ??
+                CalculationProvider(); // Return a default value if calculationProvider is null
           },
-
         ),
+        ChangeNotifierProxyProvider<AuthProvider, ProfileProvider>(
+            create: (context) => ProfileProvider(),
+            update: (context, authProvider, profileProvider) {
+              if (authProvider.userProfileModel != null) {
+                profileProvider!
+                    .setProfileDataFromModel(authProvider.userProfileModel!);
+              }
+              return profileProvider!;
+            }),
       ],
       child: MaterialApp(
         title: 'BookAny',

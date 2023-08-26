@@ -5,6 +5,7 @@ import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/screens/home/home_page.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/list_view_test/utils/string_utils.dart';
 import 'package:practise1/list_view_test/widgets/profile/email_text_field.dart';
 import 'package:practise1/list_view_test/widgets/profile/profile_text_field.dart';
 import 'package:provider/provider.dart';
@@ -227,7 +228,10 @@ class _ProfilePageState extends State<ProfilePage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final ProfileProvider profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
-   await profileProvider.setName(_nameController.text);
+    await profileProvider.setName(_nameController.text);
+    String formattedName =
+        StringUtils.convertToSentenceCaseForAll(profileProvider.name);
+    await profileProvider.setName(formattedName);
     profileProvider.setEmailId(_emailAddressController.text);
     profileProvider.setIsLoading(true);
     if (_formKey.currentState!.validate()) {
@@ -254,10 +258,12 @@ class _ProfilePageState extends State<ProfilePage> {
               (route) => false);
         });
       } on FirebaseException catch (error) {
-        GeneralUtils.showFailureSnackBarUsingScaffold(scaffoldMessenger, error.message.toString());
+        GeneralUtils.showFailureSnackBarUsingScaffold(
+            scaffoldMessenger, error.message.toString());
       }
     } else {
-      GeneralUtils.showFailureSnackBarUsingScaffold(scaffoldMessenger, "Please enter all the fields");
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, "Please enter all the fields");
     }
   }
 }

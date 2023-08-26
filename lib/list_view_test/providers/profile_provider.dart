@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider extends ChangeNotifier {
@@ -23,6 +24,25 @@ class ProfileProvider extends ChangeNotifier {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     _name = value;
+    sharedPreferences.setString("name", _name!);
+    notifyListeners();
+  }
+
+  void setProfileDataFromModel(UserProfileModel userProfileModel) {
+    print(userProfileModel.name);
+    _name = userProfileModel.name;
+    _mobileNo = userProfileModel.mobileNo;
+    _dateOfBirth = userProfileModel.dateOfBirth;
+    _gender = userProfileModel.gender;
+    _maritalStatus = userProfileModel.maritalStatus;
+    _uid = userProfileModel.uid;
+    setSharedPreferences();
+    notifyListeners();
+  }
+
+  Future<void> setSharedPreferences() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     sharedPreferences.setString("name", _name!);
     notifyListeners();
   }
