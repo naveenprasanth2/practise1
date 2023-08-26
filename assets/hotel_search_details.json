@@ -25,11 +25,25 @@
       "Free Cancellation",
       "Pay at hotel"
     ],
-    "price": 2360,
-    "discountedPrice": 1799,
     "averageRatings": 3.5,
     "noOfRatings": 30,
-    "hotelId": "BAN235687"
+    "hotelId": "BAN235687",
+    "roomTypeForSearch": [
+      {
+        "type": "standard",
+        "size": 130,
+        "maxPeopleAllowed": 3,
+        "price": 2500,
+        "discountedPrice": 1799
+      },
+      {
+        "type": "deluxe",
+        "size": 190,
+        "maxPeopleAllowed": 4,
+        "price": 4400,
+        "discountedPrice": 3500
+      }
+    ]
   },
   {
     "hotelImages": [

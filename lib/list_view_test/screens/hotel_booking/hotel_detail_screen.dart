@@ -243,7 +243,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          "${hotelDetailsModel.locationDetails.hotelLocationDetails.address},",
+                                          hotelDetailsModel.locationDetails.hotelLocationDetails.address,
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
