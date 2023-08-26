@@ -25,7 +25,6 @@ import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
 import '../../models/hotel_detail_model/about_hotel_model.dart';
-import '../../physics/slow_scroll_physics.dart';
 import '../../widgets/coupons/coupons_main_widget.dart';
 import '../../widgets/hotel_details_main_widgets/guest_policies_widget.dart';
 import '../../widgets/nearby_places/nearby_widget.dart';
@@ -170,9 +169,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                 return Container(
                   color: Colors.white,
                   child: CustomScrollView(
-                    physics: const SlowScrollPhysics(
-                      parent: BouncingScrollPhysics(),
-                    ),
+                    physics: const BouncingScrollPhysics(),
                     slivers: [
                       HotelImagesWithIconsWidget(
                           hotelDetailsModel: hotelDetailsModel),

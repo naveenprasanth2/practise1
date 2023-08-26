@@ -17,16 +17,21 @@ class RoomTypeModel {
   final int maxPeopleAllowed;
 
   @JsonKey(name: 'price')
-  final double roomPrice;
+  final double price;
 
-  RoomTypeModel({
-    required this.type,
-    required this.imageUrls,
-    required this.size,
-    required this.maxPeopleAllowed,
-    required this.roomPrice,
-  });
+  @JsonKey(name: 'discountedPrice')
+  final double discountedPrice;
 
-  factory RoomTypeModel.fromJson(Map<String, dynamic> json) => _$RoomTypeModelFromJson(json);
+  RoomTypeModel(
+      {required this.type,
+      required this.imageUrls,
+      required this.size,
+      required this.maxPeopleAllowed,
+      required this.price,
+      required this.discountedPrice});
+
+  factory RoomTypeModel.fromJson(Map<String, dynamic> json) =>
+      _$RoomTypeModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$RoomTypeModelToJson(this);
 }

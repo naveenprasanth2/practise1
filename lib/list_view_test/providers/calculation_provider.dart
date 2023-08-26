@@ -77,7 +77,7 @@ class CalculationProvider extends ChangeNotifier {
   }
 
   void setRoomType(RoomTypeModel roomTypeModel) {
-    _costPerNight = roomTypeModel.roomPrice;
+    _costPerNight = roomTypeModel.discountedPrice;
     roomSelection.setRoomType(roomTypeModel);
     setTotalCostPerNight();
     setDiscountValueAfterPriceReset();
@@ -116,7 +116,7 @@ class CalculationProvider extends ChangeNotifier {
   }
 
   void setRoomInfo(RoomTypeModel roomTypeModel) {
-    _costPerNight = roomTypeModel.roomPrice;
+    _costPerNight = roomTypeModel.discountedPrice;
     roomSelection.setRoomType(roomTypeModel);
   }
 
@@ -172,7 +172,7 @@ class CalculationProvider extends ChangeNotifier {
 
   void setGstPercentage(double gstPercentage) {
     //7. GST is now given as per the rules ( as per the _pretax price )
-    if (costPerNight! < 4000) {
+    if (costPerNight! < 7500) {
       _gstPercentage = gstPercentage;
     } else {
       _gstPercentage = 18;

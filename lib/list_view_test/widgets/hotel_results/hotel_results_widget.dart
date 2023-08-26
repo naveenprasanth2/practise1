@@ -159,7 +159,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                       ),
                       SizedBoxHelper.sizedBox_10,
                       Text(
-                        "${PriceHelper.findPriceDiffInPercentage(widget.hotelSearchModel.roomTypeForSearch[getRoomDetailsIndex()].price.toDouble(), widget.hotelSearchModel.roomTypeForSearch[getRoomDetailsIndex()].discountedPrice.toDouble())}%",
+                        "${PriceHelper.findPriceDiffInPercentage(widget.hotelSearchModel.roomTypeForSearch[getRoomDetailsIndex()].price.toDouble(), widget.hotelSearchModel.roomTypeForSearch[getRoomDetailsIndex()].discountedPrice.toDouble())}% off",
                         style:
                             const TextStyle(fontSize: 15, color: Colors.green),
                       ),

@@ -17,7 +17,7 @@ class RoomSelection {
     this.roomTypeModel = roomTypeModel;
     _roomType = roomTypeModel.type;
     _maxPeopleAllowed = roomTypeModel.maxPeopleAllowed;
-    _price = roomTypeModel.roomPrice;
+    _price = roomTypeModel.price;
     dataSetCount++;
   }
 }

@@ -81,27 +81,25 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Builder(
-                        builder: (context) {
-                          return InkWell(
-                            onTap: () {
-                              showBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const AddRoomsWidget();
-                                },
-                              );
-                            },
-                            child: Text(
-                              "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
-                              style: const TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                              ),
+                      Builder(builder: (context) {
+                        return InkWell(
+                          onTap: () {
+                            showBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const AddRoomsWidget();
+                              },
+                            );
+                          },
+                          child: Text(
+                            "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
                             ),
-                          );
-                        }
-                      ),
+                          ),
+                        );
+                      }),
                       const SizedBox(
                         width: 10,
                       ),

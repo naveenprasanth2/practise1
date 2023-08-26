@@ -12,7 +12,7 @@ class SlowScrollPhysics extends ScrollPhysics {
   @override
   double applyPhysicsToUserOffset(ScrollMetrics position, double offset) {
     // Adjust the scroll offset to slow down the scrolling speed
-    double newOffset = offset * 0.1; // You can adjust this factor as needed
+    double newOffset = offset * 0.4; // You can adjust this factor as needed
     return super.applyPhysicsToUserOffset(position, newOffset);
   }
 }

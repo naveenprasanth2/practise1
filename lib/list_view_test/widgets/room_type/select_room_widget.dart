@@ -5,6 +5,7 @@ import 'package:practise1/list_view_test/widgets/room_type/room_images_only_widg
 import 'package:provider/provider.dart';
 
 import '../../utils/dart_helper/sizebox_helper.dart';
+import '../../utils/price_helper/price_helper.dart';
 import '../../utils/string_utils.dart';
 
 class SelectRoomWidget extends StatelessWidget {
@@ -76,7 +77,7 @@ class SelectRoomWidget extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "₹ ${roomTypeModel.roomPrice}",
+                    "₹ ${roomTypeModel.discountedPrice}",
                     style: const TextStyle(
                         fontSize: 15, fontWeight: FontWeight.bold),
                   ),
@@ -84,9 +85,9 @@ class SelectRoomWidget extends StatelessWidget {
                     width: 10,
                   ),
                   //get data from price provider
-                  const Text(
-                    "₹ 5999",
-                    style: TextStyle(
+                  Text(
+                    "₹ ${roomTypeModel.price}",
+                    style: const TextStyle(
                       decoration: TextDecoration.lineThrough,
                       decorationColor: Colors.black,
                       decorationThickness: 2.0,
@@ -95,14 +96,14 @@ class SelectRoomWidget extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "73% off",
-                    style: TextStyle(color: Colors.green),
+                  Text(
+                    "${PriceHelper.findPriceDiffInPercentage(roomTypeModel.price, roomTypeModel.discountedPrice)}% off",
+                    style: const TextStyle(color: Colors.green),
                   ),
                 ],
               ),
               const SizedBox(
-                height: 40,
+                height: 30,
               ),
               InkWell(
                 onTap: () {
@@ -113,7 +114,7 @@ class SelectRoomWidget extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
                     child: Row(
@@ -122,8 +123,14 @@ class SelectRoomWidget extends StatelessWidget {
                         (calculationProvider
                                     .roomSelection.roomTypeModel?.type ==
                                 roomTypeModel.type)
-                            ? const Text("Selected", style: TextStyle(fontWeight: FontWeight.bold),)
-                            : const Text("Select", style: TextStyle(fontWeight: FontWeight.bold),),
+                            ? const Text(
+                                "Selected",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )
+                            : const Text(
+                                "Select",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                         SizedBoxHelper.sizedBox_5,
                         if (calculationProvider
                                 .roomSelection.roomTypeModel?.type ==
