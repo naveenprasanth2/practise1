@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/screens/flash_screen/flash_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../providers/auth_provider.dart';
 import '../../screens/my_bookings/my_bookings_screen.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -13,7 +16,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   Future<String?> getUserName() async {
     final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     return sharedPreferences.getString("name");
   }
 
@@ -53,8 +56,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   ),
                 );
-              } else if (snapshot.connectionState ==
-                  ConnectionState.waiting) {
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return SizedBox(
                   height: 100,
                   child: DrawerHeader(
@@ -96,6 +98,21 @@ class _MyDrawerState extends State<MyDrawer> {
                   builder: (builder) => const MyBookingsScreen(),
                 ),
               );
+            },
+            trailing: const Icon(Icons.arrow_forward_ios),
+          ),
+          const Divider(thickness: 1),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('logout'),
+            onTap: () {
+              Provider.of<AuthProvider>(context, listen: false).logout();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const MySplashScreen(),
+                  ),
+                  (route) => false);
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),

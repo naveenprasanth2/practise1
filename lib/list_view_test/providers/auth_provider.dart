@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
-import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/screens/authentication/otp_screen.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -46,6 +44,15 @@ class AuthProvider extends ChangeNotifier {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     _isSignedIn = sharedPreferences.getBool("isSignedIn") ?? false;
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    _isSignedIn = false;
+    _firebaseAuth.signOut();
+    sharedPreferences.setBool("isSignedIn", _isSignedIn!);
     notifyListeners();
   }
 
@@ -132,7 +139,8 @@ class AuthProvider extends ChangeNotifier {
     DocumentSnapshot documentSnapshot =
         await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
     if (documentSnapshot.exists) {
-      userProfileModel =  UserProfileModel.fromJson(documentSnapshot.data() as Map<String, dynamic>);
+      userProfileModel = UserProfileModel.fromJson(
+          documentSnapshot.data() as Map<String, dynamic>);
       notifyListeners();
       return true;
     } else {
