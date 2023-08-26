@@ -7,10 +7,12 @@ List<String> citiesList = LocationConstants.citiesList;
 
 class SearchPage extends StatefulWidget {
   final TextEditingController homeSearchController;
+  final TextEditingController resultsController;
 
   const SearchPage({
     super.key,
     required this.homeSearchController,
+    required this.resultsController,
   });
 
   @override
@@ -95,8 +97,8 @@ class _SearchPageState extends State<SearchPage> {
                     onTap: () {
                       _searchController.text =
                           _searchResults[index].split(",")[0];
-                      widget.homeSearchController.text =
-                          _searchResults[index].split(",")[0];
+                      widget.homeSearchController.text = _searchResults[index].split(",")[0];
+                      widget.resultsController.text = _searchResults[index];
                       Navigator.pop(context);
                     },
                     child: ListTile(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model.dart';
@@ -13,7 +14,12 @@ import '../../widgets/adult_child/adult_child_bottom_sheet.dart';
 import '../../widgets/hotel_results/hotel_results_widget.dart';
 
 class SearchResultsScreen extends StatefulWidget {
-  const SearchResultsScreen({Key? key}) : super(key: key);
+  final String cityAndState;
+
+  const SearchResultsScreen({
+    Key? key,
+    required this.cityAndState,
+  }) : super(key: key);
 
   @override
   State<SearchResultsScreen> createState() => _SearchResultsScreenState();
@@ -29,11 +35,20 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   }
 
   Stream<List<HotelSearchModel>> loadHotelSearchResultsJson() async* {
-    final value =
-        await rootBundle.loadString("assets/hotel_search_details.json");
-    final jsonData = json.decode(value) as List<dynamic>;
-    final List<HotelSearchModel> hotelSearchList = jsonData
-        .map((jsonObject) => HotelSearchModel.fromJson(jsonObject))
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection(widget.cityAndState.split(",")[1].trim().toLowerCase())
+        .doc(widget.cityAndState.split(",")[0].trim().toLowerCase())
+        .collection("hotels")
+        .get();
+    List<dynamic> valuesList = querySnapshot.docs
+        .map((doc) {
+          return doc.data().values;
+        })
+        .expand((value) => value)
+        .toList();
+
+    List<HotelSearchModel> hotelSearchList = valuesList
+        .map((element) => HotelSearchModel.fromJson(element))
         .toList();
 
     yield hotelSearchList;
@@ -62,10 +77,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     // Use a null-aware operator to avoid null errors
-                    "Hotel Name Loading...",
-                    style: TextStyle(color: Colors.white),
+                    widget.cityAndState,
+                    style: const TextStyle(color: Colors.white),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -126,12 +141,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               } else if (snapshot.hasError) {
                 return SliverFillRemaining(
                   child: Center(
-                    child: Text('Error: ${snapshot.error}'),
+                    child: Text(snapshot.error.toString() + "error"),
                   ),
                 );
               } else {
                 final hotelSearchModel = snapshot.data;
-                if (hotelSearchModel != null) {
+                if (hotelSearchModel != null && hotelSearchModel.isNotEmpty) {
                   // Data is available, build the SliverList with HotelResultsWidget
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
@@ -142,18 +157,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (builder) => HotelDetailScreen(
-                                  hotelSmallDetailsModel:
-                                      HotelSmallDetailsModel(
-                                          cityName: "Chennai",
-                                          hotelName: "M Plaza",
-                                          mapViewData: "",
-                                          townName: "Marathalli"),
+                                  hotelSearchModel: hotelSearchModel[index],
+                                  cityAndState: widget.cityAndState,
                                 ),
                               ),
                             );
                           },
                           child: Container(
-                            height: 400,
+                            height: 450,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black26),
@@ -171,7 +182,13 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   // Data is null (error or empty), display a message
                   return const SliverFillRemaining(
                     child: Center(
-                      child: Text('No data available'),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("No Hotels Found"),
+                          Text("Don't worry, we are rapidly expanding"),
+                        ],
+                      ),
                     ),
                   );
                 }

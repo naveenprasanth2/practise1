@@ -157,13 +157,13 @@ class _NearByTabViewState extends State<NearByTabView>
                       MaterialPageRoute(builder: (builder) => const MapScreen()));
                 },
                 child: Container(
-                  height: 50,
+                  height: 40,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(10)),
                   child: const Center(
-                    child: Text("View on Map"),
+                    child: Text("View on Map", style: TextStyle(fontWeight: FontWeight.bold),),
                   ),
                 ),
               ),

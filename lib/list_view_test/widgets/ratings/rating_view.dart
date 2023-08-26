@@ -11,7 +11,7 @@ class RatingView extends StatefulWidget {
 
 class _RatingViewState extends State<RatingView> {
   final PageController _pageController = PageController();
-  double _starPosition = 200.0;
+  double _starPosition = 250.0;
   int _rating = 0;
   String _selectedValue = "General";
   bool _isMoreDetailActive = false;
@@ -93,7 +93,7 @@ class _RatingViewState extends State<RatingView> {
                       curve: Curves.easeIn,
                     );
                     setState(() {
-                      _starPosition = 20.0;
+                      _starPosition = 30.0;
                       //index starts with 0, so added 1
                       _rating = index + 1;
                     });
@@ -129,6 +129,7 @@ class _RatingViewState extends State<RatingView> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           "Thanks for using our service",
@@ -138,8 +139,10 @@ class _RatingViewState extends State<RatingView> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(height: 30,),
         const Text("We'd love to hear your feedback"),
         const Text("How was your experience?"),
+        const SizedBox(height: 50,),
       ],
     );
   }

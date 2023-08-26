@@ -1,5 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
+import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
@@ -8,7 +10,9 @@ import 'package:provider/provider.dart';
 
 import 'list_view_test/providers/coupon_state_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -25,6 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
         ChangeNotifierProvider(create: (create) => MapProvider()),
         ChangeNotifierProvider(create: (create) => CouponStateProvider()),
+        ChangeNotifierProvider(create: (create) => BookingDataProvider()),
         ChangeNotifierProxyProvider<DateProvider, CalculationProvider>(
           create: (context) => CalculationProvider(),
           update: (context, dateProvider, calculationProvider) {
