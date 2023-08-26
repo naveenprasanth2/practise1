@@ -109,7 +109,7 @@ class SelectRoomWidget extends StatelessWidget {
                   calculationProvider.setRoomType(roomTypeModel);
                 },
                 child: Container(
-                  height: 30,
+                  height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
