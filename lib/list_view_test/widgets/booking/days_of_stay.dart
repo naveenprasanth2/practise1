@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class DatesOfStayContainer extends StatelessWidget {
   const DatesOfStayContainer({
     Key? key,
@@ -43,7 +45,7 @@ class DatesOfStayContainer extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBoxHelper.sizedBox4,
               Text(
                 checkInDate,
                 style: const TextStyle(
@@ -52,7 +54,7 @@ class DatesOfStayContainer extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBoxHelper.sizedBox4,
               const Text(
                 "12:00PM",
                 style: TextStyle(
@@ -88,7 +90,7 @@ class DatesOfStayContainer extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBoxHelper.sizedBox4,
               Text(
                 checkOutDate,
                 style: const TextStyle(
@@ -97,7 +99,7 @@ class DatesOfStayContainer extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBoxHelper.sizedBox4,
               const Text(
                 "11:00AM",
                 style: TextStyle(

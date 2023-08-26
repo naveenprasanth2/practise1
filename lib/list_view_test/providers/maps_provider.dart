@@ -6,7 +6,6 @@ import 'package:practise1/list_view_test/models/nearby_places_model/nearby_place
 import 'dart:ui' as ui;
 
 import '../models/nearby_places_model/place_category_model.dart';
-import '../utils/common_helper/general_utils.dart';
 
 class MapProvider extends ChangeNotifier {
   final Map<String, Marker> markers = {};

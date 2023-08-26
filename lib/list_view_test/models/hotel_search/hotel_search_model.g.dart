@@ -17,6 +17,7 @@ HotelSearchModel _$HotelSearchModelFromJson(Map<String, dynamic> json) =>
           .map((e) => e as String)
           .toList(),
       price: json['price'] as int,
+      discountedPrice: json['discountedPrice'] as int,
       averageRatings: (json['averageRatings'] as num).toDouble(),
       noOfRatings: json['noOfRatings'] as int,
       hotelId: json['hotelId'] as String,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$HotelSearchModelToJson(HotelSearchModel instance) =>
       'hotelLocationDetails': instance.hotelLocationDetails,
       'highlights': instance.highlights,
       'price': instance.price,
+      'discountedPrice': instance.discountedPrice,
       'averageRatings': instance.averageRatings,
       'noOfRatings': instance.noOfRatings,
       'hotelId': instance.hotelId,

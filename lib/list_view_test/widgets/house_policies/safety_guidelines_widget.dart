@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/widgets/house_policies/guidelines_individual_widget.dart';
 
 import '../../models/safe_guidelines_model/safe_guidelines_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class SafetyGuidelinesWidget extends StatelessWidget {
   String? response;
@@ -31,7 +32,7 @@ class SafetyGuidelinesWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const SizedBox(height: 10,),
+                SizedBoxHelper.sizedBox10,
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
@@ -47,19 +48,19 @@ class SafetyGuidelinesWidget extends StatelessWidget {
                           "Do's",
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 20,),
+                        SizedBoxHelper.sizedBox20,
                         Column(
                           children: snapshot.data!.dos
                               .map((dosText) =>
                               GuidelinesIndividualWidget(type: "dos", value: dosText))
                               .toList(),
                         ),
-                        const SizedBox(height: 20,),
+                        SizedBoxHelper.sizedBox20,
                         const Text(
                           "Dont's",
                           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 20,),
+                        SizedBoxHelper.sizedBox20,
                         Column(
                           children: snapshot.data!.donts
                               .map((dosText) => GuidelinesIndividualWidget(

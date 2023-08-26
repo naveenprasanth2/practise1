@@ -50,7 +50,7 @@ class HotelDetailsAppBar extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    "Adult ${Provider.of<CountProviders>(context, listen: true).adultCount} - Child ${Provider.of<CountProviders>(context, listen: true).childCount}",
+                    "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
                     style: const TextStyle(
                       fontSize: 15,
                       color: Colors.white,

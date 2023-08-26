@@ -9,7 +9,9 @@ import 'package:practise1/list_view_test/models/hotel_detail_model/room_type_mod
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/models/nearby_places_model/nearby_places_model.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
+import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/screens/maps/maps_screen.dart';
+import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/cancellation/cancellation_policy.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/amenities_main_widget.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
@@ -54,6 +56,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   NearbyPlacesModel? nearbyPlacesModel;
   List<CouponModel>? coupons;
   List<RoomTypeModel>? roomTypeModel;
+  RoomTypeModel? defaultRoomSelection;
   int? totalRatings;
   bool _isDataLoaded = false;
 
@@ -119,12 +122,27 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
     });
   }
 
-  setPriceData() {
+  setPriceData() async {
     final calculationProvider =
         Provider.of<CalculationProvider>(context, listen: false);
-    //need to change the price set value
-    calculationProvider
-        .setCostPerNight(hotelDetailsModel?.roomType[0].roomPrice ?? 0);
+    //the below code takes maximum adult count for a room and then uses it ( not total adult count )
+    try {
+      defaultRoomSelection = hotelDetailsModel!.roomType
+          .where((element) =>
+              element.maxPeopleAllowed >=
+              (Provider.of<CountProvider>(context, listen: false).maxAdultCountByCustomer))
+          .first;
+      calculationProvider.setRoomInfo(defaultRoomSelection!);
+    } catch (e) {
+      var maxValue = hotelDetailsModel!.roomType
+          .map((e) => e.maxPeopleAllowed)
+          .reduce(
+              (maxValue, element) => maxValue > element ? maxValue : element);
+      defaultRoomSelection = hotelDetailsModel!.roomType
+          .where((element) => element.maxPeopleAllowed <= maxValue)
+          .last;
+      calculationProvider.setRoomInfo(defaultRoomSelection!);
+    }
     calculationProvider.setDiscountPercentage(0);
     calculationProvider.setGstPercentage(12);
     calculationProvider.setPrepaidDiscountPercentage(10);
@@ -173,7 +191,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             MainAxisAlignment.start,
                                         children: [
                                           Text(
-                                            widget.hotelSearchModel.hotelLocationDetails.name,
+                                            widget.hotelSearchModel
+                                                .hotelLocationDetails.name,
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 20,
@@ -184,7 +203,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
+                                    SizedBoxHelper.sizedBox_10,
                                     Center(
                                       child: Builder(
                                         builder: (BuildContext context) {
@@ -220,7 +239,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          "${hotelDetailsModel?.locationDetails.hotelLocationDetails.address},",
+                                          "${hotelDetailsModel.locationDetails.hotelLocationDetails.address},",
                                           style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 15,
@@ -335,6 +354,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                       const BookableDetailsWidget(),
                       RoomTypesWidget(
                         roomTypeModel: roomTypeModel ?? [],
+                        defaultRoomSelection:
+                            defaultRoomSelection ?? roomTypeModel![0],
                       ),
                       const CancellationPolicyWidget(),
                       const HousePoliciesWidget(),
