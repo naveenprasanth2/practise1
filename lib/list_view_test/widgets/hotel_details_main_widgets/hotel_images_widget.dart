@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/utils/string_utils.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/count_provider.dart';
 import '../../screens/hotel_booking/images_categorization_page.dart';
 import '../images/image_stack.dart';
 
@@ -111,6 +114,9 @@ class _HotelImagesWithIconsWidgetState
                 child: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
+                    Provider.of<CalculationProvider>(context, listen: false)
+                        .roomSelection
+                        .resetMaximumAdultAllowedCount();
                   },
                   icon: Container(
                     decoration: const BoxDecoration(

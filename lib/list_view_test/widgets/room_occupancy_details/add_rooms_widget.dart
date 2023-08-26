@@ -282,52 +282,56 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
     required VoidCallback onIncrement,
     required VoidCallback onDecrement,
   }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Container(
-          height: 30,
-          width: 120, // Adjust the width as needed
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: onDecrement,
-                icon: const Icon(Icons.remove),
-                iconSize: 18,
+    return Consumer<CalculationProvider>(
+      builder: (context, calculationProvider, _) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            Container(
+              height: 30,
+              width: 120, // Adjust the width as needed
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(5),
               ),
-              Text(
-                count.toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: onDecrement,
+                    icon: const Icon(Icons.remove),
+                    iconSize: 18,
+                  ),
+                  Text(
+                    count.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  IconButton(
+                    onPressed: onIncrement,
+                    icon: Icon(
+                      Icons.add,
+                      color: title == "Adults:"
+                          ? ((count <
+                                  calculationProvider
+                                      .roomSelection
+                                      .maxPeopleAllowed)
+                              ? Colors.black
+                              : Colors.grey)
+                          : (count < 1 ? Colors.black : Colors.grey),
+                    ),
+                    iconSize: 18,
+                  ),
+                ],
               ),
-              IconButton(
-                onPressed: onIncrement,
-                icon: Icon(
-                  Icons.add,
-                  color: title == "Adults:"
-                      ? ((count <
-                              Provider.of<CalculationProvider>(context)
-                                  .roomSelection
-                                  .maxPeopleAllowed)
-                          ? Colors.black
-                          : Colors.grey)
-                      : (count < 1 ? Colors.black : Colors.grey),
-                ),
-                iconSize: 18,
-              ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      }
     );
   }
 }
