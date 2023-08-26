@@ -82,6 +82,7 @@ class _NearByTabViewState extends State<NearByTabView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SliverToBoxAdapter(
       child: Container(
         color: Colors.white,

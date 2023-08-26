@@ -103,6 +103,7 @@ class _NearByPlacesTabViewState extends State<NearByPlacesTabView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: 4,
       child: Container(
