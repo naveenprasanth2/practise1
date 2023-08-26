@@ -251,6 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
             .set(_userProfileModel.toJson())
             .then((value) {
           profileProvider.setSignIn(true);
+          profileProvider.setProfileDataFromModel(_userProfileModel);
           profileProvider.setIsLoading(false);
           Navigator.pushAndRemoveUntil(
               context,
