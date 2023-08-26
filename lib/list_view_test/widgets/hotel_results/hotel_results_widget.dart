@@ -130,16 +130,16 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                     children: widget.hotelSearchModel.highlights
                         .map(
                           (value) => HighLights(
-                        value: value,
-                      ),
-                    )
+                            value: value,
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
                 Row(
                   children: [
                     Text(
-                      "₹${widget.hotelSearchModel.discountedPrice}",
+                      "₹${widget.hotelSearchModel.roomTypeForSearch[0].discountedPrice}",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -147,7 +147,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                     ),
                     SizedBoxHelper.sizedBox_10,
                     Text(
-                      "₹${widget.hotelSearchModel.price}",
+                      "₹${widget.hotelSearchModel.roomTypeForSearch[0].price}",
                       style: const TextStyle(
                           fontSize: 15,
                           decoration: TextDecoration.lineThrough,
@@ -155,10 +155,9 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                     ),
                     SizedBoxHelper.sizedBox_10,
                     Text(
-                      "${PriceHelper.findPriceDiffInPercentage(widget.hotelSearchModel.price.toDouble(), widget.hotelSearchModel.discountedPrice.toDouble())}%",
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.green),
+                      "${PriceHelper.findPriceDiffInPercentage(widget.hotelSearchModel.roomTypeForSearch[0].price.toDouble(),
+                          widget.hotelSearchModel.roomTypeForSearch[0].discountedPrice.toDouble())}%",
+                      style: const TextStyle(fontSize: 15, color: Colors.green),
                     ),
                   ],
                 ),

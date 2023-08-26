@@ -71,11 +71,25 @@
       "Couple Friendly",
       "Pay at hotel"
     ],
-    "price": 2540,
-    "discountedPrice": 1799,
     "averageRatings": 3.9,
     "noOfRatings": 50,
-    "hotelId": "CHE23543"
+    "hotelId": "CHE23543",
+    "roomTypeForSearch": [
+      {
+        "type": "standard",
+        "size": 150,
+        "maxPeopleAllowed": 3,
+        "price": 2300,
+        "discountedPrice": 1299
+      },
+      {
+        "type": "deluxe",
+        "size": 290,
+        "maxPeopleAllowed": 3,
+        "price": 4200,
+        "discountedPrice": 3700
+      }
+    ]
   },
   {
     "hotelImages": [
@@ -103,11 +117,25 @@
       "Local Id Allowed",
       "Pay at hotel"
     ],
-    "price": 3450,
-    "discountedPrice": 1799,
     "averageRatings": 5,
     "noOfRatings": 199,
-    "hotelId": "KOL235687"
+    "hotelId": "KOL235687",
+    "roomTypeForSearch": [
+      {
+        "type": "standard",
+        "size": 120,
+        "maxPeopleAllowed": 3,
+        "price": 2900,
+        "discountedPrice": 1999
+      },
+      {
+        "type": "deluxe",
+        "size": 290,
+        "maxPeopleAllowed": 4,
+        "price": 4200,
+        "discountedPrice": 3900
+      }
+    ]
   },
   {
     "hotelImages": [
@@ -135,10 +163,24 @@
       "Free Cancellation",
       "Pay at hotel"
     ],
-    "price": 8976,
-    "discountedPrice": 1799,
     "averageRatings": 4.5,
     "noOfRatings": 77,
-    "hotelId": "HYD835687"
+    "hotelId": "HYD835687",
+    "roomTypeForSearch": [
+      {
+        "type": "standard",
+        "size": 230,
+        "maxPeopleAllowed": 3,
+        "price": 3000,
+        "discountedPrice": 1799
+      },
+      {
+        "type": "deluxe",
+        "size": 490,
+        "maxPeopleAllowed": 4,
+        "price": 3500,
+        "discountedPrice": 3500
+      }
+    ]
   }
 ]
