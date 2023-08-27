@@ -61,6 +61,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: true,
+            iconTheme: const IconThemeData(color: Colors.white),
             centerTitle: true,
             actions: [
               IconButton(

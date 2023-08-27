@@ -15,7 +15,6 @@ class MySplashScreen extends StatefulWidget {
 class _MySplashScreenState extends State<MySplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initAuthProvider();
   }

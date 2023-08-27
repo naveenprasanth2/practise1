@@ -105,6 +105,7 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                     ),
                   ],
                 ),
+                //Todo range implementation
                 Row(
                   children: [
                     Container(

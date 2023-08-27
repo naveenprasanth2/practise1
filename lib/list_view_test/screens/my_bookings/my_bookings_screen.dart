@@ -162,6 +162,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               child: Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.red.shade400,
+                  iconTheme: const IconThemeData(color: Colors.white),
                   title: const Text(
                     "My Bookings",
                     style: TextStyle(
