@@ -82,7 +82,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
+                      Flexible(
                         child: Builder(builder: (context) {
                           return InkWell(
                             onTap: () {
@@ -103,8 +103,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                           );
                         }),
                       ),
-                      SizedBoxHelper.sizedBox_5,
-                      Expanded(
+                      SizedBoxHelper.sizedBox_10,
+                      Flexible(
                         child: InkWell(
                           onTap: () async {
                             Provider.of<DateProvider>(context, listen: false)
@@ -165,7 +165,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                             );
                           },
                           child: Container(
-                            height: 450,
+                            height: 400,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black26),

@@ -5,7 +5,6 @@ import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/utils/price_helper/price_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
-import 'package:practise1/list_view_test/widgets/hotel_results/highligths_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -87,28 +86,58 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.star,
-                  color: StarRatingColourUtils.getStarRatingColor(
-                      widget.hotelSearchModel.averageRatings),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      color: StarRatingColourUtils.getStarRatingColor(
+                          widget.hotelSearchModel.averageRatings),
+                    ),
+                    SizedBoxHelper.sizedBox_5,
+                    Text(widget.hotelSearchModel.averageRatings.toString()),
+                    SizedBoxHelper.sizedBox_10,
+                    Text(
+                      "(${widget.hotelSearchModel.noOfRatings})",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(widget.hotelSearchModel.averageRatings.toString()),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "(${widget.hotelSearchModel.noOfRatings})",
-                  style: TextStyle(color: Colors.grey.shade600),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.money,
+                              color: Colors.green,
+                              size: 20,
+                            ),
+                            SizedBoxHelper.sizedBox_5,
+                            const Text(
+                              "Pay at Hotel",
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.green),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),
           ),
           Container(
-            height: 100,
+            height: 120,
             margin: const EdgeInsets.symmetric(vertical: 5),
             width: double.infinity,
             color: Colors.white,
@@ -124,17 +153,25 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                       fontSize: 18,
                     ),
                   ),
-                  Container(
-                    height: 30,
-                    width: double.infinity,
-                    color: Colors.white,
-                    child: Row(
+                  Expanded(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: widget.hotelSearchModel.highlights
                           .map(
-                            (value) => HighLights(
-                              value: value,
+                            (highlight) => Row(
+                              children: [
+                                const Icon(
+                                  Icons.check,
+                                  color: Colors.purpleAccent,
+                                ),
+                                SizedBoxHelper.sizedBox_10,
+                                Text(
+                                  highlight,
+                                  style: const TextStyle(
+                                      color: Colors.purpleAccent),
+                                ),
+                              ],
                             ),
                           )
                           .toList(),
@@ -176,12 +213,12 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
 
   int getRoomDetailsIndex() {
     RoomTypeSearchModel? roomTypeSearchModel;
-    roomTypeSearchModel = widget
-        .hotelSearchModel.roomTypeForSearch
+    roomTypeSearchModel = widget.hotelSearchModel.roomTypeForSearch
         .where((element) =>
             element.maxPeopleAllowed >=
             Provider.of<CountProvider>(context, listen: false)
-                .maxAdultCountByCustomer).firstOrNull;
+                .maxAdultCountByCustomer)
+        .firstOrNull;
     if (roomTypeSearchModel != null) {
       return widget.hotelSearchModel.roomTypeForSearch
           .indexOf(roomTypeSearchModel);
