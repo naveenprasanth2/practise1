@@ -13,7 +13,8 @@ RoomTypeModel _$RoomTypeModelFromJson(Map<String, dynamic> json) =>
           (json['images'] as List<dynamic>).map((e) => e as String).toList(),
       size: json['size'] as int,
       maxPeopleAllowed: json['maxPeopleAllowed'] as int,
-      roomPrice: (json['price'] as num).toDouble(),
+      price: (json['price'] as num).toDouble(),
+      discountedPrice: (json['discountedPrice'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$RoomTypeModelToJson(RoomTypeModel instance) =>
@@ -22,5 +23,6 @@ Map<String, dynamic> _$RoomTypeModelToJson(RoomTypeModel instance) =>
       'images': instance.imageUrls,
       'size': instance.size,
       'maxPeopleAllowed': instance.maxPeopleAllowed,
-      'price': instance.roomPrice,
+      'price': instance.price,
+      'discountedPrice': instance.discountedPrice,
     };
