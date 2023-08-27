@@ -30,6 +30,7 @@ class ProfileProvider extends ChangeNotifier {
 
   void setProfileDataFromModel(UserProfileModel userProfileModel) {
     _name = userProfileModel.name;
+    _emailId = userProfileModel.emailId;
     _mobileNo = userProfileModel.mobileNo;
     _dateOfBirth = userProfileModel.dateOfBirth;
     _gender = userProfileModel.gender;
@@ -50,7 +51,6 @@ class ProfileProvider extends ChangeNotifier {
 
   set mobileNo(String value) {
     _mobileNo = value;
-
     notifyListeners();
   }
 
