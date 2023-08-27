@@ -40,4 +40,26 @@ class GeneralUtils {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  static void showFailureSnackBarUsingScaffold(
+      ScaffoldMessengerState scaffoldMessenger, String message) {
+    scaffoldMessenger.showSnackBar(SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+    ));
+  }
+
+  static void showSuccessSnackBarUsingScaffold(
+      ScaffoldMessengerState scaffoldMessenger, String message) {
+    scaffoldMessenger.showSnackBar(SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.green,
+    ));
+  }
 }

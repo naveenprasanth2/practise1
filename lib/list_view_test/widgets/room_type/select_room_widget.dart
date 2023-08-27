@@ -5,6 +5,7 @@ import 'package:practise1/list_view_test/widgets/room_type/room_images_only_widg
 import 'package:provider/provider.dart';
 
 import '../../utils/dart_helper/sizebox_helper.dart';
+import '../../utils/string_utils.dart';
 
 class SelectRoomWidget extends StatelessWidget {
   final RoomTypeModel roomTypeModel;
@@ -49,7 +50,7 @@ class SelectRoomWidget extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                roomTypeModel.type,
+                StringUtils.convertToSentenceCase(roomTypeModel.type),
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

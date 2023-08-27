@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/flash_screen/flash_screen.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
 import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
@@ -11,6 +10,7 @@ import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'list_view_test/providers/coupon_state_provider.dart';
+import 'list_view_test/screens/flash_screen/flash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,14 +41,25 @@ class MyApp extends StatelessWidget {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (calculationProvider != null) {
                 calculationProvider.setDateProviderData(dateProvider.noOfDays);
-                countProvider.setMaximumAdultCount(calculationProvider.roomSelection.maxPeopleAllowed);
-                countProvider.setAdultAndChildCount(calculationProvider.roomsInfo);
+                countProvider.setMaximumAdultCount(
+                    calculationProvider.roomSelection.maxPeopleAllowed);
+                countProvider
+                    .setAdultAndChildCount(calculationProvider.roomsInfo);
               }
             });
-            return calculationProvider ?? CalculationProvider(); // Return a default value if calculationProvider is null
+            return calculationProvider ??
+                CalculationProvider(); // Return a default value if calculationProvider is null
           },
-
         ),
+        ChangeNotifierProxyProvider<AuthProvider, ProfileProvider>(
+            create: (context) => ProfileProvider(),
+            update: (context, authProvider, profileProvider) {
+              if (authProvider.userProfileModel != null) {
+                profileProvider!
+                    .setProfileDataFromModel(authProvider.userProfileModel!);
+              }
+              return profileProvider!;
+            }),
       ],
       child: MaterialApp(
         title: 'BookAny',
