@@ -186,7 +186,7 @@
   ],
   "roomType": [
     {
-      "type": "Standard",
+      "type": "standard",
       "images": [
         "https://media.istockphoto.com/id/119926339/photo/resort-swimming-pool.jpg?s=1024x1024&w=is&k=20&c=uzDy4YWgDC1bx7I6V7z4X8jRuIS3GUyF5w2euvucBwA=",
         "https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=1024x1024&w=is&k=20&c=lNQVwTuYzo9wQZfZzHioQMCJRTHWVzhX1UXmcqgnF5k=",
@@ -197,7 +197,7 @@
       "price": 2500
     },
     {
-      "type": "Deluxe",
+      "type": "deluxe",
       "images": [
         "https://media.istockphoto.com/id/482367041/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=-io2u3x82WO9SXAj1obTFnLDIqPOkRVpPTGyGbsi6Uc=",
         "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",

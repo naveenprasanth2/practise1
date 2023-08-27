@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/dart_helper/sizebox_helper.dart';
+
 class GuidelinesIndividualWidget extends StatelessWidget {
   final String type;
   final String value;
@@ -17,11 +19,11 @@ class GuidelinesIndividualWidget extends StatelessWidget {
               const Icon(Icons.check, color: Colors.green,),
             if(type == "donts")
               const Icon(Icons.do_not_disturb_alt_outlined, color: Colors.red,),
-            const SizedBox(width: 10,),
+            SizedBoxHelper.sizedBox_10,
             Flexible(child: Text(value)),
           ],
         ),
-        const SizedBox(height: 10,),
+        SizedBoxHelper.sizedBox10,
       ],
     );
   }

@@ -18,6 +18,9 @@ class HotelSearchModel {
   @JsonKey(name: 'price')
   int price;
 
+  @JsonKey(name: 'discountedPrice')
+  int discountedPrice;
+
   @JsonKey(name: 'averageRatings')
   double averageRatings;
 
@@ -32,6 +35,7 @@ class HotelSearchModel {
     required this.hotelLocationDetails,
     required this.highlights,
     required this.price,
+    required this.discountedPrice,
     required this.averageRatings,
     required this.noOfRatings,
     required this.hotelId,

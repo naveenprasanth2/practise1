@@ -17,7 +17,7 @@ class RoomTypeModel {
   final int maxPeopleAllowed;
 
   @JsonKey(name: 'price')
-  final int roomPrice;
+  final double roomPrice;
 
   RoomTypeModel({
     required this.type,

@@ -4,6 +4,7 @@ import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/room_occupancy/room_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class AddRoomsWidget extends StatefulWidget {
   const AddRoomsWidget({super.key});
@@ -59,7 +60,7 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
     super.initState();
     //creating a deep copy of the rooms model instead of shallow copy like List.from()
     rooms = context
-        .read<CountProviders>()
+        .read<CountProvider>()
         .roomsInfo
         .map((room) => room.clone())
         .toList();
@@ -67,209 +68,212 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: double.infinity,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                height: 100,
-              ),
-              IconButton(
-                onPressed: () {
-                  rooms = List.from(
-                      Provider.of<CountProviders>(context, listen: false)
-                          .roomsInfo);
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.close),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: rooms.length,
-              key: listViewKey,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 170,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Room ${index + 1}: ",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.grey),
+    return Consumer<CalculationProvider>(
+        builder: (context, calculationProvider, _) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: double.infinity,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                SizedBoxHelper.sizedBox100,
+                IconButton(
+                  onPressed: () {
+                    rooms = List.from(
+                        Provider.of<CountProvider>(context, listen: false)
+                            .roomsInfo);
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: rooms.length,
+                key: listViewKey,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 170,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Room ${index + 1}: ",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.grey),
+                                    ),
+                                    Text(
+                                      "${rooms[index].adults + rooms[index].children} guests",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.grey),
+                                    )
+                                  ],
+                                ),
+                                _buildRoomSection(
+                                  title: 'Adults:',
+                                  count: rooms[index].adults,
+                                  onIncrement: () {
+                                    setState(() {
+                                      if (rooms[index].adults <
+                                          calculationProvider
+                                              .roomSelection.maxPeopleAllowed) {
+                                        rooms[index].adults++;
+                                      }
+                                    });
+                                  },
+                                  onDecrement: () {
+                                    setState(() {
+                                      if (rooms[index].adults > 1) {
+                                        rooms[index].adults--;
+                                      }
+                                    });
+                                  },
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: CustomPaint(
+                                    painter: DottedLinePainter(),
                                   ),
-                                  Text(
-                                    "${rooms[index].adults + rooms[index].children} guests",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: Colors.grey),
-                                  )
-                                ],
-                              ),
-                              _buildRoomSection(
-                                title: 'Adults:',
-                                count: rooms[index].adults,
-                                onIncrement: () {
-                                  setState(() {
-                                    if (rooms[index].adults < 2) {
-                                      rooms[index].adults++;
-                                    }
-                                  });
-                                },
-                                onDecrement: () {
-                                  setState(() {
-                                    if (rooms[index].adults > 1) {
-                                      rooms[index].adults--;
-                                    }
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: CustomPaint(
-                                  painter: DottedLinePainter(),
                                 ),
-                              ),
-                              _buildRoomSection(
-                                title: 'Children:',
-                                count: rooms[index].children,
-                                onIncrement: () {
-                                  setState(() {
-                                    if (rooms[index].children < 1) {
-                                      rooms[index].children++;
-                                    }
-                                  });
-                                },
-                                onDecrement: () {
-                                  setState(() {
-                                    if (rooms[index].children > 0) {
-                                      rooms[index].children--;
-                                    }
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: CustomPaint(
-                                  painter: DottedLinePainter(),
+                                _buildRoomSection(
+                                  title: 'Children:',
+                                  count: rooms[index].children,
+                                  onIncrement: () {
+                                    setState(() {
+                                      if (rooms[index].children < 1) {
+                                        rooms[index].children++;
+                                      }
+                                    });
+                                  },
+                                  onDecrement: () {
+                                    setState(() {
+                                      if (rooms[index].children > 0) {
+                                        rooms[index].children--;
+                                      }
+                                    });
+                                  },
                                 ),
-                              ),
-                              if (index == 0) const SizedBox(height: 30),
-                              if (index != 0)
-                                InkWell(
-                                  onTap: () => removeRoom(index),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.delete,
-                                          color: Colors.red.shade300,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          'Remove Room',
-                                          style: TextStyle(
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: CustomPaint(
+                                    painter: DottedLinePainter(),
+                                  ),
+                                ),
+                                if (index == 0) SizedBoxHelper.sizedBox30,
+                                if (index != 0)
+                                  InkWell(
+                                    onTap: () => removeRoom(index),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
                                             color: Colors.red.shade300,
                                           ),
-                                        ),
-                                      ],
+                                          SizedBoxHelper.sizedBox_5,
+                                          Text(
+                                            'Remove Room',
+                                            style: TextStyle(
+                                              color: Colors.red.shade300,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      if (index == rooms.length - 1 && index < 4)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: InkWell(
-                            onTap: () => addRoom(),
-                            child: Container(
-                              height: 30,
-                              // Increase the height to accommodate the content
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: const Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.add),
-                                    SizedBox(width: 5),
-                                    Text('Add Room'),
-                                  ],
+                        if (index == rooms.length - 1 && index < 4)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: InkWell(
+                              onTap: () => addRoom(),
+                              child: Container(
+                                height: 30,
+                                // Increase the height to accommodate the content
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                child: const Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.add),
+                                      SizedBox(width: 5),
+                                      Text('Add Room'),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 100, left: 10, right: 10),
-            child: InkWell(
-              onTap: () {
-                Provider.of<CountProviders>(context, listen: false)
-                    .setRoomsDetails(rooms);
-                Provider.of<CalculationProvider>(context, listen: false)
-                    .setRoomsInfo(rooms);
-                Navigator.pop(context);
-              },
-              child: Container(
-                height: 30,
-                // Increase the height to accommodate the content
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.red.shade400,
-                ),
-                child: const Center(
-                  child: Text(
-                    'Apply',
-                    style: TextStyle(color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 100, left: 10, right: 10),
+              child: InkWell(
+                onTap: () {
+                  Provider.of<CountProvider>(context, listen: false)
+                      .setRoomsDetails(rooms);
+                  Provider.of<CalculationProvider>(context, listen: false)
+                      .setRoomsInfo(rooms);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  height: 30,
+                  // Increase the height to accommodate the content
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.red.shade400,
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Apply',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildRoomSection({
@@ -309,7 +313,14 @@ class _AddRoomsWidgetState extends State<AddRoomsWidget> {
                 onPressed: onIncrement,
                 icon: Icon(
                   Icons.add,
-                  color: (count < 2) ? Colors.black : Colors.grey,
+                  color: title == "Adults:"
+                      ? ((count <
+                              Provider.of<CalculationProvider>(context)
+                                  .roomSelection
+                                  .maxPeopleAllowed)
+                          ? Colors.black
+                          : Colors.grey)
+                      : (count < 1 ? Colors.black : Colors.grey),
                 ),
                 iconSize: 18,
               ),

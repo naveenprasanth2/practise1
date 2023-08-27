@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/screens/hotel_booking/hotel_detail_screen.dart';
+import 'package:practise1/list_view_test/utils/date_helper/date_helper.dart';
 import 'package:practise1/list_view_test/utils/rating_helper/rating_dialog_helper.dart';
 import 'package:practise1/list_view_test/widgets/booking/booking_cancel.dart';
+import 'package:practise1/list_view_test/widgets/booking/booking_history_detail.dart';
 
 import '../../models/booking_history_model/booking_history_display_model.dart';
+import '../../utils/dart_helper/sizebox_helper.dart';
 
 class MyBookingsWidget extends StatefulWidget {
   final BookingHistoryDisplayModel bookingHistoryDisplayModel;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
   const MyBookingsWidget({
     Key? key,
     required this.bookingHistoryDisplayModel,
+    required this.scaffoldKey,
   }) : super(key: key);
 
   @override
@@ -80,51 +85,69 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                     width: 20,
                   ),
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.bookingHistoryDisplayModel.hotelSearchModel
-                              .hotelLocationDetails.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                    child: InkWell(
+                      onTap: () {
+                        widget.scaffoldKey.currentState!.showBottomSheet(
+                            backgroundColor: Colors.white, (context) {
+                          return BookingHistoryDetailWidget(
+                            bookingHistoryDisplayModel:
+                                widget.bookingHistoryDisplayModel,
+                          );
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.bookingHistoryDisplayModel.hotelSearchModel
+                                .hotelLocationDetails.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkInDate} - ${widget.bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate}  ',
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
-                            ),
-                            const SizedBox(width: 10,),
-                            Container(
-                              height: 5,
-                              width: 5,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black,
-                                border: Border.all(color: Colors.black),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '${DateHelper.formatDateWithDay(widget.bookingHistoryDisplayModel.bookingHistoryModel.checkInDate)} - ${DateHelper.formatDateWithDay(widget.bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate)}  ',
                               ),
-                            ),
-                            Text(
-                              "  ${widget.bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms",
-                            ),
-                          ],
-                        ),
-                        Text(widget.bookingHistoryDisplayModel.hotelSearchModel
-                            .hotelLocationDetails.address),
-                      ],
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests",
+                              ),
+                              SizedBoxHelper.sizedBox_10,
+                              Container(
+                                height: 5,
+                                width: 5,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black,
+                                  border: Border.all(color: Colors.black),
+                                ),
+                              ),
+                              Text(
+                                "  ${widget.bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms",
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(widget
+                                  .bookingHistoryDisplayModel
+                                  .hotelSearchModel
+                                  .hotelLocationDetails
+                                  .address),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
