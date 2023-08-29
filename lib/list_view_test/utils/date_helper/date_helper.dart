@@ -2,8 +2,6 @@ import 'package:intl/intl.dart';
 
 class DateHelper {
 
-  static final DateTime _dateTime = DateTime.now();
-
   static String formatDateWithDay(String date) {
     return DateFormat('EEE, MMM-dd').format(
       DateFormat('dd-MMM-yyyy').parse(date),
@@ -21,7 +19,7 @@ class DateHelper {
   }
 
   static String getCurrentTime(){
-    return _dateTime.hour.toString() + _dateTime.minute.toString() + _dateTime.second.toString();
+    return DateTime.now().hour.toString() + DateTime.now().minute.toString() + DateTime.now().second.toString();
   }
 
   static String formatDateWithDayAndYearInNumbers(String date) {

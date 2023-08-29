@@ -4,7 +4,8 @@ class HotelDetailsSplitJson {
   final String hotelId;
   final String cityAndState;
 
-  HotelDetailsSplitJson.fromBookingHistoryModel(BookingHistoryModel bookingHistoryModel)
+  HotelDetailsSplitJson.fromBookingHistoryModel(
+      BookingHistoryModel bookingHistoryModel)
       : hotelId = bookingHistoryModel.hotelId,
         cityAndState = bookingHistoryModel.cityAndState;
 
@@ -21,12 +22,17 @@ class BookingScheduleSplitJson {
   final String checkInTime;
   final String checkOutDate;
   final String checkOutTime;
+  final int roomsCount;
+  final int guestsCount;
 
-  BookingScheduleSplitJson.fromBookingHistoryModel(BookingHistoryModel bookingHistoryModel)
+  BookingScheduleSplitJson.fromBookingHistoryModel(
+      BookingHistoryModel bookingHistoryModel)
       : checkInDate = bookingHistoryModel.checkInDate,
         checkInTime = bookingHistoryModel.checkInTime,
         checkOutDate = bookingHistoryModel.checkOutDate,
-        checkOutTime = bookingHistoryModel.checkOutTime;
+        checkOutTime = bookingHistoryModel.checkOutTime,
+        roomsCount = bookingHistoryModel.roomsCount,
+        guestsCount = bookingHistoryModel.guestsCount;
 
   Map<String, dynamic> toJson() {
     return {
@@ -34,6 +40,8 @@ class BookingScheduleSplitJson {
       'checkInTime': checkInTime,
       'checkOutDate': checkOutDate,
       'checkOutTime': checkOutTime,
+      'roomsCount': roomsCount,
+      'guestsCount': guestsCount,
     };
   }
 }
@@ -43,7 +51,8 @@ class BookingStatusSplitJson {
   final String checkOutStatus;
   final bool rated;
 
-  BookingStatusSplitJson.fromBookingHistoryModel(BookingHistoryModel bookingHistoryModel)
+  BookingStatusSplitJson.fromBookingHistoryModel(
+      BookingHistoryModel bookingHistoryModel)
       : bookingId = bookingHistoryModel.bookingId,
         checkOutStatus = bookingHistoryModel.checkOutStatus,
         rated = bookingHistoryModel.rated;
@@ -63,7 +72,8 @@ class PaymentDetailsSplitJson {
   final double discount;
   final String discountCoupon;
 
-  PaymentDetailsSplitJson.fromBookingHistoryModel(BookingHistoryModel bookingHistoryModel)
+  PaymentDetailsSplitJson.fromBookingHistoryModel(
+      BookingHistoryModel bookingHistoryModel)
       : reservedFor = bookingHistoryModel.reservedFor,
         amountPaid = bookingHistoryModel.amountPaid.toDouble(),
         discount = bookingHistoryModel.discount.toDouble(),

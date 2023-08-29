@@ -282,6 +282,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                 InkWell(
                   onTap: () {
                     // sendBookingData();
+
                     initiatePayment();
                   },
                   child: Container(

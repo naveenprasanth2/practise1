@@ -133,6 +133,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         Provider.of<CountProvider>(context, listen: false);
     final DateProvider dateProvider =
         Provider.of<DateProvider>(context, listen: false);
+    print(countProvider.roomsInfo.length);
     String bookingId =
         "${profileProvider.mobileNo.substring(1, profileProvider.mobileNo.length)}_${DateHelper.formatDateWithDayAndYearInNumbers(dateProvider.checkInDateWithYear)}_${DateHelper.getCurrentTime()}";
     bookingHistoryModel = BookingHistoryModel(

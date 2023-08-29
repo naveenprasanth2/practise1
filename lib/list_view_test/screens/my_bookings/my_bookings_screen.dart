@@ -26,6 +26,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _tabController = TabController(length: 3, vsync: this);
     getDetailedRatingsFromJson();
   }
