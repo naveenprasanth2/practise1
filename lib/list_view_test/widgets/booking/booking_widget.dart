@@ -1,17 +1,67 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../models/booking_history_model/booking_history_splitter.dart';
 import 'days_of_stay.dart';
 
-class BookingWidget extends StatelessWidget {
+class BookingWidget extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
+  final BookingHistoryModel bookingHistoryModel;
 
-  const BookingWidget({Key? key, required this.hotelDetailsModel})
+  const BookingWidget(
+      {Key? key,
+      required this.hotelDetailsModel,
+      required this.bookingHistoryModel})
       : super(key: key);
+
+  @override
+  State<BookingWidget> createState() => _BookingWidgetState();
+}
+
+class _BookingWidgetState extends State<BookingWidget> {
+  late Razorpay _razorpay;
+  late String orderId;
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Handle payment success
+    print("Payment Successful: ${response.paymentId}");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Handle payment failure
+    print("Payment Error: ${response.code} - ${response.message}");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Handle external wallet selection
+    print("External Wallet: ${response.walletName}");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +110,7 @@ class BookingWidget extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   child: Text(
-                    hotelDetailsModel.hotelName,
+                    widget.hotelDetailsModel.hotelName,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 15,
@@ -229,31 +279,37 @@ class BookingWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade400,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Pay Now",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ),
-                        Text(
-                          Provider.of<CalculationProvider>(context)
-                              .finalPriceWithPrepaidDiscount
-                              .toString(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ],
+                InkWell(
+                  onTap: () {
+                    // sendBookingData();
+                    initiatePayment();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade400,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Pay Now",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                          Text(
+                            Provider.of<CalculationProvider>(context)
+                                .finalPriceWithPrepaidDiscount
+                                .toString(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -263,5 +319,42 @@ class BookingWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void initiatePayment() {
+    var options = {
+      'key': 'rzp_test_w1r1PYTH0wy118',
+      'amount': 100, // Amount in paise (e.g., for ₹10, amount should be 1000)
+      'name': 'BookAny',
+      'description': widget.bookingHistoryModel.bookingId,
+      'prefill': {
+        'contact':
+            Provider.of<ProfileProvider>(context, listen: false).mobileNo,
+        'email': Provider.of<ProfileProvider>(context, listen: false).emailId,
+      },
+      'userId': Provider.of<ProfileProvider>(context, listen: false).mobileNo,
+      'external': {
+        'wallets': ['paytm'] // You can specify supported wallets
+      },
+      'notes': {
+        'hotelDetails': jsonEncode(HotelDetailsSplitJson.fromBookingHistoryModel(widget.bookingHistoryModel).toJson()),
+        'bookingSchedule': jsonEncode(BookingScheduleSplitJson.fromBookingHistoryModel(widget.bookingHistoryModel).toJson()),
+        'bookingStatus': jsonEncode(BookingStatusSplitJson.fromBookingHistoryModel(widget.bookingHistoryModel).toJson()),
+        'paymentDetails': jsonEncode(PaymentDetailsSplitJson.fromBookingHistoryModel(widget.bookingHistoryModel).toJson()),
+      }
+    };
+    _razorpay.open(options);
+  }
+
+  void sendBookingData() {
+    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      firebaseFirestore
+          .collection("users")
+          .doc(Provider.of<ProfileProvider>(context, listen: false).mobileNo)
+          .collection("bookings")
+          .doc(widget.bookingHistoryModel.bookingId)
+          .set({
+        widget.bookingHistoryModel.bookingId: widget.bookingHistoryModel.toJson()
+      });
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/widgets/my_bookings/my_bookings_widget.dart';
 import 'package:provider/provider.dart';
 import '../../models/booking_history_model/booking_history_model.dart';
@@ -33,7 +34,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     // Navigate to the bookings collection of the dummy user document
     final bookingsCollection = _firebaseFirestore
         .collection("users")
-        .doc("dummy")
+        .doc(Provider.of<ProfileProvider>(context).mobileNo)
         .collection("bookings");
 
     // Fetch all the documents from the bookings collection
