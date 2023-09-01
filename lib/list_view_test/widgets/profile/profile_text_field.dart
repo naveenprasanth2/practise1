@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/providers/profile_provider.dart';
-import 'package:provider/provider.dart';
 
 class ProfileTextField extends StatelessWidget {
   final String labelText;
@@ -48,9 +46,6 @@ class ProfileTextField extends StatelessWidget {
         }else{
           return "Please enter your name";
         }
-      },
-      onChanged: (value) {
-        Provider.of<ProfileProvider>(context).setName(value);
       },
     );
   }

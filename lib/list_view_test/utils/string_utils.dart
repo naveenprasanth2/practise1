@@ -4,6 +4,16 @@ class StringUtils {
         inputText.substring(1, inputText.length).toLowerCase();
   }
 
+  static String convertToSentenceCaseForAll(String inputText) {
+    String convertedText = inputText
+        .split(" ")
+        .map((splitText) =>
+            splitText.substring(0, 1).toUpperCase() +
+            splitText.substring(1, splitText.length).toLowerCase())
+        .join(" ");
+    return convertedText;
+  }
+
   static String getDayWithSuffix(int day) {
     if (day >= 11 && day <= 13) {
       return "th";

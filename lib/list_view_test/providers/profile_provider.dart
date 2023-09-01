@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider extends ChangeNotifier {
   String? _name;
@@ -10,11 +12,38 @@ class ProfileProvider extends ChangeNotifier {
   String _maritalStatus = "Undisclosed";
   final DateTime _dateTimeObject = DateTime.now();
   final DateFormat _dateFormat = DateFormat("dd-MMM-yyyy");
+  bool _isLoading = false;
+  String? _uid;
+
+  final Future<SharedPreferences> sharedPreferences =
+      SharedPreferences.getInstance();
 
   String get name => _name!;
 
-  void setName(String value) {
+  Future<void> setName(String value) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     _name = value;
+    sharedPreferences.setString("name", _name!);
+    notifyListeners();
+  }
+
+  void setProfileDataFromModel(UserProfileModel userProfileModel) {
+    print(userProfileModel.name);
+    _name = userProfileModel.name;
+    _mobileNo = userProfileModel.mobileNo;
+    _dateOfBirth = userProfileModel.dateOfBirth;
+    _gender = userProfileModel.gender;
+    _maritalStatus = userProfileModel.maritalStatus;
+    _uid = userProfileModel.uid;
+    setSharedPreferences();
+    notifyListeners();
+  }
+
+  Future<void> setSharedPreferences() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setString("name", _name!);
     notifyListeners();
   }
 
@@ -22,12 +51,13 @@ class ProfileProvider extends ChangeNotifier {
 
   set mobileNo(String value) {
     _mobileNo = value;
+
     notifyListeners();
   }
 
   String get emailId => _emailId!;
 
-  set emailId(String value) {
+  setEmailId(String value) {
     _emailId = value;
     notifyListeners();
   }
@@ -74,5 +104,31 @@ class ProfileProvider extends ChangeNotifier {
   void setMaritalStatus(String value) {
     _maritalStatus = value;
     notifyListeners();
+  }
+
+  bool get isLoading => _isLoading;
+
+  void setIsLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  void setUid(String uid) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setString("uid", uid);
+    _uid = sharedPreferences.getString("uid");
+  }
+
+  void setSignIn(bool value) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setBool("isSignedIn", value);
+  }
+
+  String get uid => _uid!;
+
+  void setMobileNo(String value) {
+    _mobileNo = value;
   }
 }

@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
 import 'package:practise1/list_view_test/screens/authentication/otp_screen.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
-  bool _isSignedIn = false;
+  bool? _isSignedIn;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  UserProfileModel? userProfileModel;
   String? _phoneNumber;
   bool _isLoading = false;
   String? _uid;
 
-  bool get isSignedIn => _isSignedIn;
+  bool get isSignedIn => _isSignedIn!;
 
   bool get isLoading => _isLoading;
 
@@ -22,7 +24,11 @@ class AuthProvider extends ChangeNotifier {
   String get uid => _uid!;
 
   AuthProvider() {
-    checkSignIn();
+    init();
+  }
+
+  Future<void> init() async {
+    await checkSignIn();
   }
 
   setPhoneNumber(String phoneNumber) {
@@ -34,14 +40,24 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void checkSignIn() async {
+  Future<void> checkSignIn() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     _isSignedIn = sharedPreferences.getBool("isSignedIn") ?? false;
     notifyListeners();
   }
 
+  Future<void> logout() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    _isSignedIn = false;
+    _firebaseAuth.signOut();
+    sharedPreferences.setBool("isSignedIn", _isSignedIn!);
+    notifyListeners();
+  }
+
   void signInWithPhone(BuildContext context, String phoneNumber) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -50,7 +66,6 @@ class AuthProvider extends ChangeNotifier {
         },
         verificationFailed: (error) {
           GeneralUtils.showFailureSnackBar(context, error.message.toString());
-          print(error.message.toString());
         },
         codeSent: (String verificationId, int? forceResendingToken) {
           Navigator.push(
@@ -63,11 +78,13 @@ class AuthProvider extends ChangeNotifier {
         codeAutoRetrievalTimeout: (verificationId) {},
       );
     } on FirebaseAuthException catch (e) {
-      GeneralUtils.showFailureSnackBar(context, e.message.toString());
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, e.message.toString());
     }
   }
 
   Future<void> resendOtp(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -90,7 +107,8 @@ class AuthProvider extends ChangeNotifier {
         timeout: const Duration(seconds: 60),
       );
     } catch (e) {
-      GeneralUtils.showFailureSnackBar(context, "An error occurred: $e");
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, "An error occurred: $e");
     }
   }
 
@@ -100,6 +118,7 @@ class AuthProvider extends ChangeNotifier {
       required String userOtp,
       required Function onSuccess}) async {
     setIsLoading(true);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: userOtp);
@@ -110,7 +129,8 @@ class AuthProvider extends ChangeNotifier {
         onSuccess();
       } else {}
     } on FirebaseAuthException catch (e) {
-      GeneralUtils.showFailureSnackBar(context, e.message.toString());
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, e.message.toString());
     }
     setIsLoading(false);
   }
@@ -118,12 +138,12 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> checkExistingUser() async {
     DocumentSnapshot documentSnapshot =
         await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
-
-    if(documentSnapshot.exists){
-      print("user exists");
+    if (documentSnapshot.exists) {
+      userProfileModel = UserProfileModel.fromJson(
+          documentSnapshot.data() as Map<String, dynamic>);
+      notifyListeners();
       return true;
-    }else{
-      print("user not exists");
+    } else {
       return false;
     }
   }
