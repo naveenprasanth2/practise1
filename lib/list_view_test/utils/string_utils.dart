@@ -5,12 +5,17 @@ class StringUtils {
   }
 
   static String convertToSentenceCaseForAll(String inputText) {
-    String convertedText = inputText
-        .split(" ")
-        .map((splitText) =>
-            splitText.substring(0, 1).toUpperCase() +
-            splitText.substring(1, splitText.length).toLowerCase())
-        .join(" ");
+    String? convertedText;
+    if(inputText.split(" ").length > 1){
+      convertedText = inputText
+          .split(" ")
+          .map((splitText) =>
+      splitText.substring(0, 1).toUpperCase() +
+          splitText.substring(1, splitText.length).toLowerCase())
+          .join(" ");
+    }else{
+      convertedText = convertToSentenceCase(inputText);
+    }
     return convertedText;
   }
 
