@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
@@ -8,6 +9,7 @@ import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart'
 import 'package:practise1/list_view_test/widgets/authentication/authentication_button.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/user_profile/user_profile_model.dart';
 import '../../utils/dart_helper/sizebox_helper.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -24,6 +26,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   String? otpCode;
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +154,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void verifyOtp(BuildContext context, String userOtp) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     final ProfileProvider profileProvider =
@@ -161,15 +165,35 @@ class _OtpScreenState extends State<OtpScreen> {
         userOtp: userOtp,
         onSuccess: () {
           //checking whether user exists in db or not
-          authProvider.checkExistingUser().then((value) {
+          authProvider.checkExistingUser().then((value) async {
             if (value == true) {
               profileProvider.setSignIn(true);
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (builder) => const HomeScreen(),
-                  ),
-                  (route) => false);
+              try {
+                await _firebaseFirestore
+                    .collection("users")
+                    .doc(Provider.of<AuthProvider>(context, listen: false)
+                        .phoneNumber)
+                    .get()
+                    .then((document) {
+                  if (document.exists) {
+                    profileProvider.setSignIn(true);
+                    Map<String, dynamic>? data = document.data(); // Handle nullable data
+                    if (data != null) {
+                      profileProvider.setProfileDataFromModel(
+                          UserProfileModel.fromJson(data));
+                      profileProvider.setIsLoading(false);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (builder) => const HomeScreen()),
+                          (route) => false);
+                    }
+                  }
+                });
+              } on FirebaseException catch (error) {
+                GeneralUtils.showFailureSnackBarUsingScaffold(
+                    scaffoldMessenger, error.message.toString());
+              }
             } else {
               Navigator.pushAndRemoveUntil(
                   context,

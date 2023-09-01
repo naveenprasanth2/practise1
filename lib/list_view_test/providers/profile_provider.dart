@@ -18,7 +18,7 @@ class ProfileProvider extends ChangeNotifier {
   final Future<SharedPreferences> sharedPreferences =
       SharedPreferences.getInstance();
 
-  String get name => _name!;
+  String? get name => _name;
 
   Future<void> setName(String value) async {
     final SharedPreferences sharedPreferences =
@@ -30,6 +30,7 @@ class ProfileProvider extends ChangeNotifier {
 
   void setProfileDataFromModel(UserProfileModel userProfileModel) {
     _name = userProfileModel.name;
+    _emailId = userProfileModel.emailId;
     _mobileNo = userProfileModel.mobileNo;
     _dateOfBirth = userProfileModel.dateOfBirth;
     _gender = userProfileModel.gender;
@@ -43,6 +44,38 @@ class ProfileProvider extends ChangeNotifier {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.setString("name", _name!);
+    print(sharedPreferences.getString("name"));
+    sharedPreferences.setString("emailId", _emailId!);
+    sharedPreferences.setString("mobileNo", _mobileNo!);
+    sharedPreferences.setString("dateOfBirth", _dateOfBirth!);
+    sharedPreferences.setString("gender", _gender);
+    sharedPreferences.setString("maritalStatus", _maritalStatus);
+    sharedPreferences.setString("uid", _uid!);
+    print(sharedPreferences.getString("gender"));
+    notifyListeners();
+  }
+
+  Future<void> setProfileDataFromSharedPreferences() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    _name = sharedPreferences.getString("name");
+    _emailId = sharedPreferences.getString("emailId");
+    _mobileNo = sharedPreferences.getString("mobileNo");
+    _dateOfBirth = sharedPreferences.getString("dateOfBirth");
+    _gender = sharedPreferences.getString("gender")!;
+    _maritalStatus = sharedPreferences.getString("maritalStatus")!;
+    _uid = sharedPreferences.getString("uid");
+    notifyListeners();
+  }
+
+  void clearProfileProviderData(){
+    _name = '';
+    _emailId = '';
+    _mobileNo = '';
+    _dateOfBirth = '';
+    _gender = "Undisclosed";
+    _maritalStatus = "Undisclosed";
+    _uid = '';
     notifyListeners();
   }
 
@@ -50,11 +83,10 @@ class ProfileProvider extends ChangeNotifier {
 
   set mobileNo(String value) {
     _mobileNo = value;
-
     notifyListeners();
   }
 
-  String get emailId => _emailId!;
+  String? get emailId => _emailId;
 
   setEmailId(String value) {
     _emailId = value;

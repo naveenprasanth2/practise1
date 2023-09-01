@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../authentication/register_screen.dart';
@@ -15,7 +16,6 @@ class MySplashScreen extends StatefulWidget {
 class _MySplashScreenState extends State<MySplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initAuthProvider();
   }
@@ -32,6 +32,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       final authenticationProvider =
           Provider.of<AuthProvider>(context, listen: false);
       if (authenticationProvider.isSignedIn) {
+        Provider.of<ProfileProvider>(context, listen: false).setProfileDataFromSharedPreferences();
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
