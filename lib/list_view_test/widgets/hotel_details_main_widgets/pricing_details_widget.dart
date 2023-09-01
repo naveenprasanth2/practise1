@@ -141,7 +141,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         guestsCount: countProvider.adultCount,
         checkInDate: dateProvider.checkInDateWithYear,
         checkOutDate: dateProvider.checkOutDateWithYear,
-        reservedFor: profileProvider.name,
+        reservedFor: profileProvider.name!,
         bookingId: bookingId,
         checkInTime: "12:00PM",
         checkOutTime: "11:00AM",

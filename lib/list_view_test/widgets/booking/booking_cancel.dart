@@ -129,4 +129,19 @@ class BookingCancelWidget extends StatelessWidget {
         .swapDataFromUpcomingToCancelledList(
             bookingHistoryModel.bookingId.toString());
   }
+
+  void cancelBookingThroughValidatingServer(BuildContext context) {
+    bookingHistoryModel.checkOutStatus = "cancelled";
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc("dummy")
+        .collection("bookings")
+        .doc(bookingHistoryModel.bookingId.toString())
+        .set({
+      bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
+    });
+    Provider.of<BookingDataProvider>(context, listen: false)
+        .swapDataFromUpcomingToCancelledList(
+        bookingHistoryModel.bookingId.toString());
+  }
 }

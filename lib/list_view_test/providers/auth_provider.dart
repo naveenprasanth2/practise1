@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/screens/authentication/otp_screen.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -42,17 +44,22 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> checkSignIn() async {
     final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     _isSignedIn = sharedPreferences.getBool("isSignedIn") ?? false;
     notifyListeners();
   }
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
+    final profileProvider = Provider.of<ProfileProvider>(
+        context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+    await SharedPreferences.getInstance();
     _isSignedIn = false;
     _firebaseAuth.signOut();
-    sharedPreferences.setBool("isSignedIn", _isSignedIn!);
+    profileProvider.clearProfileProviderData();
+    authProvider.resetUserProfileModel();
+    await sharedPreferences.clear();
     notifyListeners();
   }
 
@@ -112,11 +119,10 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  void verifyOtp(
-      {required BuildContext context,
-      required String verificationId,
-      required String userOtp,
-      required Function onSuccess}) async {
+  void verifyOtp({required BuildContext context,
+    required String verificationId,
+    required String userOtp,
+    required Function onSuccess}) async {
     setIsLoading(true);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
@@ -137,7 +143,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> checkExistingUser() async {
     DocumentSnapshot documentSnapshot =
-        await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
+    await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
     if (documentSnapshot.exists) {
       userProfileModel = UserProfileModel.fromJson(
           documentSnapshot.data() as Map<String, dynamic>);
@@ -146,5 +152,15 @@ class AuthProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  void resetUserProfileModel() {
+    userProfileModel = UserProfileModel(name: "",
+        mobileNo: "",
+        emailId: "",
+        dateOfBirth: "Date of Birth",
+        gender: "Undisclosed",
+        maritalStatus: "Undisclosed",
+        uid: "");
   }
 }
