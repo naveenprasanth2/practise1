@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
 import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../utils/common_helper/general_utils.dart';
 
@@ -58,6 +62,7 @@ class BookingCancelWidget extends StatelessWidget {
                     color: Colors.red.shade400,
                     onTap: () {
                       // Handle button press
+                      sendCancellationToApiEndPoint(context);
                       cancelBooking(context);
                       GeneralUtils.showSuccessSnackBar(context,
                           "Cancel Successful \nRefund will be processed in 4 working days");
@@ -130,18 +135,39 @@ class BookingCancelWidget extends StatelessWidget {
             bookingHistoryModel.bookingId.toString());
   }
 
-  void cancelBookingThroughValidatingServer(BuildContext context) {
-    bookingHistoryModel.checkOutStatus = "cancelled";
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc("dummy")
-        .collection("bookings")
-        .doc(bookingHistoryModel.bookingId.toString())
-        .set({
-      bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
-    });
-    Provider.of<BookingDataProvider>(context, listen: false)
-        .swapDataFromUpcomingToCancelledList(
-        bookingHistoryModel.bookingId.toString());
+  // void cancelBookingThroughValidatingServer(BuildContext context) {
+  //   bookingHistoryModel.checkOutStatus = "cancelled";
+  //   FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc("dummy")
+  //       .collection("bookings")
+  //       .doc(bookingHistoryModel.bookingId.toString())
+  //       .set({
+  //     bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
+  //   });
+  //   Provider.of<BookingDataProvider>(context, listen: false)
+  //       .swapDataFromUpcomingToCancelledList(
+  //           bookingHistoryModel.bookingId.toString());
+  // }
+
+  Future<void> sendCancellationToApiEndPoint(BuildContext context) async {
+    const String url =
+        'https://us-central1-bookany.cloudfunctions.net/processRefund';
+    final Map<String, dynamic> requestData = {
+      'userId': Provider.of<ProfileProvider>(context, listen: false).mobileNo,
+      'orderId': bookingHistoryModel.bookingId,
+    };
+    print(Provider.of<ProfileProvider>(context, listen: false).mobileNo);
+    final response = await http.post(
+      Uri.parse(url),
+      body: jsonEncode(requestData),
+      headers: {'Content-Type': 'application/json'},
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print('Refund processed successfully: ${response.body}');
+    } else {
+      print('Error processing refund: ${response.body}');
+    }
   }
 }
