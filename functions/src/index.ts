@@ -62,7 +62,7 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
     if (generatedSignature === razorpaySignature) {
         const event = req.body.event;
 
-        if (event === 'payment.authorized') {
+        if (event === 'payment.captured') {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
             const notesString = req.body.payload.payment.entity.notes;
@@ -89,6 +89,33 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     res.status(500).send('Internal server error');
                 });
                 bookingDocRef.collection('paymentId').doc('paymentId').set({ paymentDetails: paymentDetails })
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                
+        } else if (event === 'refund.created') {
+            const mobileNo = req.body.payload.payment.entity.contact;
+            const description = req.body.payload.payment.entity.description;
+            const refundDetails = req.body.payload.refund.entity;
+            console.log(refundDetails);
+
+            const userDocRef = admin.firestore().collection('users').doc(mobileNo);
+            const bookingDocRef = userDocRef.collection('bookings').doc(description);
+            const fieldPath = `${description}.status`;
+
+            bookingDocRef.update({ [fieldPath]: "processing refund" })
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                bookingDocRef.collection('paymentId').doc('paymentId').update({ refundDetails: refundDetails })
                 .then(() => {
                     res.status(200).send('OK');
                 })
