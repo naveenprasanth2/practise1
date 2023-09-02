@@ -13,6 +13,7 @@ const razorpay = new Razorpay({
 const processRefund = functions.https.onRequest(async (request, response) => {
     const orderId = request.body.orderId;
     const mobileNo = request.body.userId;
+    let paymentId;
     const userDocRef = admin.firestore().collection('users').doc(mobileNo);
     const bookingDocRef = userDocRef.collection('bookings').doc(orderId);
     try {
@@ -27,15 +28,15 @@ const processRefund = functions.https.onRequest(async (request, response) => {
                 response.status(400).json({ error: 'We cannot process refund for this orderId' });
                 return;
             }else if(bookingData?.[orderId].status == 'success'){
-                console.error(bookingData?.[orderId].status);
                const paymentDetails = (await bookingDocRef.collection('paymentId').doc('paymentId').get()).data();
-                console.error(paymentDetails?.paymentDetails.id);
+                paymentId = paymentDetails?.paymentDetails.id
+                console.error();
                 console.error("Booking status is 'success'");
                 response.status(400).json({ error: 'We can process refund for this orderId' });
             }
 
             try {
-                const refund = await razorpay.payments.refund("Paybbuybvyu", {});
+                const refund = await razorpay.payments.refund(paymentId, {});
                 response.json(refund);
             } catch (error) {
                 response.status(500).json(error);
