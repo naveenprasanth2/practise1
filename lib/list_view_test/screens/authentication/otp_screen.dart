@@ -176,8 +176,11 @@ class _OtpScreenState extends State<OtpScreen> {
                     .get()
                     .then((document) {
                   if (document.exists) {
+                    //setting this bcoz, its from two different providers
+                    authProvider.setSignIn(true);
                     profileProvider.setSignIn(true);
-                    Map<String, dynamic>? data = document.data(); // Handle nullable data
+                    Map<String, dynamic>? data =
+                        document.data(); // Handle nullable data
                     if (data != null) {
                       profileProvider.setProfileDataFromModel(
                           UserProfileModel.fromJson(data));
