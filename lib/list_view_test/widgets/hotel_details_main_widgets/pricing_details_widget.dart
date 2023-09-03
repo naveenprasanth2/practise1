@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/about_hotel_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/booking_history_model/booking_history_model.dart';
@@ -15,11 +17,13 @@ import '../hotel_details/pricing_detail_widget.dart';
 class HotelDetailsBottomBar extends StatefulWidget {
   final HotelDetailsModel? hotelDetailsModel;
   final AboutHotelModel? aboutHotelModel;
+  final HotelSearchModel hotelSearchModel;
 
   const HotelDetailsBottomBar({
     super.key,
     this.hotelDetailsModel,
     this.aboutHotelModel,
+    required this.hotelSearchModel,
   });
 
   @override
@@ -146,9 +150,13 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         checkInTime: "12:00PM",
         checkOutTime: "11:00AM",
         checkOutStatus: "booked",
-        cityAndState: "chennai, tamilnadu",
-        discount: 10,
-        discountCoupon: "TTYY90",
+        cityAndState: "chennai, Tamilnadu",
+        discount: Provider.of<CouponStateProvider>(context, listen: false)
+                .selectedCoupon
+                ?.percentage ??
+            0,
+        discountCoupon:
+            Provider.of<CouponStateProvider>(context, listen: false).couponCode,
         hotelId: widget.hotelDetailsModel!.id,
         rated: false,
         roomsCount: countProvider.roomsInfo.length);

@@ -348,7 +348,9 @@ class _BookingWidgetState extends State<BookingWidget> {
         Provider.of<ProfileProvider>(context, listen: false);
     var options = {
       'key': 'rzp_test_w1r1PYTH0wy118',
-      'amount': 100, // Amount in paise (e.g., for ₹10, amount should be 1000)
+      'amount': (Provider.of<CalculationProvider>(context, listen: false)
+              .finalPriceWithPrepaidDiscount!) *
+          100, // Amount in paise (e.g., for ₹10, amount should be 1000)
       'name': 'BookAny',
       'description': widget.bookingHistoryModel.bookingId,
       'prefill': {

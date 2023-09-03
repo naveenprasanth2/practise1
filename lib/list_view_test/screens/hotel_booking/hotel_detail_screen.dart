@@ -193,7 +193,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Column(
@@ -249,7 +250,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                       children: [
                                         Flexible(
                                           child: Text(
-                                            hotelDetailsModel.locationDetails.hotelLocationDetails.address,
+                                            hotelDetailsModel.locationDetails
+                                                .hotelLocationDetails.address,
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 15,
@@ -280,7 +282,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             width: 5,
                                           ),
                                           Text(
-                                            widget.hotelSearchModel.averageRatings
+                                            widget
+                                                .hotelSearchModel.averageRatings
                                                 .toString(),
                                             style: TextStyle(
                                               color: StarRatingColourUtils
@@ -386,6 +389,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
         bottomNavigationBar: HotelDetailsBottomBar(
           hotelDetailsModel: hotelDetailsModel,
           aboutHotelModel: aboutHotelModel,
+          hotelSearchModel: widget.hotelSearchModel,
         ),
       ),
     );
