@@ -144,7 +144,7 @@ class _MyDrawerState extends State<MyDrawer> {
             const Divider(thickness: 1),
           if (!Provider.of<AuthProvider>(context, listen: true).isSignedIn)
             ListTile(
-              leading: const Icon(Icons.logout),
+              leading: const Icon(Icons.login),
               title: const Text('login'),
               onTap: () {
                 Navigator.pushAndRemoveUntil(
