@@ -44,17 +44,21 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> checkSignIn() async {
     final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     _isSignedIn = sharedPreferences.getBool("isSignedIn") ?? false;
     notifyListeners();
   }
 
+  void setSignIn(bool value) {
+    _isSignedIn = value;
+  }
+
   Future<void> logout(BuildContext context) async {
-    final profileProvider = Provider.of<ProfileProvider>(
-        context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     _isSignedIn = false;
     _firebaseAuth.signOut();
     profileProvider.clearProfileProviderData();
@@ -119,10 +123,11 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  void verifyOtp({required BuildContext context,
-    required String verificationId,
-    required String userOtp,
-    required Function onSuccess}) async {
+  void verifyOtp(
+      {required BuildContext context,
+      required String verificationId,
+      required String userOtp,
+      required Function onSuccess}) async {
     setIsLoading(true);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
@@ -143,7 +148,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> checkExistingUser() async {
     DocumentSnapshot documentSnapshot =
-    await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
+        await _firebaseFirestore.collection("users").doc(_phoneNumber).get();
     if (documentSnapshot.exists) {
       userProfileModel = UserProfileModel.fromJson(
           documentSnapshot.data() as Map<String, dynamic>);
@@ -155,7 +160,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void resetUserProfileModel() {
-    userProfileModel = UserProfileModel(name: "",
+    userProfileModel = UserProfileModel(
+        name: "",
         mobileNo: "",
         emailId: "",
         dateOfBirth: "Date of Birth",
