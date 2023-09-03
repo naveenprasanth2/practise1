@@ -158,10 +158,10 @@ class _BookingWidgetState extends State<BookingWidget> {
                   flex: 1,
                   child: Container(
                     alignment: Alignment.center,
-                    child: const Text(
-                      'Naveen Prasanth',
+                    child: Text(
+                      Provider.of<ProfileProvider>(context).reservedFor!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                       ),
                     ),

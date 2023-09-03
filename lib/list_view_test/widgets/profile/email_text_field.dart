@@ -38,13 +38,15 @@ class _EmailTextFieldState extends State<EmailTextField> {
     widget.textEditingController.text = initialValue!;
     return TextFormField(
       controller: widget.textEditingController,
-      onChanged: (value){
+      onChanged: (value) {
         initialValue = value;
       },
       decoration: InputDecoration(
         hintText: widget.hintText,
         labelText: widget.labelText,
         enabled: widget.enabled,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15,

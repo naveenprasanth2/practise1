@@ -100,7 +100,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         child: TextFormField(
                           controller: _dateOfBirthController,
+                          style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
                             labelText: Provider.of<ProfileProvider>(context,
                                         listen: true)
                                     .dateOfBirth ??
@@ -110,6 +113,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               borderSide:
                                   const BorderSide(color: Colors.black12),
                             ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                                  const BorderSide(color: Colors.black12),
+                            ),
+                            labelStyle: const TextStyle(color: Colors.black),
                           ),
                           enabled: false,
                           validator: (value) {
@@ -127,11 +136,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           const Text(
                             'Gender: ',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 14),
                           ),
                           SizedBoxHelper.sizedBox10,
                           Container(
-                            height: 40,
+                            height: 35,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               color: Colors.grey.shade200,
@@ -174,11 +183,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           const Text(
                             'Marital status: ',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 14),
                           ),
                           SizedBoxHelper.sizedBox10,
                           Container(
-                            height: 40,
+                            height: 35,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               color: Colors.grey.shade200,
