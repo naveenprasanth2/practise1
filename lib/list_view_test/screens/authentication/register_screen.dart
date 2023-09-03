@@ -165,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           (route) => false);
                     },
                     child: const Text(
-                      "Lets do it later",
+                      "No rush! Let's do it later",
                       style: TextStyle(
                         color: Colors.black,
                         decoration: TextDecoration.underline,
