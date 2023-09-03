@@ -147,8 +147,6 @@ class _MyDrawerState extends State<MyDrawer> {
               leading: const Icon(Icons.logout),
               title: const Text('login'),
               onTap: () {
-                Provider.of<AuthProvider>(context, listen: false)
-                    .logout(context);
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
