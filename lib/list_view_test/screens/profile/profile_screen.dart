@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ]
               : [],
           title: const Text(
-            'Profile Page',
+            'My Profile',
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

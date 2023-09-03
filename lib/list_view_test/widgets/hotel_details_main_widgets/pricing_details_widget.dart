@@ -86,6 +86,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
                           ? BookingWidget(
                               hotelDetailsModel: widget.hotelDetailsModel!,
                               bookingHistoryModel: bookingHistoryModel,
+                              detailsScreenContext: context,
                             )
                           : const SizedBox.shrink();
                     },
@@ -133,7 +134,6 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         Provider.of<CountProvider>(context, listen: false);
     final DateProvider dateProvider =
         Provider.of<DateProvider>(context, listen: false);
-    print(countProvider.roomsInfo.length);
     String bookingId =
         "${profileProvider.mobileNo.substring(1, profileProvider.mobileNo.length)}_${DateHelper.formatDateWithDayAndYearInNumbers(dateProvider.checkInDateWithYear)}_${DateHelper.getCurrentTime()}";
     bookingHistoryModel = BookingHistoryModel(
@@ -141,7 +141,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         guestsCount: countProvider.adultCount,
         checkInDate: dateProvider.checkInDateWithYear,
         checkOutDate: dateProvider.checkOutDateWithYear,
-        reservedFor: profileProvider.name!,
+        reservedFor: profileProvider.reservedFor!,
         bookingId: bookingId,
         checkInTime: "12:00PM",
         checkOutTime: "11:00AM",
