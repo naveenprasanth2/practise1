@@ -130,7 +130,8 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       defaultRoomSelection = hotelDetailsModel!.roomType
           .where((element) =>
               element.maxPeopleAllowed >=
-              (Provider.of<CountProvider>(context, listen: false).maxAdultCountByCustomer))
+              (Provider.of<CountProvider>(context, listen: false)
+                  .maxAdultCountByCustomer))
           .first;
       calculationProvider.setRoomInfo(defaultRoomSelection!);
     } catch (e) {
@@ -150,232 +151,242 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<HotelDetailsModel?>(
-          stream: _hotelDetailsStream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text("Error loading hotel details"),
-              );
-            } else {
-              final hotelDetailsModel = snapshot.data;
-              if (hotelDetailsModel != null) {
-                return Container(
-                  color: Colors.white,
-                  child: CustomScrollView(
-                    physics: const PageScrollPhysics(),
-                    slivers: [
-                      HotelImagesWithIconsWidget(
-                          hotelDetailsModel: hotelDetailsModel),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            color: Colors.white,
-                            height: 150,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            widget.hotelSearchModel
-                                                .hotelLocationDetails.name,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBoxHelper.sizedBox_10,
-                                    Center(
-                                      child: Builder(
-                                        builder: (BuildContext context) {
-                                          return IconButton(
-                                            onPressed: () {
-                                              showBottomSheet(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return aboutHotelModel !=
-                                                            null
-                                                        ? HotelDetailsBottomWidget(
-                                                            aboutHotelModel:
-                                                                aboutHotelModel!,
-                                                          )
-                                                        : const SizedBox
-                                                            .shrink();
-                                                  });
-                                            },
-                                            icon: Icon(
-                                              Icons.info_outline,
-                                              color: Colors.red.shade400,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Flexible(
-                                  flex: 2,
-                                  child: Row(
+    return WillPopScope(
+      onWillPop: () async {
+        //this line helps in resetting the adult count to default
+        Provider.of<CalculationProvider>(context, listen: false)
+            .roomSelection
+            .resetMaximumAdultAllowedCount();
+        return true;
+      },
+      child: Scaffold(
+        body: StreamBuilder<HotelDetailsModel?>(
+            stream: _hotelDetailsStream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text("Error loading hotel details"),
+                );
+              } else {
+                final hotelDetailsModel = snapshot.data;
+                if (hotelDetailsModel != null) {
+                  return Container(
+                    color: Colors.white,
+                    child: CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                        //hotel images widget
+                        HotelImagesWithIconsWidget(
+                            hotelDetailsModel: hotelDetailsModel),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              color: Colors.white,
+                              height: 150,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
-                                        child: Text(
-                                          "${hotelDetailsModel.locationDetails.hotelLocationDetails.address},",
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.normal,
-                                          ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              widget.hotelSearchModel
+                                                  .hotelLocationDetails.name,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBoxHelper.sizedBox_10,
+                                      Center(
+                                        child: Builder(
+                                          builder: (BuildContext context) {
+                                            return IconButton(
+                                              onPressed: () {
+                                                showBottomSheet(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return aboutHotelModel !=
+                                                              null
+                                                          ? HotelDetailsBottomWidget(
+                                                              aboutHotelModel:
+                                                                  aboutHotelModel!,
+                                                            )
+                                                          : const SizedBox
+                                                              .shrink();
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.info_outline,
+                                                color: Colors.red.shade400,
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                Flexible(
+                                  Flexible(
+                                    flex: 2,
                                     child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
                                       children: [
-                                        Icon(
-                                          Icons.star,
-                                          color: StarRatingColourUtils
-                                              .getStarRatingColor(widget
-                                                  .hotelSearchModel
-                                                  .averageRatings),
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          widget.hotelSearchModel.averageRatings
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: StarRatingColourUtils
-                                                .getStarRatingColor(widget
-                                                    .hotelSearchModel
-                                                    .averageRatings),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ReviewsScreen(
-                                                  averageRatings: widget
-                                                      .hotelSearchModel
-                                                      .averageRatings,
-                                                ),
-                                              ),
-                                            );
-                                          },
+                                        Flexible(
                                           child: Text(
-                                            "${widget.hotelSearchModel.noOfRatings} ratings",
+                                            hotelDetailsModel.locationDetails.hotelLocationDetails.address,
                                             style: const TextStyle(
-                                                color: Colors.blue),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (builder) =>
-                                                    const MapScreen()));
-                                      },
-                                      child: const Row(
-                                        children: [
-                                          Icon(
-                                            Icons.location_pin,
-                                            color: Colors.red,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            "Map View",
-                                            style: TextStyle(
-                                              color: Colors.blueAccent,
+                                              color: Colors.black,
                                               fontSize: 15,
                                               fontWeight: FontWeight.normal,
                                             ),
                                           ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: StarRatingColourUtils
+                                                .getStarRatingColor(widget
+                                                    .hotelSearchModel
+                                                    .averageRatings),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            widget.hotelSearchModel.averageRatings
+                                                .toString(),
+                                            style: TextStyle(
+                                              color: StarRatingColourUtils
+                                                  .getStarRatingColor(widget
+                                                      .hotelSearchModel
+                                                      .averageRatings),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ReviewsScreen(
+                                                    averageRatings: widget
+                                                        .hotelSearchModel
+                                                        .averageRatings,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              "${widget.hotelSearchModel.noOfRatings} ratings",
+                                              style: const TextStyle(
+                                                  color: Colors.blue),
+                                            ),
+                                          ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                )),
-                              ],
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      const MapScreen()));
+                                        },
+                                        child: const Row(
+                                          children: [
+                                            Icon(
+                                              Icons.location_pin,
+                                              color: Colors.red,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "Map View",
+                                              style: TextStyle(
+                                                color: Colors.blueAccent,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      if (amenitiesModel != null)
-                        AmenitiesMainWidget(
-                          amenitiesModel: amenitiesModel!,
-                          hotelDetailsModel: hotelDetailsModel,
+                        if (amenitiesModel != null)
+                          AmenitiesMainWidget(
+                            amenitiesModel: amenitiesModel!,
+                            hotelDetailsModel: hotelDetailsModel,
+                          ),
+                        GuestPoliciesMainWidget(
+                          guestPolicies: guestPolicies ?? [],
                         ),
-                      GuestPoliciesMainWidget(
-                        guestPolicies: guestPolicies ?? [],
-                      ),
-                      CouponsMainWidget(
-                        coupons: coupons ?? [],
-                      ),
-                      const BookableDetailsWidget(),
-                      RoomTypesWidget(
-                        roomTypeModel: roomTypeModel ?? [],
-                        defaultRoomSelection:
-                            defaultRoomSelection ?? roomTypeModel![0],
-                      ),
-                      const CancellationPolicyWidget(),
-                      const HousePoliciesWidget(),
-                      if (nearbyPlacesModel != null)
-                        NearByTabView(
-                          nearbyPlacesModel: nearbyPlacesModel!,
+                        CouponsMainWidget(
+                          coupons: coupons ?? [],
                         ),
-                    ],
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: Text("No hotel details available"),
-                );
+                        const BookableDetailsWidget(),
+                        RoomTypesWidget(
+                          roomTypeModel: roomTypeModel ?? [],
+                          defaultRoomSelection:
+                              defaultRoomSelection ?? roomTypeModel![0],
+                        ),
+                        const CancellationPolicyWidget(),
+                        const HousePoliciesWidget(),
+                        if (nearbyPlacesModel != null)
+                          NearByTabView(
+                            nearbyPlacesModel: nearbyPlacesModel!,
+                          ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Text("No hotel details available"),
+                  );
+                }
               }
-            }
-          }),
-      bottomNavigationBar: HotelDetailsBottomBar(
-        hotelDetailsModel: hotelDetailsModel,
-        aboutHotelModel: aboutHotelModel,
+            }),
+        bottomNavigationBar: HotelDetailsBottomBar(
+          hotelDetailsModel: hotelDetailsModel,
+          aboutHotelModel: aboutHotelModel,
+        ),
       ),
     );
   }

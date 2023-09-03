@@ -29,7 +29,6 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void setProfileDataFromModel(UserProfileModel userProfileModel) {
-    print(userProfileModel.name);
     _name = userProfileModel.name;
     _mobileNo = userProfileModel.mobileNo;
     _dateOfBirth = userProfileModel.dateOfBirth;

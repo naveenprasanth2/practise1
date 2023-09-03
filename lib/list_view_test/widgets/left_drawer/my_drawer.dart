@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/screens/flash_screen/flash_screen.dart';
+import 'package:practise1/list_view_test/screens/profile/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,10 +81,16 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            leading: const Icon(Icons.person),
+            title: const Text('My Profile'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  //editing profile page
+                  builder: (builder) => const ProfilePage(),
+                ),
+              );
             },
             trailing: const Icon(Icons.arrow_forward_ios),
           ),

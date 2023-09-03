@@ -32,17 +32,19 @@ class _MySplashScreenState extends State<MySplashScreen> {
       final authenticationProvider =
           Provider.of<AuthProvider>(context, listen: false);
       if (authenticationProvider.isSignedIn) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (builder) => const HomeScreen(),
-          ),
-        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (builder) => const HomeScreen(),
+            ),
+            (route) => false);
       } else {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (builder) => const RegisterScreen(),
-          ),
-        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (builder) => const RegisterScreen(),
+            ),
+            (route) => false);
       }
     });
   }
