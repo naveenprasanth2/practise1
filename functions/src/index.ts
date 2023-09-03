@@ -29,10 +29,8 @@ const processRefund = functions.https.onRequest(async (request, response) => {
                 return;
             }else if(bookingData?.[orderId].status == 'success'){
                const paymentDetails = (await bookingDocRef.collection('paymentId').doc('paymentId').get()).data();
-                paymentId = paymentDetails?.paymentDetails.id
-                console.error();
-                console.error("Booking status is 'success'");
-                response.status(400).json({ error: 'We can process refund for this orderId' });
+                paymentId = paymentDetails?.paymentDetails.id;
+                response.status(200).json({ success: 'order refund in progress' });
             }
 
             try {
@@ -101,13 +99,13 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
             const refundDetails = req.body.payload.refund.entity;
-            console.log(refundDetails);
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
             const fieldPath = `${description}.status`;
+            const fieldPathForBookingStatus = `${description}.checkOutStatus`;
 
-            bookingDocRef.update({ [fieldPath]: "processing refund" })
+            bookingDocRef.update({ [fieldPath]: "processing refund", [fieldPathForBookingStatus]:'cancelled'  })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -124,7 +122,33 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     res.status(500).send('Internal server error');
                 });
                 
-        } else {
+        } else if (event === 'refund.processed') {
+            const mobileNo = req.body.payload.payment.entity.contact;
+            const description = req.body.payload.payment.entity.description;
+            const refundDetails = req.body.payload.refund.entity;
+
+            const userDocRef = admin.firestore().collection('users').doc(mobileNo);
+            const bookingDocRef = userDocRef.collection('bookings').doc(description);
+            const fieldPath = `${description}.status`;
+            console.error(refundDetails);
+            bookingDocRef.update({ [fieldPath]: "refund processed"})
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                bookingDocRef.collection('paymentId').doc('paymentId').update({ processedRefundDetails: refundDetails })
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                
+        }else {
             res.status(200).send('OK');
         }
     } else {

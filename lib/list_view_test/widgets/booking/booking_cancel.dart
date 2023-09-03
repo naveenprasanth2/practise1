@@ -63,9 +63,7 @@ class BookingCancelWidget extends StatelessWidget {
                     onTap: () {
                       // Handle button press
                       sendCancellationToApiEndPoint(context);
-                      cancelBooking(context);
-                      GeneralUtils.showSuccessSnackBar(context,
-                          "Cancel Successful \nRefund will be processed in 4 working days");
+                      // cancelBooking(context);
                       Navigator.pop(context);
                     },
                   ),
@@ -151,23 +149,39 @@ class BookingCancelWidget extends StatelessWidget {
   // }
 
   Future<void> sendCancellationToApiEndPoint(BuildContext context) async {
+    final bookingProvider =
+        Provider.of<BookingDataProvider>(context, listen: false);
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     const String url =
         'https://us-central1-bookany.cloudfunctions.net/processRefund';
     final Map<String, dynamic> requestData = {
       'userId': Provider.of<ProfileProvider>(context, listen: false).mobileNo,
       'orderId': bookingHistoryModel.bookingId,
     };
-    print(Provider.of<ProfileProvider>(context, listen: false).mobileNo);
     final response = await http.post(
       Uri.parse(url),
       body: jsonEncode(requestData),
       headers: {'Content-Type': 'application/json'},
     );
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      print('Refund processed successfully: ${response.body}');
+      bookingHistoryModel.checkOutStatus = "cancelled";
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(profileProvider.mobileNo)
+          .collection("bookings")
+          .doc(bookingHistoryModel.bookingId.toString())
+          .set({
+        bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
+      });
+      bookingProvider.swapDataFromUpcomingToCancelledList(
+          bookingHistoryModel.bookingId.toString());
+      GeneralUtils.showSuccessSnackBarUsingScaffold(scaffoldMessenger,
+          "Cancel Successful \nRefund will be processed in 4 working days");
     } else {
-      print('Error processing refund: ${response.body}');
+      GeneralUtils.showFailureSnackBarUsingScaffold(
+          scaffoldMessenger, "Cancel failed, please try after sometime.");
     }
   }
 }
