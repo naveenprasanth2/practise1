@@ -230,16 +230,16 @@ class _ProfilePageState extends State<ProfilePage> {
         Provider.of<ProfileProvider>(context, listen: false);
     await profileProvider.setName(_nameController.text.trim());
     String formattedName =
-        StringUtils.convertToSentenceCaseForAll(profileProvider.name);
+        StringUtils.convertToSentenceCaseForAll(profileProvider.name!);
     await profileProvider.setName(formattedName);
     profileProvider.setEmailId(_emailAddressController.text.trim());
     profileProvider.setIsLoading(true);
     if (_formKey.currentState!.validate()) {
       // If the form is valid, you can perform your form submission logic
       _userProfileModel = UserProfileModel(
-          name: profileProvider.name,
+          name: profileProvider.name!,
           mobileNo: profileProvider.mobileNo,
-          emailId: profileProvider.emailId,
+          emailId: profileProvider.emailId!,
           dateOfBirth: profileProvider.dateOfBirth!,
           gender: profileProvider.gender,
           maritalStatus: profileProvider.maritalStatus,
