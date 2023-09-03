@@ -2,6 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:practise1/list_view_test/providers/auth_provider.dart';
+import 'package:practise1/list_view_test/screens/home/home_page.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/authentication/authentication_button.dart';
 import 'package:provider/provider.dart';
@@ -153,6 +154,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         text: "Send OTP"),
                   ),
+                  SizedBoxHelper.sizedBox20,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => const HomeScreen(),
+                          ),
+                          (route) => false);
+                    },
+                    child: const Text(
+                      "Lets do it later",
+                      style: TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

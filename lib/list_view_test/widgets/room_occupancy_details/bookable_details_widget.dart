@@ -130,7 +130,7 @@ class BookableDetailsWidget extends StatelessWidget {
                                 Text(
                                   profileProvider.reservedFor ??
                                       profileProvider.name ??
-                                      "",
+                                      "Guest",
                                   style: const TextStyle(
                                       fontSize: 13, color: Colors.blue),
                                 )

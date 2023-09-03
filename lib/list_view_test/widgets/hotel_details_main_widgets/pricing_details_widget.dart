@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/about_hotel_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/providers/auth_provider.dart';
 import 'package:practise1/list_view_test/providers/coupon_state_provider.dart';
+import 'package:practise1/list_view_test/screens/authentication/register_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/booking_history_model/booking_history_model.dart';
@@ -78,23 +80,62 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
                 ),
               ],
             ),
-            Builder(builder: (context) {
-              return InkWell(
-                onTap: () {
-                  createPayloadForBooking();
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return widget.aboutHotelModel != null
-                          ? BookingWidget(
-                              hotelDetailsModel: widget.hotelDetailsModel!,
-                              bookingHistoryModel: bookingHistoryModel,
-                              detailsScreenContext: context,
-                            )
-                          : const SizedBox.shrink();
+            if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+              Builder(
+                builder: (context) {
+                  return InkWell(
+                    onTap: () {
+                      createPayloadForBooking();
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return widget.aboutHotelModel != null
+                              ? BookingWidget(
+                                  hotelDetailsModel: widget.hotelDetailsModel!,
+                                  bookingHistoryModel: bookingHistoryModel,
+                                  detailsScreenContext: context,
+                                )
+                              : const SizedBox.shrink();
+                        },
+                      );
                     },
+                    child: Container(
+                      height: 40,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade600,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            offset: Offset(0, 2),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Book Now",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   );
+                },
+              ),
+            if (!Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+              InkWell(
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => const RegisterScreen()),
+                      (route) => false);
                 },
                 child: Container(
                   height: 40,
@@ -112,7 +153,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
                   ),
                   child: const Center(
                     child: Text(
-                      "Book Now",
+                      "Login & Book",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -121,8 +162,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
                     ),
                   ),
                 ),
-              );
-            }),
+              ),
           ],
         ),
       ),
