@@ -208,5 +208,60 @@ const processRating = functions.https.onRequest(async (request, response) => {
 
 });
 
-export { processRefund, handleRazorpayCallback, processRating };
+const fetchRatingsDaily = functions.pubsub
+    .schedule('0 2 * * *')
+    .timeZone('Asia/Kolkata') // Set to Indian Standard Time
+    .onRun(async (context) => {
+    try {
+      const collectionsSnapshot = await admin.firestore().listCollections();
+
+      for (const collectionRef of collectionsSnapshot) {
+        const collectionId = collectionRef.id;
+        
+        // Skip the "users" collection
+        if (collectionId === 'users') {
+          continue;
+        }
+
+        const documentsSnapshot = await collectionRef.get();
+
+        for (const documentSnapshot of documentsSnapshot.docs) {
+          const hotelsCollectionRef = documentSnapshot.ref.collection('hotels');
+          const hotelsDocumentsSnapshot = await hotelsCollectionRef.get();
+
+          for (const hotelDocumentSnapshot of hotelsDocumentsSnapshot.docs) {
+            const ratingsCollectionRef = hotelDocumentSnapshot.ref.collection('ratings');
+            const ratingsSnapshot = await ratingsCollectionRef.get();
+            
+            const ratings: number[] = []; // Array to store rating values
+            
+            ratingsSnapshot.forEach((ratingDoc) => {
+              const ratingData = ratingDoc.data();
+              const ratingValue = ratingData.ratings.rating;
+              ratings.push(ratingValue);
+            });
+
+            const valueOfOneStarRating = ratings.filter(rating => rating === 1).length;
+            const valueOfTwoStarRating = ratings.filter(rating => rating === 2).length;
+            const valueOfThreeStarRating = ratings.filter(rating => rating === 3).length;
+            const valueOfFourStarRating = ratings.filter(rating => rating === 4).length;
+            const valueOfFiveStarRating = ratings.filter(rating => rating === 5).length;
+
+            console.log(valueOfOneStarRating + "one");
+            console.log(valueOfTwoStarRating + "two");
+            console.log(valueOfThreeStarRating+ "three");
+            console.log(valueOfFourStarRating + "four");
+            console.log(valueOfFiveStarRating + "five");
+          }
+        }
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error fetching ratings:', error);
+      return null;
+    }
+  });
+
+export { processRefund, handleRazorpayCallback, processRating,fetchRatingsDaily };
 
