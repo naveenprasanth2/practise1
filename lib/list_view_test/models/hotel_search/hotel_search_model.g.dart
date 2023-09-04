@@ -22,6 +22,8 @@ HotelSearchModel _$HotelSearchModelFromJson(Map<String, dynamic> json) =>
       roomTypeForSearch: (json['roomTypeForSearch'] as List<dynamic>)
           .map((e) => RoomTypeSearchModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      starRatingAverageModel: StarRatingAverageModel.fromJson(
+          json['ratings'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$HotelSearchModelToJson(HotelSearchModel instance) =>
@@ -33,4 +35,5 @@ Map<String, dynamic> _$HotelSearchModelToJson(HotelSearchModel instance) =>
       'noOfRatings': instance.noOfRatings,
       'hotelId': instance.hotelId,
       'roomTypeForSearch': instance.roomTypeForSearch,
+      'ratings': instance.starRatingAverageModel,
     };

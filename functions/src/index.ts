@@ -209,7 +209,7 @@ const processRating = functions.https.onRequest(async (request, response) => {
 });
 
 const fetchRatingsDaily = functions.pubsub
-    .schedule('0 2 * * *')
+    .schedule('0 5* * *')
     .timeZone('Asia/Kolkata') // Set to Indian Standard Time
     .onRun(async (context) => {
     try {
@@ -247,11 +247,29 @@ const fetchRatingsDaily = functions.pubsub
             const valueOfFourStarRating = ratings.filter(rating => rating === 4).length;
             const valueOfFiveStarRating = ratings.filter(rating => rating === 5).length;
 
+            
+
             console.log(valueOfOneStarRating + "one");
             console.log(valueOfTwoStarRating + "two");
             console.log(valueOfThreeStarRating+ "three");
             console.log(valueOfFourStarRating + "four");
             console.log(valueOfFiveStarRating + "five");
+
+            // Get the document ID as the field name
+            const fieldName = hotelDocumentSnapshot.id;
+
+            // Access the nested field "ratings" using data() method
+            const fieldData = hotelDocumentSnapshot.data();
+
+            // Using optional chain expression to access nested "ratings" field
+            const ratingsData = fieldData?.[fieldName]?.ratings;
+
+            if (ratingsData !== undefined) {
+            console.log(`Ratings Data:`, ratingsData);
+            } else {
+            console.error('Nested field "ratings" is missing or undefined in hotel document data.');
+            }
+
           }
         }
       }
