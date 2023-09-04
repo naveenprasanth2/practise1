@@ -1,11 +1,23 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
+import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_rating_details_model.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
+import 'package:practise1/list_view_test/utils/date_helper/date_helper.dart';
+import 'package:practise1/list_view_test/utils/ratings_helper/ratings_helper.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/dart_helper/sizebox_helper.dart';
 
 class RatingView extends StatefulWidget {
-  const RatingView({super.key});
+  final BookingHistoryDisplayModel bookingHistoryDisplayModel;
+  const RatingView({
+    super.key,
+    required this.bookingHistoryDisplayModel,
+  });
 
   @override
   State<RatingView> createState() => _RatingViewState();
@@ -26,6 +38,11 @@ class _RatingViewState extends State<RatingView> {
     "Cleanliness",
     "Basic Amenities",
   ];
+
+  int? noOfStarsSelected;
+  String? whatCouldBeBetter;
+  String? description;
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +75,7 @@ class _RatingViewState extends State<RatingView> {
               color: Colors.red.shade400,
               child: MaterialButton(
                 onPressed: () {
+                  sendFeedback();
                   Navigator.pop(context);
                 },
                 child: const Text(
@@ -98,6 +116,7 @@ class _RatingViewState extends State<RatingView> {
                       _starPosition = 30.0;
                       //index starts with 0, so added 1
                       _rating = index + 1;
+                      noOfStarsSelected = _rating;
                     });
                   },
                   icon: index < _rating
@@ -169,6 +188,7 @@ class _RatingViewState extends State<RatingView> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  controller: _textEditingController,
                   focusNode: _moreDetailsFocusNode,
                   decoration: InputDecoration(
                     hintText: "Write your review here",
@@ -194,6 +214,7 @@ class _RatingViewState extends State<RatingView> {
                       onTap: () {
                         setState(() {
                           _selectedValue = option;
+                          whatCouldBeBetter = _selectedValue;
                         });
                       },
                       child: Chip(
@@ -237,5 +258,38 @@ class _RatingViewState extends State<RatingView> {
         ),
       ],
     );
+  }
+
+  void sendFeedback() {
+    final BookingHistoryModel bookingHistoryModel =
+        widget.bookingHistoryDisplayModel.bookingHistoryModel;
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    description = _textEditingController.text == ""
+        ? RatingsHelper.titleBasedOnStars(noOfStarsSelected!)
+        : _textEditingController.text;
+    StarRatingDetailsModel starRatingDetailsModel = StarRatingDetailsModel(
+        name: profileProvider.name!,
+        rating: noOfStarsSelected!,
+        title: RatingsHelper.titleBasedOnStars(noOfStarsSelected!),
+        timeStamp: DateHelper.getCurrentDate(),
+        description: description!);
+
+    FirebaseFirestore.instance
+        .collection(bookingHistoryModel.cityAndState
+            .split(",")
+            .last
+            .trim()
+            .toLowerCase())
+        .doc(bookingHistoryModel.cityAndState
+            .split(",")
+            .first
+            .trim()
+            .toLowerCase())
+        .collection("hotels")
+        .doc(bookingHistoryModel.hotelId)
+        .collection("ratings")
+        .doc(bookingHistoryModel.bookingId)
+        .set({"ratings": starRatingDetailsModel.toJson()});
   }
 }
