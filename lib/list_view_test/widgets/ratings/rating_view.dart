@@ -41,7 +41,7 @@ class _RatingViewState extends State<RatingView> {
     "Cleanliness",
     "Basic Amenities",
   ];
-
+  bool _isLoading = false;
   int? noOfStarsSelected;
   String? whatCouldBeBetter;
   String? description;
@@ -79,11 +79,20 @@ class _RatingViewState extends State<RatingView> {
               child: MaterialButton(
                 onPressed: () {
                   sendFeedback();
+                  setState(() {
+                    _isLoading = true;
+                  });
                 },
-                child: const Text(
-                  "Done",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: !_isLoading
+                    ? const Text(
+                        "Done",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -289,12 +298,18 @@ class _RatingViewState extends State<RatingView> {
     )
         .then((response) {
       if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.pop(context); // pop the current screen/dialog
         showDialog(
           context: context,
           builder: (builder) => const RatingSuccessfulWidget(),
         ); // show the success widget
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.pop(context); // pop the current screen/dialog
         showDialog(
           context: context,

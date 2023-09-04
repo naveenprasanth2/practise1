@@ -234,8 +234,10 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                               .rated ==
                           false)
                     InkWell(
-                      onTap: () => RatingDialogHelper.openRatingDialog(
-                          context, widget.bookingHistoryDisplayModel),
+                      onTap: () {
+                        RatingDialogHelper.openRatingDialog(
+                            context, widget.bookingHistoryDisplayModel);
+                      },
                       child: Container(
                         height: 50,
                         width: 120,
