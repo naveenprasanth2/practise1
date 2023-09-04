@@ -161,26 +161,51 @@ const processRating = functions.https.onRequest(async (request, response) => {
     const bookingHistoryModel = request.body.bookingHistoryModel;
     const ratingsModel = request.body.starRatingDetailsModel;
     const mobileNo = request.body.mobileNo;
-    console.log(ratingsModel);
-    console.log(bookingHistoryModel);
-    console.log(mobileNo);
-    const ratingRefDoc = admin.firestore().collection(bookingHistoryModel.cityAndState
-        .split(",")
-        .pop()  // equivalent to .last
-        .trim()
-        .toLowerCase()).doc(bookingHistoryModel.cityAndState
+    const userRatedStatus = admin.firestore().collection('users').doc(mobileNo).collection('bookings')
+        .doc(bookingId);
+        const snapshot = await userRatedStatus.get();
+    
+        if (!snapshot.exists) {
+            console.error('Document not found');
+            response.status(500).send('No corresponding booking id found for the user');
+        }
+    
+        const data = snapshot.data();
+        const rated = data ? data?.[bookingId].rated : null;  // Ensure the data exists before trying to access the ratings field
+        const checkOutStatus = data ? data?.[bookingId].checkOutStatus : null;
+        console.log(data?.[bookingId].rated);
+    
+    if(rated == false && checkOutStatus == 'checkedOut'){
+        const ratingRefDoc = admin.firestore().collection(bookingHistoryModel.cityAndState
             .split(",")
-            [0]  // equivalent to .first in Dart
+            .pop()  // equivalent to .last
             .trim()
-            .toLowerCase()).collection('hotels').doc(bookingHistoryModel.hotelId).collection('ratings').doc(bookingId);
-            ratingRefDoc.set({ 'ratings': ratingsModel })
-            .then(() => {
-                response.status(200).send('OK');
-            })
-            .catch(error => {
-                console.error('Error updating database:', error);
-                response.status(500).send('Internal server error');
-            });
+            .toLowerCase()).doc(bookingHistoryModel.cityAndState
+                .split(",")
+                [0]  // equivalent to .first in Dart
+                .trim()
+                .toLowerCase()).collection('hotels').doc(bookingHistoryModel.hotelId).collection('ratings').doc(bookingId);
+                ratingRefDoc.set({ 'ratings': ratingsModel })
+                .then(() => {
+                    response.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    response.status(500).send('Internal server error');
+                });
+        const filePathToSetRating = `${bookingId}.rated`;
+        userRatedStatus.update({ [filePathToSetRating]: true })
+        .then(() => {
+            response.status(200).send('OK');
+        })
+        .catch(error => {
+            console.error('Error updating user rated status:', error);
+            response.status(500).send('Internal server error');
+        });
+    }else{
+        response.status(500).send('User cannot rate for this booking id');
+    }
+
 });
 
 export { processRefund, handleRazorpayCallback, processRating };
