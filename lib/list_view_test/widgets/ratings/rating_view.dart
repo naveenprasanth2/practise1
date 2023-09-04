@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
@@ -9,6 +9,7 @@ import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/utils/date_helper/date_helper.dart';
 import 'package:practise1/list_view_test/utils/ratings_helper/ratings_helper.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../utils/dart_helper/sizebox_helper.dart';
 
@@ -260,7 +261,7 @@ class _RatingViewState extends State<RatingView> {
     );
   }
 
-  void sendFeedback() {
+  void sendFeedback() async {
     final BookingHistoryModel bookingHistoryModel =
         widget.bookingHistoryDisplayModel.bookingHistoryModel;
     final ProfileProvider profileProvider =
@@ -275,21 +276,21 @@ class _RatingViewState extends State<RatingView> {
         timeStamp: DateHelper.getCurrentDate(),
         description: description!);
 
-    FirebaseFirestore.instance
-        .collection(bookingHistoryModel.cityAndState
-            .split(",")
-            .last
-            .trim()
-            .toLowerCase())
-        .doc(bookingHistoryModel.cityAndState
-            .split(",")
-            .first
-            .trim()
-            .toLowerCase())
-        .collection("hotels")
-        .doc(bookingHistoryModel.hotelId)
-        .collection("ratings")
-        .doc(bookingHistoryModel.bookingId)
-        .set({"ratings": starRatingDetailsModel.toJson()});
+    final response = await http.post(
+      Uri.parse("https://us-central1-bookany.cloudfunctions.net/processRating"),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'bookingHistoryModel': bookingHistoryModel,
+        'starRatingDetailsModel': starRatingDetailsModel,
+        'mobileNo':
+            Provider.of<ProfileProvider>(context, listen: false).mobileNo,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Successfully sent rating!');
+    } else {
+      print('Failed to send rating: ${response.body}');
+    }
   }
 }

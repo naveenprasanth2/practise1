@@ -156,5 +156,32 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
     }
 });
 
-export { processRefund, handleRazorpayCallback };
+const processRating = functions.https.onRequest(async (request, response) => {
+    const bookingId = request.body.bookingHistoryModel.bookingId;
+    const bookingHistoryModel = request.body.bookingHistoryModel;
+    const ratingsModel = request.body.starRatingDetailsModel;
+    const mobileNo = request.body.mobileNo;
+    console.log(ratingsModel);
+    console.log(bookingHistoryModel);
+    console.log(mobileNo);
+    const ratingRefDoc = admin.firestore().collection(bookingHistoryModel.cityAndState
+        .split(",")
+        .pop()  // equivalent to .last
+        .trim()
+        .toLowerCase()).doc(bookingHistoryModel.cityAndState
+            .split(",")
+            [0]  // equivalent to .first in Dart
+            .trim()
+            .toLowerCase()).collection('hotels').doc(bookingHistoryModel.hotelId).collection('ratings').doc(bookingId);
+            ratingRefDoc.set({ 'ratings': ratingsModel })
+            .then(() => {
+                response.status(200).send('OK');
+            })
+            .catch(error => {
+                console.error('Error updating database:', error);
+                response.status(500).send('Internal server error');
+            });
+});
+
+export { processRefund, handleRazorpayCallback, processRating };
 
