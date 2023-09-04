@@ -8,6 +8,8 @@ import 'package:practise1/list_view_test/models/star_ratings_model/star_rating_d
 import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/utils/date_helper/date_helper.dart';
 import 'package:practise1/list_view_test/utils/ratings_helper/ratings_helper.dart';
+import 'package:practise1/list_view_test/widgets/ratings/rating_failure_widget.dart';
+import 'package:practise1/list_view_test/widgets/ratings/rating_succesful_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -77,7 +79,6 @@ class _RatingViewState extends State<RatingView> {
               child: MaterialButton(
                 onPressed: () {
                   sendFeedback();
-                  Navigator.pop(context);
                 },
                 child: const Text(
                   "Done",
@@ -276,21 +277,30 @@ class _RatingViewState extends State<RatingView> {
         timeStamp: DateHelper.getCurrentDate(),
         description: description!);
 
-    final response = await http.post(
+    await http
+        .post(
       Uri.parse("https://us-central1-bookany.cloudfunctions.net/processRating"),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'bookingHistoryModel': bookingHistoryModel,
         'starRatingDetailsModel': starRatingDetailsModel,
-        'mobileNo':
-            Provider.of<ProfileProvider>(context, listen: false).mobileNo,
+        'mobileNo': profileProvider.mobileNo,
       }),
-    );
-
-    if (response.statusCode == 200) {
-      print('Successfully sent rating!');
-    } else {
-      print('Failed to send rating: ${response.body}');
-    }
+    )
+        .then((response) {
+      if (response.statusCode == 200) {
+        Navigator.pop(context); // pop the current screen/dialog
+        showDialog(
+          context: context,
+          builder: (builder) => const RatingSuccessfulWidget(),
+        ); // show the success widget
+      } else {
+        Navigator.pop(context); // pop the current screen/dialog
+        showDialog(
+          context: context,
+          builder: (builder) => const RatingFailureWidget(),
+        );
+      }
+    });
   }
 }
