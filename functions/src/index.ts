@@ -209,7 +209,7 @@ const processRating = functions.https.onRequest(async (request, response) => {
 });
 
 const fetchRatingsDaily = functions.pubsub
-    .schedule('0 5* * *')
+    .schedule('0 5 * * *')
     .timeZone('Asia/Kolkata') // Set to Indian Standard Time
     .onRun(async (context) => {
     try {
@@ -246,7 +246,8 @@ const fetchRatingsDaily = functions.pubsub
             const valueOfThreeStarRating = ratings.filter(rating => rating === 3).length;
             const valueOfFourStarRating = ratings.filter(rating => rating === 4).length;
             const valueOfFiveStarRating = ratings.filter(rating => rating === 5).length;
-
+            const sumOfAllNewRating = ratings.reduce((sum, rating) => sum + rating, 0);
+            const countOfNewRatings = ratings.length;
             
 
             console.log(valueOfOneStarRating + "one");
@@ -265,7 +266,19 @@ const fetchRatingsDaily = functions.pubsub
             const ratingsData = fieldData?.[fieldName]?.ratings;
 
             if (ratingsData !== undefined) {
-            console.log(`Ratings Data:`, ratingsData);
+                const totalCurrentRatings = (ratingsData.oneStarRatingsCount + ratingsData.twoStarRatingsCount + 
+                                            ratingsData.threeStarRatingsCount + ratingsData.fourStarRatingsCount + ratingsData.fiveStarRatingsCount);
+                ratingsData.averageRating = (((ratingsData.averageRating * totalCurrentRatings) + (sumOfAllNewRating * countOfNewRatings))/(totalCurrentRatings + sumOfAllNewRating));
+                ratingsData.oneStarRatingsCount = ratingsData.oneStarRatingsCount + valueOfOneStarRating;
+                ratingsData.twoStarRatingsCount = ratingsData.twoStarRatingsCount + valueOfTwoStarRating;
+                ratingsData.threeStarRatingsCount = ratingsData.threeStarRatingsCount + valueOfThreeStarRating;
+                ratingsData.fourStarRatingsCount = ratingsData.fourStarRatingsCount + valueOfFourStarRating;
+                ratingsData.fiveStarRatingsCount = ratingsData.fiveStarRatingsCount + valueOfFiveStarRating;
+                ratingsData.noOfRatings = totalCurrentRatings + countOfNewRatings;
+                await hotelDocumentSnapshot.ref.update({
+                    [`${fieldName}.ratings`]: ratingsData
+                });
+
             } else {
             console.error('Nested field "ratings" is missing or undefined in hotel document data.');
             }
