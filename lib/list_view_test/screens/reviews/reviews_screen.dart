@@ -1,7 +1,6 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
@@ -11,9 +10,15 @@ import '../../utils/star_rating_colour_utils.dart';
 import '../../widgets/ratings/ratings_tile.dart';
 
 class ReviewsScreen extends StatefulWidget {
+  final HotelSearchModel hotelSearchModel;
   final StarRatingAverageModel starRatingAverageModel;
+  final String cityAndState;
 
-  const ReviewsScreen({Key? key, required this.starRatingAverageModel})
+  const ReviewsScreen(
+      {Key? key,
+      required this.starRatingAverageModel,
+      required this.hotelSearchModel,
+      required this.cityAndState})
       : super(key: key);
 
   @override
@@ -22,6 +27,7 @@ class ReviewsScreen extends StatefulWidget {
 
 class _ReviewsScreenState extends State<ReviewsScreen> {
   List<StarRatingDetailsModel> ratingsDetails = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -30,14 +36,29 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   }
 
   Future<void> getDetailedReviewsFromJson() async {
-    final value =
-        await rootBundle.loadString("assets/star_ratings_detail.json");
-    setState(() {
-      final dynamic ratingsDetailsData = json.decode(value);
+    final city = widget.cityAndState.split(",")[0].trim().toLowerCase();
+    final state = widget.cityAndState.split(",")[1].trim().toLowerCase();
 
-      for (var json in ratingsDetailsData) {
-        ratingsDetails.add(StarRatingDetailsModel.fromJson(json));
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(state)
+        .doc(city)
+        .collection("hotels")
+        .doc(widget.hotelSearchModel.hotelId)
+        .collection("ratings")
+        .get();
+
+    List<StarRatingDetailsModel> tempList = [];
+    for (var doc in querySnapshot.docs) {
+      var docData =
+          doc.data() as Map<String, dynamic>?; // Cast to Map<String, dynamic>
+      if (docData != null) {
+        var ratingsData = docData['ratings'] as Map<String, dynamic>;
+        tempList.add(StarRatingDetailsModel.fromJson(ratingsData));
       }
+    }
+    setState(() {
+      ratingsDetails = tempList;
+      _isLoading = false;
     });
   }
 
@@ -148,24 +169,33 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               height: 20,
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
-                    height: 150,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black26)),
-                    child: RatingsTile(ratingDetail: ratingsDetails[index]),
+          !_isLoading
+              ? SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          height: 150,
+                          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black26)),
+                          child:
+                              RatingsTile(ratingDetail: ratingsDetails[index]),
+                        ),
+                      );
+                    },
+                    childCount: ratingsDetails.length,
                   ),
-                );
-              },
-              childCount: ratingsDetails.length,
-            ),
-          ),
+                )
+              : const SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
         ],
       ),
     );

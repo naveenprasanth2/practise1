@@ -19,8 +19,6 @@ import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pric
 import 'package:practise1/list_view_test/widgets/house_policies/house_policies.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
-import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
-import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
@@ -297,6 +295,10 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                                     starRatingAverageModel: widget
                                                         .hotelSearchModel
                                                         .starRatingAverageModel,
+                                                    hotelSearchModel:
+                                                        widget.hotelSearchModel,
+                                                    cityAndState:
+                                                        widget.cityAndState,
                                                   ),
                                                 ),
                                               );
