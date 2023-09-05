@@ -99,7 +99,21 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     myBookingHistoryList.sort((a, b) {
       DateTime dateA = DateFormat("dd-MMM-yyyy").parse(a.checkInDate);
       DateTime dateB = DateFormat("dd-MMM-yyyy").parse(b.checkInDate);
-      return dateB.compareTo(dateA); // For descending order
+
+      // Compare dates
+      int dateComparison = dateB.compareTo(dateA); // For descending order
+      if (dateComparison != 0) {
+        return dateComparison;
+      }
+
+      // If dates are the same, compare the 'rated' field
+      if (!a.rated && b.rated) {
+        return -1; // a is false and b is true, so a should come before b
+      } else if (a.rated && !b.rated) {
+        return 1; // a is true and b is false, so a should come after b
+      } else {
+        return 0; // both are the same
+      }
     });
     for (var element in myBookingHistoryList) {
       if (element.checkOutStatus == "checkedOut") {
