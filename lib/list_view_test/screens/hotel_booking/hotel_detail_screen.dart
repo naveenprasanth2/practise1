@@ -274,7 +274,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                                 .hotelSearchModel
                                                 .starRatingAverageModel
                                                 .averageRating
-                                                .toString(),
+                                                .toStringAsFixed(1),
                                             style: TextStyle(
                                               color: StarRatingColourUtils
                                                   .getStarRatingColor(widget
@@ -294,10 +294,9 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ReviewsScreen(
-                                                    averageRatings: widget
+                                                    starRatingAverageModel: widget
                                                         .hotelSearchModel
-                                                        .starRatingAverageModel
-                                                        .averageRating,
+                                                        .starRatingAverageModel,
                                                   ),
                                                 ),
                                               );

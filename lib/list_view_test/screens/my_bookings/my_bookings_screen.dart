@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/providers/profile_provider.dart';
@@ -32,10 +33,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _tabController = TabController(length: 3, vsync: this);
-    getDetailedRatingsFromJson();
+    getBookingsDetails();
   }
 
-  Future<void> getDetailedRatingsFromJson() async {
+  Future<void> getBookingsDetails() async {
     // Navigate to the bookings collection of the dummy user document
     final bookingsCollection = _firebaseFirestore
         .collection("users")
@@ -53,6 +54,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
     myBookingHistoryList.addAll(
         allValues.map((value) => BookingHistoryModel.fromJson(value)).toList());
+    // Sort the list based on the checkIndate field
+    myBookingHistoryList.sort((a, b) {
+      DateTime dateA = DateFormat("dd-MMM-yyyy").parse(a.checkInDate);
+      DateTime dateB = DateFormat("dd-MMM-yyyy").parse(b.checkInDate);
+      return dateA.compareTo(dateB); // For descending order
+    });
     getUpcomingList();
     getCheckedOutList();
     getCancelledList();
@@ -67,6 +74,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
     for (var element in myBookingHistoryList) {
       if (element.checkOutStatus == "booked") {
+        //here call happens for getting teh corresponding hotel details
         tasks.add(
           getHotelDetails(element).then(
             (hotelDetails) => upcomingList.add(
@@ -88,7 +96,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
   Future<void> getCheckedOutList() async {
     List<BookingHistoryDisplayModel> checkedOutList = [];
     List<Future> tasks = []; // List to hold all our future tasks
-
+    myBookingHistoryList.sort((a, b) {
+      DateTime dateA = DateFormat("dd-MMM-yyyy").parse(a.checkInDate);
+      DateTime dateB = DateFormat("dd-MMM-yyyy").parse(b.checkInDate);
+      return dateB.compareTo(dateA); // For descending order
+    });
     for (var element in myBookingHistoryList) {
       if (element.checkOutStatus == "checkedOut") {
         tasks.add(
@@ -227,9 +239,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                   return TabBarView(
                     controller: _tabController,
                     children: [
-                      buildTabView(bookingDataProvider.upcomingList, "Upcoming"),
-                      buildTabView(bookingDataProvider.checkedOutList, "Checked Out"),
-                      buildTabView(bookingDataProvider.cancelledList, "Cancelled"),
+                      buildTabView(
+                          bookingDataProvider.upcomingList, "Upcoming"),
+                      buildTabView(
+                          bookingDataProvider.checkedOutList, "Checked Out"),
+                      buildTabView(
+                          bookingDataProvider.cancelledList, "Cancelled"),
                     ],
                   );
                 }),
@@ -240,23 +255,24 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   Widget buildTabView(List<BookingHistoryDisplayModel> data, String listType) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 700), // Adjust the duration as needed
+      duration:
+          const Duration(milliseconds: 700), // Adjust the duration as needed
       child: data.isEmpty
           ? Center(
-        child: Text("No $listType details available."),
-      )
+              child: Text("No $listType details available."),
+            )
           : ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: MyBookingsWidget(
-              bookingHistoryDisplayModel: data[index],
-              scaffoldKey: _scaffoldKey,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: MyBookingsWidget(
+                    bookingHistoryDisplayModel: data[index],
+                    scaffoldKey: _scaffoldKey,
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

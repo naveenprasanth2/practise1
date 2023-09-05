@@ -193,8 +193,13 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                     ),
                   ),
                   if (widget.bookingHistoryDisplayModel.bookingHistoryModel
-                          .checkOutStatus ==
-                      "booked")
+                              .checkOutStatus ==
+                          "booked" &&
+                      DateHelper.canCancelBooking(
+                          widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .checkInDate,
+                          widget.bookingHistoryDisplayModel.bookingHistoryModel
+                              .checkInTime))
                     InkWell(
                       onTap: () {
                         showDialog(

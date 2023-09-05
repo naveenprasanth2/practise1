@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
@@ -10,9 +11,9 @@ import '../../utils/star_rating_colour_utils.dart';
 import '../../widgets/ratings/ratings_tile.dart';
 
 class ReviewsScreen extends StatefulWidget {
-  final double averageRatings;
+  final StarRatingAverageModel starRatingAverageModel;
 
-  const ReviewsScreen({Key? key, required this.averageRatings})
+  const ReviewsScreen({Key? key, required this.starRatingAverageModel})
       : super(key: key);
 
   @override
@@ -49,10 +50,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             backgroundColor: Colors.red.shade400,
             title: const Text(
               "Ratings & Reviews",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             centerTitle: true,
           ),
@@ -72,7 +71,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: StarRatingColourUtils.getStarRatingColor(
-                              widget.averageRatings),
+                              widget.starRatingAverageModel.averageRating),
                         ),
                       ),
                       child: Align(
@@ -87,15 +86,18 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                   Icons.star,
                                   color:
                                       StarRatingColourUtils.getStarRatingColor(
-                                          widget.averageRatings),
+                                          widget.starRatingAverageModel
+                                              .averageRating),
                                 ),
                                 SizedBoxHelper.sizedBox_6,
                                 Text(
-                                  widget.averageRatings.toString(),
+                                  widget.starRatingAverageModel.averageRating
+                                      .toStringAsFixed(1),
                                   style: TextStyle(
                                     color: StarRatingColourUtils
-                                        .getStarRatingColor(
-                                            widget.averageRatings),
+                                        .getStarRatingColor(widget
+                                            .starRatingAverageModel
+                                            .averageRating),
                                   ),
                                 ),
                               ],
@@ -120,10 +122,11 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                           "Good",
                           style: TextStyle(
                               color: StarRatingColourUtils.getStarRatingColor(
-                                  widget.averageRatings),
+                                  widget.starRatingAverageModel.averageRating),
                               fontWeight: FontWeight.bold),
                         ),
-                        Text("${ratingsDetails.length} Ratings"),
+                        Text(
+                            "${widget.starRatingAverageModel.noOfRatings} Ratings"),
                       ],
                     ),
                   ),
@@ -131,13 +134,13 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               ),
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: RatingStatsWidget(
-              count5Stars: 1,
-              count4Stars: 4,
-              count3Stars: 9,
-              count2Stars: 7,
-              count1Star: 5,
+              count5Stars: widget.starRatingAverageModel.fiveStarRatingsCount,
+              count4Stars: widget.starRatingAverageModel.fourStarRatingsCount,
+              count3Stars: widget.starRatingAverageModel.threeStarRatingsCount,
+              count2Stars: widget.starRatingAverageModel.twoStarRatingsCount,
+              count1Star: widget.starRatingAverageModel.oneStarRatingsCount,
             ),
           ),
           const SliverToBoxAdapter(
