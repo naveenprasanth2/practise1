@@ -209,7 +209,7 @@ const processRating = functions.https.onRequest(async (request, response) => {
 });
 
 const fetchRatingsDaily = functions.pubsub
-    .schedule('0 5 * * *')
+    .schedule('*/5 * * * *' )
     .timeZone('Asia/Kolkata') // Set to Indian Standard Time
     .onRun(async (context) => {
     try {
@@ -231,7 +231,9 @@ const fetchRatingsDaily = functions.pubsub
 
           for (const hotelDocumentSnapshot of hotelsDocumentsSnapshot.docs) {
             const ratingsCollectionRef = hotelDocumentSnapshot.ref.collection('ratings');
-            const ratingsSnapshot = await ratingsCollectionRef.get();
+            const ratingsSnapshot = await ratingsCollectionRef
+                        .get();
+
             
             const ratings: number[] = []; // Array to store rating values
             
@@ -268,7 +270,7 @@ const fetchRatingsDaily = functions.pubsub
             if (ratingsData !== undefined) {
                 const totalCurrentRatings = (ratingsData.oneStarRatingsCount + ratingsData.twoStarRatingsCount + 
                                             ratingsData.threeStarRatingsCount + ratingsData.fourStarRatingsCount + ratingsData.fiveStarRatingsCount);
-                ratingsData.averageRating = (((ratingsData.averageRating * totalCurrentRatings) + (sumOfAllNewRating * countOfNewRatings))/(totalCurrentRatings + sumOfAllNewRating));
+                ratingsData.averageRating = (((ratingsData.averageRating * totalCurrentRatings) + (sumOfAllNewRating))/(totalCurrentRatings + countOfNewRatings));
                 ratingsData.oneStarRatingsCount = ratingsData.oneStarRatingsCount + valueOfOneStarRating;
                 ratingsData.twoStarRatingsCount = ratingsData.twoStarRatingsCount + valueOfTwoStarRating;
                 ratingsData.threeStarRatingsCount = ratingsData.threeStarRatingsCount + valueOfThreeStarRating;
@@ -286,7 +288,6 @@ const fetchRatingsDaily = functions.pubsub
           }
         }
       }
-
       return null;
     } catch (error) {
       console.error('Error fetching ratings:', error);

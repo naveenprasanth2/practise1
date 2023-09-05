@@ -17,12 +17,6 @@ class HotelSearchModel {
   @JsonKey(name: 'highlights')
   List<String> highlights;
 
-  @JsonKey(name: 'averageRatings')
-  double averageRatings;
-
-  @JsonKey(name: 'noOfRatings')
-  int noOfRatings;
-
   @JsonKey(name: 'hotelId')
   String hotelId;
 
@@ -36,8 +30,6 @@ class HotelSearchModel {
       {required this.hotelImages,
       required this.hotelLocationDetails,
       required this.highlights,
-      required this.averageRatings,
-      required this.noOfRatings,
       required this.hotelId,
       required this.roomTypeForSearch,
       required this.starRatingAverageModel});

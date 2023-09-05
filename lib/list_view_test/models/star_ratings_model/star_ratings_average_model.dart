@@ -7,6 +7,9 @@ class StarRatingAverageModel {
   @JsonKey(name: 'averageRating')
   final double averageRating;
 
+  @JsonKey(name: 'noOfRatings')
+  final int noOfRatings;
+
   @JsonKey(name: 'oneStarRatingsCount')
   final int oneStarRatingsCount;
 
@@ -24,6 +27,7 @@ class StarRatingAverageModel {
 
   StarRatingAverageModel({
     required this.averageRating,
+    required this.noOfRatings,
     required this.oneStarRatingsCount,
     required this.twoStarRatingsCount,
     required this.threeStarRatingsCount,

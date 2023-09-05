@@ -93,14 +93,18 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                   children: [
                     Icon(
                       Icons.star,
-                      color: StarRatingColourUtils.getStarRatingColor(
-                          widget.hotelSearchModel.averageRatings),
+                      color: StarRatingColourUtils.getStarRatingColor(widget
+                          .hotelSearchModel
+                          .starRatingAverageModel
+                          .averageRating),
                     ),
                     SizedBoxHelper.sizedBox_5,
-                    Text(widget.hotelSearchModel.averageRatings.toString()),
+                    Text(widget
+                        .hotelSearchModel.starRatingAverageModel.averageRating
+                        .toStringAsFixed(1)),
                     SizedBoxHelper.sizedBox_10,
                     Text(
-                      "(${widget.hotelSearchModel.noOfRatings})",
+                      "(${widget.hotelSearchModel.starRatingAverageModel.noOfRatings})",
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                   ],

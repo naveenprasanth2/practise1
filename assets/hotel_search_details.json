@@ -22,8 +22,6 @@
           "lng": 80.22056993747232
         },
         "highlights": ["Free Breakfast", "Free Cancellation", "Pay at hotel"],
-        "averageRatings": 3.5,
-        "noOfRatings": 30,
         "hotelId": "TNCHE1111",
         "ratings": {
           "averageRating": 3.5,
@@ -74,8 +72,6 @@
           "lng": 80.22056993747232
         },
         "highlights": ["Free Breakfast", "Couple Friendly", "Pay at hotel"],
-        "averageRatings": 3.9,
-        "noOfRatings": 50,
         "hotelId": "TNCHE1112",
         "ratings": {
           "averageRating": 3.5,
@@ -126,8 +122,6 @@
           "lng": 80.22056993747232
         },
         "highlights": ["Free Breakfast", "Local Id Allowed", "Pay at hotel"],
-        "averageRatings": 5,
-        "noOfRatings": 199,
         "hotelId": "TNCHE1113",
         "ratings": {
           "averageRating": 3.5,
@@ -178,8 +172,6 @@
           "lng": 80.22056993747232
         },
         "highlights": ["Couple Friendly", "Free Cancellation", "Pay at hotel"],
-        "averageRatings": 4.5,
-        "noOfRatings": 77,
         "hotelId": "TNCHE1114",
         "ratings": {
           "averageRating": 3.5,

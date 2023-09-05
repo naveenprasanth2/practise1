@@ -10,6 +10,7 @@ StarRatingAverageModel _$StarRatingAverageModelFromJson(
         Map<String, dynamic> json) =>
     StarRatingAverageModel(
       averageRating: (json['averageRating'] as num).toDouble(),
+      noOfRatings: json['noOfRatings'] as int,
       oneStarRatingsCount: json['oneStarRatingsCount'] as int,
       twoStarRatingsCount: json['twoStarRatingsCount'] as int,
       threeStarRatingsCount: json['threeStarRatingsCount'] as int,
@@ -21,6 +22,7 @@ Map<String, dynamic> _$StarRatingAverageModelToJson(
         StarRatingAverageModel instance) =>
     <String, dynamic>{
       'averageRating': instance.averageRating,
+      'noOfRatings': instance.noOfRatings,
       'oneStarRatingsCount': instance.oneStarRatingsCount,
       'twoStarRatingsCount': instance.twoStarRatingsCount,
       'threeStarRatingsCount': instance.threeStarRatingsCount,

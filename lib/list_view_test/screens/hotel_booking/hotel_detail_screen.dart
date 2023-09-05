@@ -51,7 +51,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
   AboutHotelModel? aboutHotelModel;
   List<GuestPolicyModel>? guestPolicies;
-  StarRatingAverageModel? hotelRatings;
   HotelDetailsModel? hotelDetailsModel;
   NearbyPlacesModel? nearbyPlacesModel;
   List<CouponModel>? coupons;
@@ -64,7 +63,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   void initState() {
     super.initState();
     _hotelDetailsStream = readHotelDetailsModelJson().asStream();
-    readHotelRatingsJson();
   }
 
   @override
@@ -109,17 +107,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
     });
     return hotelDetailsModel;
-  }
-
-  Future<void> readHotelRatingsJson() async {
-    final value =
-        await rootBundle.loadString("assets/star_ratings_average.json");
-    setState(() {
-      hotelRatings = StarRatingAverageModel.fromJson(json.decode(value));
-      totalRatings = hotelRatings != null
-          ? HotelHelper.calculateTotalRatings(hotelRatings!)
-          : 0;
-    });
   }
 
   setPriceData() async {
@@ -276,20 +263,24 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             color: StarRatingColourUtils
                                                 .getStarRatingColor(widget
                                                     .hotelSearchModel
-                                                    .averageRatings),
+                                                    .starRatingAverageModel
+                                                    .averageRating),
                                           ),
                                           const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
                                             widget
-                                                .hotelSearchModel.averageRatings
+                                                .hotelSearchModel
+                                                .starRatingAverageModel
+                                                .averageRating
                                                 .toString(),
                                             style: TextStyle(
                                               color: StarRatingColourUtils
                                                   .getStarRatingColor(widget
                                                       .hotelSearchModel
-                                                      .averageRatings),
+                                                      .starRatingAverageModel
+                                                      .averageRating),
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -305,13 +296,14 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                                       ReviewsScreen(
                                                     averageRatings: widget
                                                         .hotelSearchModel
-                                                        .averageRatings,
+                                                        .starRatingAverageModel
+                                                        .averageRating,
                                                   ),
                                                 ),
                                               );
                                             },
                                             child: Text(
-                                              "${widget.hotelSearchModel.noOfRatings} ratings",
+                                              "${widget.hotelSearchModel.starRatingAverageModel.noOfRatings} ratings",
                                               style: const TextStyle(
                                                   color: Colors.blue),
                                             ),
