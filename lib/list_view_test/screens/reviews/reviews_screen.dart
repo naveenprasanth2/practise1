@@ -32,10 +32,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   @override
   void initState() {
     super.initState();
-    getDetailedReviewsFromJson();
+    getDetailedReviews();
   }
 
-  Future<void> getDetailedReviewsFromJson() async {
+  Future<void> getDetailedReviews() async {
     final city = widget.cityAndState.split(",")[0].trim().toLowerCase();
     final state = widget.cityAndState.split(",")[1].trim().toLowerCase();
 
@@ -75,115 +75,143 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             centerTitle: true,
+            iconTheme: const IconThemeData(color: Colors.white),
+            automaticallyImplyLeading: true,
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: StarRatingColourUtils.getStarRatingColor(
-                              widget.starRatingAverageModel.averageRating),
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: StarRatingColourUtils.getStarRatingColor(
+                                widget.starRatingAverageModel.averageRating),
+                          ),
                         ),
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color:
-                                      StarRatingColourUtils.getStarRatingColor(
-                                          widget.starRatingAverageModel
-                                              .averageRating),
-                                ),
-                                SizedBoxHelper.sizedBox_6,
-                                Text(
-                                  widget.starRatingAverageModel.averageRating
-                                      .toStringAsFixed(1),
-                                  style: TextStyle(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star,
                                     color: StarRatingColourUtils
                                         .getStarRatingColor(widget
                                             .starRatingAverageModel
                                             .averageRating),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const Text("out of 5"),
-                          ],
+                                  SizedBoxHelper.sizedBox_6,
+                                  Text(
+                                    widget.starRatingAverageModel.averageRating
+                                        .toStringAsFixed(1),
+                                    style: TextStyle(
+                                      color: StarRatingColourUtils
+                                          .getStarRatingColor(widget
+                                              .starRatingAverageModel
+                                              .averageRating),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Text("out of 5"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Good",
-                          style: TextStyle(
-                              color: StarRatingColourUtils.getStarRatingColor(
-                                  widget.starRatingAverageModel.averageRating),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                            "${widget.starRatingAverageModel.noOfRatings} Ratings"),
-                      ],
+                    const SizedBox(
+                      width: 20,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Good",
+                            style: TextStyle(
+                                color: StarRatingColourUtils.getStarRatingColor(
+                                    widget
+                                        .starRatingAverageModel.averageRating),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                              "${widget.starRatingAverageModel.noOfRatings} Ratings"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           SliverToBoxAdapter(
-            child: RatingStatsWidget(
-              count5Stars: widget.starRatingAverageModel.fiveStarRatingsCount,
-              count4Stars: widget.starRatingAverageModel.fourStarRatingsCount,
-              count3Stars: widget.starRatingAverageModel.threeStarRatingsCount,
-              count2Stars: widget.starRatingAverageModel.twoStarRatingsCount,
-              count1Star: widget.starRatingAverageModel.oneStarRatingsCount,
+            child: Container(
+              color: Colors.white,
+              child: RatingStatsWidget(
+                count5Stars: widget.starRatingAverageModel.fiveStarRatingsCount,
+                count4Stars: widget.starRatingAverageModel.fourStarRatingsCount,
+                count3Stars:
+                    widget.starRatingAverageModel.threeStarRatingsCount,
+                count2Stars: widget.starRatingAverageModel.twoStarRatingsCount,
+                count1Star: widget.starRatingAverageModel.oneStarRatingsCount,
+              ),
             ),
           ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 20,
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Container(
+                  color: Colors.white,
+                  height: 20,
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.black12,
+                ),
+              ],
             ),
           ),
           !_isLoading
               ? SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          height: 150,
-                          margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black26)),
-                          child:
-                              RatingsTile(ratingDetail: ratingsDetails[index]),
-                        ),
+                      return Column(
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                height: 150,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: RatingsTile(
+                                    ratingDetail: ratingsDetails[index]),
+                              ),
+                            ),
+                          ),
+                          const Divider(
+                            thickness: 0.5,
+                            color: Colors.black12,
+                          ),
+                        ],
                       );
                     },
                     childCount: ratingsDetails.length,

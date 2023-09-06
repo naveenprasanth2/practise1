@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 
 import '../../models/star_ratings_model/star_rating_details_model.dart';
 import '../../utils/star_rating_colour_utils.dart';
@@ -82,11 +83,20 @@ class RatingsTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      ratingDetail.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.person,
+                          color: Colors.black54,
+                        ),
+                        SizedBoxHelper.sizedBox_5,
+                        Text(
+                          ratingDetail.name,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black54),
+                        ),
+                      ],
                     ),
                     RatingBarIndicator(
                       rating: double.parse(ratingDetail.rating.toString()),
@@ -104,9 +114,12 @@ class RatingsTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      ratingDetail.timeStamp,
-                      style: const TextStyle(fontSize: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Text(
+                        ratingDetail.timeStamp,
+                        style: const TextStyle(fontSize: 12),
+                      ),
                     ),
                   ],
                 ),

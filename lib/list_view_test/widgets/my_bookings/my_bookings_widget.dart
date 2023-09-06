@@ -215,7 +215,7 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                       },
                       child: Container(
                         height: 50,
-                        width: 120,
+                        width: 100,
                         margin: const EdgeInsets.all(2),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -226,7 +226,6 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                             ),
                             Text(
                               "Cancel",
-                              style: TextStyle(color: Colors.black),
                             ),
                           ],
                         ),
@@ -270,14 +269,14 @@ class _MyBookingsWidgetState extends State<MyBookingsWidget> {
                           true)
                     Container(
                       height: 50,
-                      width: 120,
+                      width: 100,
                       margin: const EdgeInsets.all(2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Icon(
                             Icons.star,
-                            color: Colors.yellow.shade300,
+                            color: Colors.red.shade600,
                           ),
                           const Text(
                             "Rated",
