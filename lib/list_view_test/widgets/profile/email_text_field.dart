@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:validators/validators.dart' as validator;
 
-class EmailTextField extends StatelessWidget {
+import '../../providers/profile_provider.dart';
+
+class EmailTextField extends StatefulWidget {
   final String labelText;
   final String hintText;
   final bool enabled;
@@ -16,13 +19,32 @@ class EmailTextField extends StatelessWidget {
   });
 
   @override
+  State<EmailTextField> createState() => _EmailTextFieldState();
+}
+
+class _EmailTextFieldState extends State<EmailTextField> {
+  String? initialValue;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    initialValue ??=
+        Provider.of<ProfileProvider>(context, listen: true).emailId ?? '';
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    widget.textEditingController.text = initialValue!;
     return TextFormField(
-      controller: textEditingController,
+      controller: widget.textEditingController,
+      onChanged: (value){
+        initialValue = value;
+      },
       decoration: InputDecoration(
-        hintText: hintText,
-        labelText: labelText,
-        enabled: enabled,
+        hintText: widget.hintText,
+        labelText: widget.labelText,
+        enabled: widget.enabled,
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15,

@@ -47,7 +47,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _searchController.dispose();
     super.dispose();
   }
@@ -56,9 +55,18 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select a city"),
+        title: const Text(
+          "Select a city",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.red,
         // Set the background color of the AppBar to red
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -97,7 +105,8 @@ class _SearchPageState extends State<SearchPage> {
                     onTap: () {
                       _searchController.text =
                           _searchResults[index].split(",")[0];
-                      widget.homeSearchController.text = _searchResults[index].split(",")[0];
+                      widget.homeSearchController.text =
+                          _searchResults[index].split(",")[0];
                       widget.resultsController.text = _searchResults[index];
                       Navigator.pop(context);
                     },

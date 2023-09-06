@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProfileTextField extends StatelessWidget {
+import '../../providers/profile_provider.dart';
+
+class ProfileTextField extends StatefulWidget {
   final String labelText;
   final String hintText;
   final bool enabled;
@@ -15,14 +18,38 @@ class ProfileTextField extends StatelessWidget {
   });
 
   @override
+  State<ProfileTextField> createState() => _ProfileTextFieldState();
+}
+
+class _ProfileTextFieldState extends State<ProfileTextField> {
+  String? initialValue;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    initialValue ??= Provider.of<ProfileProvider>(context, listen: true).name ?? '';
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    widget.textEditingController.text = initialValue!;
     return TextFormField(
-      controller: textEditingController,
+      controller: widget.textEditingController,
       autocorrect: false,
+      onChanged: (value){
+        initialValue = value;
+      },
       decoration: InputDecoration(
-        hintText: hintText,
-        labelText: labelText,
-        enabled: enabled,
+        hintText: widget.hintText,
+        labelText: widget.labelText,
+        enabled: widget.enabled,
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15,
@@ -43,7 +70,7 @@ class ProfileTextField extends StatelessWidget {
       validator: (value) {
         if (value != null && value.length > 2) {
           return null;
-        }else{
+        } else {
           return "Please enter your name";
         }
       },
