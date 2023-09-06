@@ -40,8 +40,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
     return BottomAppBar(
       height: 80,
       color: Colors.white,
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.transparent),
+      child: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
