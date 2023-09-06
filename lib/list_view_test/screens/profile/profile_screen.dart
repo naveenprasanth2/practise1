@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/user_profile/user_profile_model.dart';
+import 'package:practise1/list_view_test/providers/auth_provider.dart';
 import 'package:practise1/list_view_test/providers/profile_provider.dart';
+import 'package:practise1/list_view_test/screens/flash_screen/flash_screen.dart';
 import 'package:practise1/list_view_test/screens/home/home_page.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
@@ -36,6 +38,26 @@ class _ProfilePageState extends State<ProfilePage> {
     return Consumer<ProfileProvider>(builder: (context, profileProvider, _) {
       return Scaffold(
         appBar: AppBar(
+          actions: Provider.of<AuthProvider>(context, listen: false).isSignedIn
+              ? [
+                  IconButton(
+                    onPressed: () {
+                      Provider.of<AuthProvider>(context, listen: false)
+                          .logout(context);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => const MySplashScreen(),
+                          ),
+                          (route) => false);
+                    },
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  )
+                ]
+              : [],
           title: const Text(
             'Profile Page',
             style: TextStyle(
@@ -44,6 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           backgroundColor: Colors.red,
+          iconTheme: const IconThemeData(color: Colors.white),
+          automaticallyImplyLeading:
+              Provider.of<AuthProvider>(context, listen: false).isSignedIn,
         ),
         body: profileProvider.isLoading
             ? const Center(
@@ -205,10 +230,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.red.shade400,
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "Continue",
-                              style: TextStyle(
+                              Provider.of<AuthProvider>(context).isSignedIn
+                                  ? "Save"
+                                  : "Continue",
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
