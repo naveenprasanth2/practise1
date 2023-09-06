@@ -174,8 +174,10 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                               color: Colors.white,
                               height: 150,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Row(
                                     crossAxisAlignment:
@@ -206,18 +208,19 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             return IconButton(
                                               onPressed: () {
                                                 showBottomSheet(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return aboutHotelModel !=
-                                                              null
-                                                          ? HotelDetailsBottomWidget(
-                                                              aboutHotelModel:
-                                                                  aboutHotelModel!,
-                                                            )
-                                                          : const SizedBox
-                                                              .shrink();
-                                                    });
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return aboutHotelModel !=
+                                                            null
+                                                        ? HotelDetailsBottomWidget(
+                                                            aboutHotelModel:
+                                                                aboutHotelModel!,
+                                                          )
+                                                        : const SizedBox
+                                                            .shrink();
+                                                  },
+                                                );
                                               },
                                               icon: Icon(
                                                 Icons.info_outline,
@@ -264,9 +267,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                                     .starRatingAverageModel
                                                     .averageRating),
                                           ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
+                                          SizedBoxHelper.sizedBox_5,
                                           Text(
                                             widget
                                                 .hotelSearchModel
@@ -282,9 +283,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
+                                          SizedBoxHelper.sizedBox_10,
                                           TextButton(
                                             onPressed: () {
                                               Navigator.push(
@@ -314,21 +313,21 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                       InkWell(
                                         onTap: () {
                                           Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      const MapScreen()));
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  const MapScreen(),
+                                            ),
+                                          );
                                         },
-                                        child: const Row(
+                                        child: Row(
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.location_pin,
                                               color: Colors.red,
                                             ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
+                                            SizedBoxHelper.sizedBox_5,
+                                            const Text(
                                               "Map View",
                                               style: TextStyle(
                                                 color: Colors.blueAccent,
