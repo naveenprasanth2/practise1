@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as crypto from 'crypto';
 import Razorpay from 'razorpay';
+import * as moment from 'moment-timezone';
 
 admin.initializeApp();
 
@@ -209,10 +210,18 @@ const processRating = functions.https.onRequest(async (request, response) => {
 });
 
 const fetchRatingsDaily = functions.pubsub
-    .schedule('*/5 * * * *' )
+    .schedule('5 * * * *')
     .timeZone('Asia/Kolkata') // Set to Indian Standard Time
     .onRun(async (context) => {
     try {
+        // Get the current date and time in IST
+const nowInIST = moment.tz("Asia/Kolkata");
+
+// Subtract one day to get yesterday's date
+const yesterdayInIST = nowInIST.subtract(2, 'days');
+
+// Format the date
+const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
       const collectionsSnapshot = await admin.firestore().listCollections();
 
       for (const collectionRef of collectionsSnapshot) {
@@ -231,10 +240,12 @@ const fetchRatingsDaily = functions.pubsub
 
           for (const hotelDocumentSnapshot of hotelsDocumentsSnapshot.docs) {
             const ratingsCollectionRef = hotelDocumentSnapshot.ref.collection('ratings');
-            const ratingsSnapshot = await ratingsCollectionRef
+                    // Fetch ratings documents created in the last 10 minutes and before 5 minutes
+                    const ratingsSnapshot = await ratingsCollectionRef
+                        .where('ratings.timeStamp', '==', formattedYesterdayDate)
                         .get();
-
-            
+                        console.log(formattedYesterdayDate);
+                        
             const ratings: number[] = []; // Array to store rating values
             
             ratingsSnapshot.forEach((ratingDoc) => {
@@ -270,7 +281,11 @@ const fetchRatingsDaily = functions.pubsub
             if (ratingsData !== undefined) {
                 const totalCurrentRatings = (ratingsData.oneStarRatingsCount + ratingsData.twoStarRatingsCount + 
                                             ratingsData.threeStarRatingsCount + ratingsData.fourStarRatingsCount + ratingsData.fiveStarRatingsCount);
-                ratingsData.averageRating = (((ratingsData.averageRating * totalCurrentRatings) + (sumOfAllNewRating))/(totalCurrentRatings + countOfNewRatings));
+                let calculatedAverage = ((ratingsData.averageRating * totalCurrentRatings) + sumOfAllNewRating) / (totalCurrentRatings + countOfNewRatings);
+
+                // Check if the calculated average is NaN and set it to 0 if true
+                ratingsData.averageRating = isNaN(calculatedAverage) ? 0 : calculatedAverage;
+                                            
                 ratingsData.oneStarRatingsCount = ratingsData.oneStarRatingsCount + valueOfOneStarRating;
                 ratingsData.twoStarRatingsCount = ratingsData.twoStarRatingsCount + valueOfTwoStarRating;
                 ratingsData.threeStarRatingsCount = ratingsData.threeStarRatingsCount + valueOfThreeStarRating;

@@ -99,14 +99,29 @@ class _HotelResultsWidgetState extends State<HotelResultsWidget> {
                           .averageRating),
                     ),
                     SizedBoxHelper.sizedBox_5,
-                    Text(widget
-                        .hotelSearchModel.starRatingAverageModel.averageRating
-                        .toStringAsFixed(1)),
+                    if (widget.hotelSearchModel.starRatingAverageModel
+                            .averageRating
+                            .toStringAsFixed(1) !=
+                        '0.0')
+                      Text(widget
+                          .hotelSearchModel.starRatingAverageModel.averageRating
+                          .toStringAsFixed(1)),
+                    if (widget.hotelSearchModel.starRatingAverageModel
+                            .averageRating
+                            .toStringAsFixed(1) ==
+                        '0.0')
+                      const Text(
+                        "Brand New",
+                        style: TextStyle(color: Colors.pinkAccent),
+                      ),
                     SizedBoxHelper.sizedBox_10,
-                    Text(
-                      "(${widget.hotelSearchModel.starRatingAverageModel.noOfRatings})",
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
+                    if (widget.hotelSearchModel.starRatingAverageModel
+                            .noOfRatings !=
+                        0)
+                      Text(
+                        "(${widget.hotelSearchModel.starRatingAverageModel.noOfRatings})",
+                        style: TextStyle(color: Colors.grey.shade600),
+                      ),
                   ],
                 ),
                 //Todo range implementation
