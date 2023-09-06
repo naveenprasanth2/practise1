@@ -172,7 +172,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               color: Colors.white,
-                              height: 150,
+                              height: 130,
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -233,7 +233,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     ],
                                   ),
                                   Flexible(
-                                    flex: 2,
+                                    flex: 1,
                                     child: Row(
                                       children: [
                                         Flexible(
