@@ -33,7 +33,7 @@ class AmenitiesMainWidget extends StatelessWidget {
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: AmenitiesFrameWidgetOne(
+                    child: AmenitiesFrameWidget(
                       amenitiesModel: amenitiesModel,
                     ),
                   ),

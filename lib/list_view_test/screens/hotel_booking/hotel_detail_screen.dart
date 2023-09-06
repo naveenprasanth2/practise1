@@ -19,8 +19,6 @@ import 'package:practise1/list_view_test/widgets/hotel_details_main_widgets/pric
 import 'package:practise1/list_view_test/widgets/house_policies/house_policies.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/list_view_test/models/amenities_model/amenities_model.dart';
-import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
-import 'package:practise1/list_view_test/utils/hotel_helper.dart';
 import 'package:practise1/list_view_test/utils/star_rating_colour_utils.dart';
 import 'package:practise1/list_view_test/widgets/hotel_details/hotel_details_bottom_widget.dart';
 
@@ -51,7 +49,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   AmenitiesModel? amenitiesModel;
   AboutHotelModel? aboutHotelModel;
   List<GuestPolicyModel>? guestPolicies;
-  StarRatingAverageModel? hotelRatings;
   HotelDetailsModel? hotelDetailsModel;
   NearbyPlacesModel? nearbyPlacesModel;
   List<CouponModel>? coupons;
@@ -64,7 +61,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
   void initState() {
     super.initState();
     _hotelDetailsStream = readHotelDetailsModelJson().asStream();
-    readHotelRatingsJson();
   }
 
   @override
@@ -109,17 +105,6 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       aboutHotelModel = hotelDetailsModel!.aboutHotelModel;
     });
     return hotelDetailsModel;
-  }
-
-  Future<void> readHotelRatingsJson() async {
-    final value =
-        await rootBundle.loadString("assets/star_ratings_average.json");
-    setState(() {
-      hotelRatings = StarRatingAverageModel.fromJson(json.decode(value));
-      totalRatings = hotelRatings != null
-          ? HotelHelper.calculateTotalRatings(hotelRatings!)
-          : 0;
-    });
   }
 
   setPriceData() async {
@@ -187,13 +172,16 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               color: Colors.white,
-                              height: 150,
+                              height: 130,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Column(
@@ -220,18 +208,19 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             return IconButton(
                                               onPressed: () {
                                                 showBottomSheet(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return aboutHotelModel !=
-                                                              null
-                                                          ? HotelDetailsBottomWidget(
-                                                              aboutHotelModel:
-                                                                  aboutHotelModel!,
-                                                            )
-                                                          : const SizedBox
-                                                              .shrink();
-                                                    });
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return aboutHotelModel !=
+                                                            null
+                                                        ? HotelDetailsBottomWidget(
+                                                            aboutHotelModel:
+                                                                aboutHotelModel!,
+                                                          )
+                                                        : const SizedBox
+                                                            .shrink();
+                                                  },
+                                                );
                                               },
                                               icon: Icon(
                                                 Icons.info_outline,
@@ -244,12 +233,13 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                     ],
                                   ),
                                   Flexible(
-                                    flex: 2,
+                                    flex: 1,
                                     child: Row(
                                       children: [
                                         Flexible(
                                           child: Text(
-                                            hotelDetailsModel.locationDetails.hotelLocationDetails.address,
+                                            hotelDetailsModel.locationDetails
+                                                .hotelLocationDetails.address,
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 15,
@@ -274,25 +264,26 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                             color: StarRatingColourUtils
                                                 .getStarRatingColor(widget
                                                     .hotelSearchModel
-                                                    .averageRatings),
+                                                    .starRatingAverageModel
+                                                    .averageRating),
                                           ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
+                                          SizedBoxHelper.sizedBox_5,
                                           Text(
-                                            widget.hotelSearchModel.averageRatings
-                                                .toString(),
+                                            widget
+                                                .hotelSearchModel
+                                                .starRatingAverageModel
+                                                .averageRating
+                                                .toStringAsFixed(1),
                                             style: TextStyle(
                                               color: StarRatingColourUtils
                                                   .getStarRatingColor(widget
                                                       .hotelSearchModel
-                                                      .averageRatings),
+                                                      .starRatingAverageModel
+                                                      .averageRating),
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
+                                          SizedBoxHelper.sizedBox_10,
                                           TextButton(
                                             onPressed: () {
                                               Navigator.push(
@@ -300,15 +291,19 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ReviewsScreen(
-                                                    averageRatings: widget
+                                                    starRatingAverageModel: widget
                                                         .hotelSearchModel
-                                                        .averageRatings,
+                                                        .starRatingAverageModel,
+                                                    hotelSearchModel:
+                                                        widget.hotelSearchModel,
+                                                    cityAndState:
+                                                        widget.cityAndState,
                                                   ),
                                                 ),
                                               );
                                             },
                                             child: Text(
-                                              "${widget.hotelSearchModel.noOfRatings} ratings",
+                                              "${widget.hotelSearchModel.starRatingAverageModel.noOfRatings} ratings",
                                               style: const TextStyle(
                                                   color: Colors.blue),
                                             ),
@@ -318,21 +313,21 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                       InkWell(
                                         onTap: () {
                                           Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      const MapScreen()));
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (builder) =>
+                                                  const MapScreen(),
+                                            ),
+                                          );
                                         },
-                                        child: const Row(
+                                        child: Row(
                                           children: [
-                                            Icon(
+                                            const Icon(
                                               Icons.location_pin,
                                               color: Colors.red,
                                             ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
+                                            SizedBoxHelper.sizedBox_5,
+                                            const Text(
                                               "Map View",
                                               style: TextStyle(
                                                 color: Colors.blueAccent,
@@ -386,6 +381,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
         bottomNavigationBar: HotelDetailsBottomBar(
           hotelDetailsModel: hotelDetailsModel,
           aboutHotelModel: aboutHotelModel,
+          hotelSearchModel: widget.hotelSearchModel,
         ),
       ),
     );

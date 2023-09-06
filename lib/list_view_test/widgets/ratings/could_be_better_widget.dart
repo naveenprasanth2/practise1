@@ -1,13 +1,13 @@
 // import 'package:flutter/material.dart';
-//
+
 // class CouldBeBetterWidget extends StatefulWidget {
 //   final
 //   const CouldBeBetterWidget({super.key});
-//
+
 //   @override
 //   State<CouldBeBetterWidget> createState() => _CouldBeBetterWidgetState();
 // }
-//
+
 // class _CouldBeBetterWidgetState extends State<CouldBeBetterWidget> {
 //   @override
 //   Widget build(BuildContext context) {

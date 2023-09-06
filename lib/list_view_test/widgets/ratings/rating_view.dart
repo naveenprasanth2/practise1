@@ -1,11 +1,26 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/models/booking_history_model/booking_history_display_model.dart';
+import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_rating_details_model.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
+import 'package:practise1/list_view_test/utils/date_helper/date_helper.dart';
+import 'package:practise1/list_view_test/utils/ratings_helper/ratings_helper.dart';
+import 'package:practise1/list_view_test/widgets/ratings/rating_failure_widget.dart';
+import 'package:practise1/list_view_test/widgets/ratings/rating_succesful_dialog.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../utils/dart_helper/sizebox_helper.dart';
 
 class RatingView extends StatefulWidget {
-  const RatingView({super.key});
+  final BookingHistoryDisplayModel bookingHistoryDisplayModel;
+  const RatingView({
+    super.key,
+    required this.bookingHistoryDisplayModel,
+  });
 
   @override
   State<RatingView> createState() => _RatingViewState();
@@ -26,6 +41,11 @@ class _RatingViewState extends State<RatingView> {
     "Cleanliness",
     "Basic Amenities",
   ];
+  bool _isLoading = false;
+  int? noOfStarsSelected;
+  String? whatCouldBeBetter;
+  String? description;
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +78,21 @@ class _RatingViewState extends State<RatingView> {
               color: Colors.red.shade400,
               child: MaterialButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  sendFeedback();
+                  setState(() {
+                    _isLoading = true;
+                  });
                 },
-                child: const Text(
-                  "Done",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: !_isLoading
+                    ? const Text(
+                        "Done",
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -98,6 +127,7 @@ class _RatingViewState extends State<RatingView> {
                       _starPosition = 30.0;
                       //index starts with 0, so added 1
                       _rating = index + 1;
+                      noOfStarsSelected = _rating;
                     });
                   },
                   icon: index < _rating
@@ -169,6 +199,7 @@ class _RatingViewState extends State<RatingView> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  controller: _textEditingController,
                   focusNode: _moreDetailsFocusNode,
                   decoration: InputDecoration(
                     hintText: "Write your review here",
@@ -194,6 +225,7 @@ class _RatingViewState extends State<RatingView> {
                       onTap: () {
                         setState(() {
                           _selectedValue = option;
+                          whatCouldBeBetter = _selectedValue;
                         });
                       },
                       child: Chip(
@@ -237,5 +269,53 @@ class _RatingViewState extends State<RatingView> {
         ),
       ],
     );
+  }
+
+  void sendFeedback() async {
+    final BookingHistoryModel bookingHistoryModel =
+        widget.bookingHistoryDisplayModel.bookingHistoryModel;
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    description = _textEditingController.text == ""
+        ? RatingsHelper.titleBasedOnStars(noOfStarsSelected!)
+        : _textEditingController.text;
+    StarRatingDetailsModel starRatingDetailsModel = StarRatingDetailsModel(
+        name: profileProvider.name!,
+        rating: noOfStarsSelected!,
+        title: RatingsHelper.titleBasedOnStars(noOfStarsSelected!),
+        timeStamp: DateHelper.getCurrentDate(),
+        description: description!);
+
+    await http
+        .post(
+      Uri.parse("https://us-central1-bookany.cloudfunctions.net/processRating"),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'bookingHistoryModel': bookingHistoryModel,
+        'starRatingDetailsModel': starRatingDetailsModel,
+        'mobileNo': profileProvider.mobileNo,
+      }),
+    )
+        .then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context); // pop the current screen/dialog
+        showDialog(
+          context: context,
+          builder: (builder) => const RatingSuccessfulWidget(),
+        ); // show the success widget
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context); // pop the current screen/dialog
+        showDialog(
+          context: context,
+          builder: (builder) => const RatingFailureWidget(),
+        );
+      }
+    });
   }
 }
