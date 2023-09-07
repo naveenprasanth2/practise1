@@ -161,7 +161,7 @@ class AuthProvider extends ChangeNotifier {
 
   void resetUserProfileModel() {
     userProfileModel = UserProfileModel(
-        name: "Guest",
+        name: "",
         mobileNo: "",
         emailId: "",
         dateOfBirth: "Date of Birth",

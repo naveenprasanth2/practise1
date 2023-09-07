@@ -210,7 +210,7 @@ const processRating = functions.https.onRequest(async (request, response) => {
 });
 
 const fetchRatingsDaily = functions.pubsub
-    .schedule('5 * * * *')
+    .schedule('0 0 * * *')
     .timeZone('Asia/Kolkata') // Set to Indian Standard Time
     .onRun(async (context) => {
     try {
@@ -218,7 +218,7 @@ const fetchRatingsDaily = functions.pubsub
 const nowInIST = moment.tz("Asia/Kolkata");
 
 // Subtract one day to get yesterday's date
-const yesterdayInIST = nowInIST.subtract(2, 'days');
+const yesterdayInIST = nowInIST.subtract(1, 'days');
 
 // Format the date
 const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
@@ -240,7 +240,7 @@ const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
 
           for (const hotelDocumentSnapshot of hotelsDocumentsSnapshot.docs) {
             const ratingsCollectionRef = hotelDocumentSnapshot.ref.collection('ratings');
-                    // Fetch ratings documents created in the last 10 minutes and before 5 minutes
+                    // Fetch ratings documents created yesterday
                     const ratingsSnapshot = await ratingsCollectionRef
                         .where('ratings.timeStamp', '==', formattedYesterdayDate)
                         .get();
