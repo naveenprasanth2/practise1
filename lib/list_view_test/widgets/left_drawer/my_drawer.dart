@@ -62,14 +62,14 @@ class _MyDrawerState extends State<MyDrawer> {
                               SizedBoxHelper.sizedBox10,
                               Text(
                                 //this is done in order to handle non login situations
-                                Provider.of<ProfileProvider>(context,
+                                (Provider.of<ProfileProvider>(context,
                                                     listen: false)
                                                 .name !=
-                                            null ||
+                                            null &&
                                         Provider.of<ProfileProvider>(context,
                                                     listen: false)
                                                 .name !=
-                                            ""
+                                            "")
                                     ? Provider.of<ProfileProvider>(context,
                                             listen: false)
                                         .name!
