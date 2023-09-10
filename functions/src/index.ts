@@ -261,13 +261,6 @@ const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
             const valueOfFiveStarRating = ratings.filter(rating => rating === 5).length;
             const sumOfAllNewRating = ratings.reduce((sum, rating) => sum + rating, 0);
             const countOfNewRatings = ratings.length;
-            
-
-            console.log(valueOfOneStarRating + "one");
-            console.log(valueOfTwoStarRating + "two");
-            console.log(valueOfThreeStarRating+ "three");
-            console.log(valueOfFourStarRating + "four");
-            console.log(valueOfFiveStarRating + "five");
 
             // Get the document ID as the field name
             const fieldName = hotelDocumentSnapshot.id;

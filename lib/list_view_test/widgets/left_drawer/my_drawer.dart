@@ -182,14 +182,14 @@ class _MyDrawerState extends State<MyDrawer> {
                     child: Row(children: [
                       //made changes for this icon to align with other icons
                       const Padding(
-                        padding: EdgeInsets.all(5.0),
+                        padding: EdgeInsets.only(left: 5.0),
                         child: Icon(
                           Icons.logout,
                           size: 30,
                         ),
                       ),
-                      SizedBoxHelper.sizedBox_20,
-                      const Text('logout', style: TextStyle(fontSize: 17)),
+                      SizedBoxHelper.sizedBox_15,
+                      const Text('Logout', style: TextStyle(fontSize: 17)),
                     ]),
                   ),
                 ),
