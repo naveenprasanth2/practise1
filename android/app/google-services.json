@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1099359424912:android:28a790e74821dfcbe6a315",
+        "mobilesdk_app_id": "1:1099359424912:android:b7319e63f49d8923e6a315",
         "android_client_info": {
           "package_name": "com.bookany.users"
         }
@@ -86,14 +86,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "1099359424912-da7mg9ifho07hgsfc20d5vmf8pf6fr36.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.practise1",
-            "certificate_hash": "865ac896228c5225a00da7246e8f81f9353f39db"
-          }
-        },
         {
           "client_id": "1099359424912-umpool0nedo6e0100d046788f7ps68oe.apps.googleusercontent.com",
           "client_type": 3

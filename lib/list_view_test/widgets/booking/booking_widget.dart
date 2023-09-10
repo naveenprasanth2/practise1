@@ -383,15 +383,16 @@ class _BookingWidgetState extends State<BookingWidget> {
     _razorpay.open(options);
   }
 
-  void sendBookingData() {
-    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    firebaseFirestore
-        .collection("users")
-        .doc(Provider.of<ProfileProvider>(context, listen: false).mobileNo)
-        .collection("bookings")
-        .doc(widget.bookingHistoryModel.bookingId)
-        .set({
-      widget.bookingHistoryModel.bookingId: widget.bookingHistoryModel.toJson()
-    });
-  }
+  //leaving this only for testing the authorization to write
+  // void sendBookingData() {
+  //   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  //   firebaseFirestore
+  //       .collection("users")
+  //       .doc(Provider.of<ProfileProvider>(context, listen: false).mobileNo)
+  //       .collection("bookings")
+  //       .doc(widget.bookingHistoryModel.bookingId)
+  //       .set({
+  //     widget.bookingHistoryModel.bookingId: widget.bookingHistoryModel.toJson()
+  //   });
+  // }
 }
