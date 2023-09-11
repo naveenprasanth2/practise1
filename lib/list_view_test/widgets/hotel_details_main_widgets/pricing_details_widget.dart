@@ -198,6 +198,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
             Provider.of<CouponStateProvider>(context, listen: false).couponCode,
         hotelId: widget.hotelDetailsModel!.id,
         rated: false,
-        roomsCount: countProvider.roomsInfo.length);
+        roomsCount: countProvider.roomsInfo.length,
+        roomType: calculationProvider.roomSelection.roomType);
   }
 }

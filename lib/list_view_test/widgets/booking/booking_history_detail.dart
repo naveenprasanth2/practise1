@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/list_view_test/utils/string_utils.dart';
 import 'package:practise1/list_view_test/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/list_view_test/widgets/room_occupancy_details/add_rooms_widget.dart';
 
@@ -245,6 +246,31 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                                 "${bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests"),
                           ],
                         ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Room Type",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(StringUtils.convertToSentenceCaseForAll(
+                            bookingHistoryDisplayModel
+                                .bookingHistoryModel.roomType)),
                       ],
                     ),
                   ),

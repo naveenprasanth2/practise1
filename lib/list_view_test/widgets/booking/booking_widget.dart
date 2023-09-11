@@ -379,6 +379,9 @@ class _BookingWidgetState extends State<BookingWidget> {
                 .toJson()),
       }
     };
+    print(widget.bookingHistoryModel.roomType);
+    print(jsonEncode(BookingScheduleSplitJson.fromBookingHistoryModel(
+        widget.bookingHistoryModel)));
     _razorpay.open(options);
   }
 

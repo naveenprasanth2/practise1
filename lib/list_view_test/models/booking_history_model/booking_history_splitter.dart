@@ -23,6 +23,7 @@ class BookingScheduleSplitJson {
   final String checkOutDate;
   final String checkOutTime;
   final int roomsCount;
+  final String roomType;
   final int guestsCount;
 
   BookingScheduleSplitJson.fromBookingHistoryModel(
@@ -32,6 +33,7 @@ class BookingScheduleSplitJson {
         checkOutDate = bookingHistoryModel.checkOutDate,
         checkOutTime = bookingHistoryModel.checkOutTime,
         roomsCount = bookingHistoryModel.roomsCount,
+        roomType = bookingHistoryModel.roomType,
         guestsCount = bookingHistoryModel.guestsCount;
 
   Map<String, dynamic> toJson() {
@@ -41,6 +43,7 @@ class BookingScheduleSplitJson {
       'checkOutDate': checkOutDate,
       'checkOutTime': checkOutTime,
       'roomsCount': roomsCount,
+      'roomType': roomType,
       'guestsCount': guestsCount,
     };
   }
