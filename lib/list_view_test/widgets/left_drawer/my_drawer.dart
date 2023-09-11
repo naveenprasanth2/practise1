@@ -48,40 +48,59 @@ class _MyDrawerState extends State<MyDrawer> {
                           decoration: const BoxDecoration(
                             color: Colors.white,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Hello,',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Hello,',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBoxHelper.sizedBox10,
+                                  Text(
+                                    //this is done in order to handle non login situations
+                                    (Provider.of<ProfileProvider>(context,
+                                                        listen: false)
+                                                    .name !=
+                                                null &&
+                                            Provider.of<ProfileProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .name !=
+                                                "")
+                                        ? Provider.of<ProfileProvider>(context,
+                                                listen: false)
+                                            .name!
+                                        : "Guest",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                    maxLines: 1, // Set maximum lines to 1
+                                    overflow: TextOverflow
+                                        .ellipsis, // Add ellipsis (...) for overflow
+                                  ),
+                                ],
                               ),
-                              SizedBoxHelper.sizedBox10,
-                              Text(
-                                //this is done in order to handle non login situations
-                                (Provider.of<ProfileProvider>(context,
-                                                    listen: false)
-                                                .name !=
-                                            null &&
-                                        Provider.of<ProfileProvider>(context,
-                                                    listen: false)
-                                                .name !=
-                                            "")
-                                    ? Provider.of<ProfileProvider>(context,
-                                            listen: false)
-                                        .name!
-                                    : "Guest",
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                ),
-                                maxLines: 1, // Set maximum lines to 1
-                                overflow: TextOverflow
-                                    .ellipsis, // Add ellipsis (...) for overflow
-                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        //editing profile page
+                                        builder: (builder) =>
+                                            const ProfilePage(),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.arrow_right)),
                             ],
                           ),
                         ),
