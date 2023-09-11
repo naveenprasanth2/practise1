@@ -87,15 +87,18 @@ class _RoomTypesWidgetState extends State<RoomTypesWidget>
                             .toList(),
                       ),
                     ),
-                    SizedBox(
+                    Container(
+                      color: Colors.white,
                       height: 450,
                       child: TabBarView(
                         controller: _tabController,
                         viewportFraction: 0.90,
                         children: widget.roomTypeModel
                             .map(
-                              (roomType) =>
-                                  SelectRoomWidget(roomTypeModel: roomType),
+                              (roomType) => Container(
+                                  color: Colors.white,
+                                  child: SelectRoomWidget(
+                                      roomTypeModel: roomType)),
                             )
                             .toList(),
                       ),
