@@ -161,7 +161,9 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                               ),
                             ),
                             Text(bookingHistoryDisplayModel
-                                .bookingHistoryModel.bookingId),
+                                .bookingHistoryModel.bookingId
+                                .split("_")
+                                .last),
                           ],
                         ),
                         Align(
@@ -171,7 +173,9 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                               GeneralUtils.copyBookingIdToClipboard(
                                   context,
                                   bookingHistoryDisplayModel
-                                      .bookingHistoryModel.bookingId);
+                                      .bookingHistoryModel.bookingId
+                                      .split("_")
+                                      .last);
                             },
                             icon: const Icon(Icons.copy),
                           ),
@@ -307,32 +311,50 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Contact BookAny"),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.arrow_forward_ios)),
-                          ],
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Contact bookAny"),
+                                    Icon(Icons.arrow_forward_ios),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  InkWell(
+                    onTap: () {
+                      GeneralUtils.launchPhone(bookingHistoryDisplayModel
+                          .hotelSearchModel.hotelContactDetails.phone);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Contact Property Desk"),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.arrow_forward_ios)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Contact Property Desk"),
+                              Icon(Icons.arrow_forward_ios),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(
                     width: double.infinity,

@@ -189,7 +189,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         checkInTime: "12:00PM",
         checkOutTime: "11:00AM",
         checkOutStatus: "booked",
-        cityAndState: "chennai, Tamilnadu",
+        cityAndState: widget.hotelSearchModel.cityAndState,
         discount: Provider.of<CouponStateProvider>(context, listen: false)
                 .selectedCoupon
                 ?.percentage ??
