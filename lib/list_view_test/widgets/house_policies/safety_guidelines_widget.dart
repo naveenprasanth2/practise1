@@ -28,55 +28,58 @@ class SafetyGuidelinesWidget extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SizedBoxHelper.sizedBox10,
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Do's",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBoxHelper.sizedBox20,
-                          Column(
-                            children: snapshot.data!.dos
-                                .map((dosText) => GuidelinesIndividualWidget(
-                                    type: "dos", value: dosText))
-                                .toList(),
-                          ),
-                          SizedBoxHelper.sizedBox20,
-                          const Text(
-                            "Dont's",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBoxHelper.sizedBox20,
-                          Column(
-                            children: snapshot.data!.donts
-                                .map((dosText) => GuidelinesIndividualWidget(
-                                    type: "donts", value: dosText))
-                                .toList(),
-                          ),
-                        ],
+          return Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBoxHelper.sizedBox10,
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Do's",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBoxHelper.sizedBox20,
+                            Column(
+                              children: snapshot.data!.dos
+                                  .map((dosText) => GuidelinesIndividualWidget(
+                                      type: "dos", value: dosText))
+                                  .toList(),
+                            ),
+                            SizedBoxHelper.sizedBox20,
+                            const Text(
+                              "Dont's",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBoxHelper.sizedBox20,
+                            Column(
+                              children: snapshot.data!.donts
+                                  .map((dosText) => GuidelinesIndividualWidget(
+                                      type: "donts", value: dosText))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
