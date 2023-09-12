@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/utils/string_utils.dart';
+import 'package:practise1/list_view_test/widgets/booking/chat_bubble.dart';
 import 'package:practise1/list_view_test/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/list_view_test/widgets/room_occupancy_details/add_rooms_widget.dart';
 
@@ -302,7 +303,9 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                                 const Text("Amount paid"),
                                 SizedBoxHelper.sizedBox_10,
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    print("test");
+                                  },
                                   icon: const Icon(Icons.info_outline),
                                 ),
                               ],
