@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:practise1/list_view_test/screens/authentication/register_screen.dart';
 import 'package:practise1/list_view_test/screens/flash_screen/flash_screen.dart';
+import 'package:practise1/list_view_test/screens/language/select_language_screen.dart';
 import 'package:practise1/list_view_test/screens/profile/profile_screen.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:provider/provider.dart';
@@ -266,19 +267,68 @@ class _MyDrawerState extends State<MyDrawer> {
                   child: Container(
                     height: 60,
                     color: Colors.white,
-                    child: Row(children: [
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.login,
+                          size: 30,
+                        ),
+                        SizedBoxHelper.sizedBox_20,
+                        const Text(
+                          'login',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  height: 60,
+                  color: Colors.white,
+                  child: Row(
+                    children: [
                       const Icon(
-                        Icons.login,
+                        Icons.help_outline_rounded,
                         size: 30,
                       ),
                       SizedBoxHelper.sizedBox_20,
                       const Text(
-                        'login',
+                        'Need help?',
                         style: TextStyle(fontSize: 17),
                       ),
-                    ]),
+                    ],
                   ),
                 ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => SelectLanguageScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 60,
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.language_outlined,
+                        size: 30,
+                      ),
+                      SizedBoxHelper.sizedBox_20,
+                      const Text(
+                        'Change language',
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
