@@ -68,7 +68,7 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearProfileProviderData(){
+  void clearProfileProviderData() {
     _name = '';
     _emailId = '';
     _mobileNo = '';

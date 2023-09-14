@@ -6,6 +6,7 @@ class BookingDataProvider extends ChangeNotifier {
   List<BookingHistoryDisplayModel> _upcomingList = [];
   List<BookingHistoryDisplayModel> _checkedOutList = [];
   List<BookingHistoryDisplayModel> _cancelledList = [];
+  bool isPayNowLoading = false;
 
   List<BookingHistoryDisplayModel> get upcomingList => _upcomingList;
 
@@ -28,10 +29,17 @@ class BookingDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void swapDataFromUpcomingToCancelledList(String bookingId){
-    BookingHistoryDisplayModel removedValue = _upcomingList.firstWhere((element) => element.bookingHistoryModel.checkOutStatus == "cancelled");
-    _upcomingList.removeWhere((element) => element.bookingHistoryModel.checkOutStatus == "cancelled");
+  void swapDataFromUpcomingToCancelledList(String bookingId) {
+    BookingHistoryDisplayModel removedValue = _upcomingList.firstWhere(
+        (element) => element.bookingHistoryModel.checkOutStatus == "cancelled");
+    _upcomingList.removeWhere(
+        (element) => element.bookingHistoryModel.checkOutStatus == "cancelled");
     _cancelledList.insert(0, removedValue);
+    notifyListeners();
+  }
+
+  void setIsPayNowLoading(bool value) {
+    isPayNowLoading = value;
     notifyListeners();
   }
 }
