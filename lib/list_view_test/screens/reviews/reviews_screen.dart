@@ -1,7 +1,7 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:practise1/list_view_test/models/hotel_search/hotel_search_model.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/list_view_test/widgets/ratings/ratings_widget.dart';
 
@@ -10,9 +10,15 @@ import '../../utils/star_rating_colour_utils.dart';
 import '../../widgets/ratings/ratings_tile.dart';
 
 class ReviewsScreen extends StatefulWidget {
-  final double averageRatings;
+  final HotelSearchModel hotelSearchModel;
+  final StarRatingAverageModel starRatingAverageModel;
+  final String cityAndState;
 
-  const ReviewsScreen({Key? key, required this.averageRatings})
+  const ReviewsScreen(
+      {Key? key,
+      required this.starRatingAverageModel,
+      required this.hotelSearchModel,
+      required this.cityAndState})
       : super(key: key);
 
   @override
@@ -21,22 +27,38 @@ class ReviewsScreen extends StatefulWidget {
 
 class _ReviewsScreenState extends State<ReviewsScreen> {
   List<StarRatingDetailsModel> ratingsDetails = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    getDetailedReviewsFromJson();
+    getDetailedReviews();
   }
 
-  Future<void> getDetailedReviewsFromJson() async {
-    final value =
-        await rootBundle.loadString("assets/star_ratings_detail.json");
-    setState(() {
-      final dynamic ratingsDetailsData = json.decode(value);
+  Future<void> getDetailedReviews() async {
+    final city = widget.cityAndState.split(",")[0].trim().toLowerCase();
+    final state = widget.cityAndState.split(",")[1].trim().toLowerCase();
 
-      for (var json in ratingsDetailsData) {
-        ratingsDetails.add(StarRatingDetailsModel.fromJson(json));
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(state)
+        .doc(city)
+        .collection("hotels")
+        .doc(widget.hotelSearchModel.hotelId)
+        .collection("ratings")
+        .get();
+
+    List<StarRatingDetailsModel> tempList = [];
+    for (var doc in querySnapshot.docs) {
+      var docData =
+          doc.data() as Map<String, dynamic>?; // Cast to Map<String, dynamic>
+      if (docData != null) {
+        var ratingsData = docData['ratings'] as Map<String, dynamic>;
+        tempList.add(StarRatingDetailsModel.fromJson(ratingsData));
       }
+    }
+    setState(() {
+      ratingsDetails = tempList;
+      _isLoading = false;
     });
   }
 
@@ -49,120 +71,159 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             backgroundColor: Colors.red.shade400,
             title: const Text(
               "Ratings & Reviews",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             centerTitle: true,
+            iconTheme: const IconThemeData(color: Colors.white),
+            automaticallyImplyLeading: true,
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: StarRatingColourUtils.getStarRatingColor(
-                              widget.averageRatings),
+            child: Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: StarRatingColourUtils.getStarRatingColor(
+                                widget.starRatingAverageModel.averageRating),
+                          ),
                         ),
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color:
-                                      StarRatingColourUtils.getStarRatingColor(
-                                          widget.averageRatings),
-                                ),
-                                SizedBoxHelper.sizedBox_6,
-                                Text(
-                                  widget.averageRatings.toString(),
-                                  style: TextStyle(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star,
                                     color: StarRatingColourUtils
-                                        .getStarRatingColor(
-                                            widget.averageRatings),
+                                        .getStarRatingColor(widget
+                                            .starRatingAverageModel
+                                            .averageRating),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const Text("out of 5"),
-                          ],
+                                  SizedBoxHelper.sizedBox_6,
+                                  Text(
+                                    widget.starRatingAverageModel.averageRating
+                                        .toStringAsFixed(1),
+                                    style: TextStyle(
+                                      color: StarRatingColourUtils
+                                          .getStarRatingColor(widget
+                                              .starRatingAverageModel
+                                              .averageRating),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Text("out of 5"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Good",
-                          style: TextStyle(
-                              color: StarRatingColourUtils.getStarRatingColor(
-                                  widget.averageRatings),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text("${ratingsDetails.length} Ratings"),
-                      ],
+                    const SizedBox(
+                      width: 20,
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Good",
+                            style: TextStyle(
+                                color: StarRatingColourUtils.getStarRatingColor(
+                                    widget
+                                        .starRatingAverageModel.averageRating),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                              "${widget.starRatingAverageModel.noOfRatings} Ratings"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const SliverToBoxAdapter(
-            child: RatingStatsWidget(
-              count5Stars: 1,
-              count4Stars: 4,
-              count3Stars: 9,
-              count2Stars: 7,
-              count1Star: 5,
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.white,
+              child: RatingStatsWidget(
+                count5Stars: widget.starRatingAverageModel.fiveStarRatingsCount,
+                count4Stars: widget.starRatingAverageModel.fourStarRatingsCount,
+                count3Stars:
+                    widget.starRatingAverageModel.threeStarRatingsCount,
+                count2Stars: widget.starRatingAverageModel.twoStarRatingsCount,
+                count1Star: widget.starRatingAverageModel.oneStarRatingsCount,
+              ),
             ),
           ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 20,
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Container(
+                  color: Colors.white,
+                  height: 20,
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.black12,
+                ),
+              ],
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Container(
-                    height: 150,
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black26)),
-                    child: RatingsTile(ratingDetail: ratingsDetails[index]),
+          !_isLoading
+              ? SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                height: 150,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: RatingsTile(
+                                    ratingDetail: ratingsDetails[index]),
+                              ),
+                            ),
+                          ),
+                          const Divider(
+                            thickness: 0.5,
+                            color: Colors.black12,
+                          ),
+                        ],
+                      );
+                    },
+                    childCount: ratingsDetails.length,
                   ),
-                );
-              },
-              childCount: ratingsDetails.length,
-            ),
-          ),
+                )
+              : const SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
         ],
       ),
     );

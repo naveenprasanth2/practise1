@@ -20,11 +20,13 @@ import 'days_of_stay.dart';
 class BookingWidget extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
   final BookingHistoryModel bookingHistoryModel;
+  final BuildContext detailsScreenContext;
 
   const BookingWidget(
       {Key? key,
       required this.hotelDetailsModel,
-      required this.bookingHistoryModel})
+      required this.bookingHistoryModel,
+      required this.detailsScreenContext})
       : super(key: key);
 
   @override
@@ -52,6 +54,8 @@ class _BookingWidgetState extends State<BookingWidget> {
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsPayNowLoading(false);
+    Provider.of<BookingDataProvider>(context, listen: false)
+        .setIsRetryLoading(false);
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
@@ -61,6 +65,8 @@ class _BookingWidgetState extends State<BookingWidget> {
   void _handlePaymentError(PaymentFailureResponse response) {
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsPayNowLoading(false);
+    Provider.of<BookingDataProvider>(context, listen: false)
+        .setIsRetryLoading(false);
     showDialog(
       context: context,
       builder: (context) =>
@@ -152,10 +158,10 @@ class _BookingWidgetState extends State<BookingWidget> {
                   flex: 1,
                   child: Container(
                     alignment: Alignment.center,
-                    child: const Text(
-                      'Naveen Prasanth',
+                    child: Text(
+                      Provider.of<ProfileProvider>(context).reservedFor!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                       ),
                     ),
@@ -290,7 +296,8 @@ class _BookingWidgetState extends State<BookingWidget> {
                   InkWell(
                     onTap: () {
                       // sendBookingData();
-
+                      Provider.of<BookingDataProvider>(context, listen: false)
+                          .setIsPayNowLoading(true);
                       initiatePayment();
                     },
                     child: Container(
@@ -337,19 +344,20 @@ class _BookingWidgetState extends State<BookingWidget> {
   }
 
   void initiatePayment() {
-    Provider.of<BookingDataProvider>(context, listen: false)
-        .setIsPayNowLoading(true);
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
     var options = {
       'key': 'rzp_test_w1r1PYTH0wy118',
-      'amount': 100, // Amount in paise (e.g., for ₹10, amount should be 1000)
+      'amount': (Provider.of<CalculationProvider>(context, listen: false)
+              .finalPriceWithPrepaidDiscount!) *
+          100, // Amount in paise (e.g., for ₹10, amount should be 1000)
       'name': 'BookAny',
       'description': widget.bookingHistoryModel.bookingId,
       'prefill': {
-        'contact':
-            Provider.of<ProfileProvider>(context, listen: false).mobileNo,
-        'email': Provider.of<ProfileProvider>(context, listen: false).emailId,
+        'contact': profileProvider.mobileNo,
+        'email': profileProvider.emailId,
       },
-      'userId': Provider.of<ProfileProvider>(context, listen: false).mobileNo,
+      'userId': profileProvider.mobileNo,
       'external': {
         'wallets': ['paytm'] // You can specify supported wallets
       },
