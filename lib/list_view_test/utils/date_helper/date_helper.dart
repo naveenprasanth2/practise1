@@ -20,6 +20,13 @@ class DateHelper {
         .inDays;
   }
 
+  static int getNoOfDaysInBetweenInShort(String fromDate, String toDate) {
+    return DateFormat('MMM-dd')
+        .parse(toDate)
+        .difference(DateFormat('MMM-dd').parse(fromDate))
+        .inDays;
+  }
+
   static String getCurrentTime() {
     return DateTime.now().hour.toString() +
         DateTime.now().minute.toString() +

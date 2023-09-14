@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/utils/date_helper/date_helper.dart';
 
 import '../../utils/dart_helper/sizebox_helper.dart';
 
@@ -16,7 +17,7 @@ class DatesOfStayContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      width: MediaQuery.of(context).size.width * 0.90,
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -31,11 +32,10 @@ class DatesOfStayContainer extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Check-In',
@@ -65,22 +65,26 @@ class DatesOfStayContainer extends StatelessWidget {
             ],
           ),
           Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SizedBox(
-                height: 50,
-                width: 100,
-                child: Icon(
-                  Icons.hotel,
-                  size: 50,
-                  color: Colors.red.shade400,
+            child: SizedBox(
+              height: 50,
+              width: 100,
+              child: Center(
+                child: Text(
+                  DateHelper.getNoOfDaysInBetweenInShort(
+                              checkInDate, checkOutDate)
+                          .toString() +
+                      "N".toString(),
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.red.shade400,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Check-Out',
