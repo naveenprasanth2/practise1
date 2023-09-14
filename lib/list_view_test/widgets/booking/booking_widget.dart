@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/models/booking_history_model/booking_history_model.dart';
 import 'package:practise1/list_view_test/models/hotel_detail_model/hotel_details_model_v2.dart';
@@ -383,15 +382,16 @@ class _BookingWidgetState extends State<BookingWidget> {
     _razorpay.open(options);
   }
 
-  void sendBookingData() {
-    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    firebaseFirestore
-        .collection("users")
-        .doc(Provider.of<ProfileProvider>(context, listen: false).mobileNo)
-        .collection("bookings")
-        .doc(widget.bookingHistoryModel.bookingId)
-        .set({
-      widget.bookingHistoryModel.bookingId: widget.bookingHistoryModel.toJson()
-    });
-  }
+  //leaving this only for testing the authorization to write
+  // void sendBookingData() {
+  //   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  //   firebaseFirestore
+  //       .collection("users")
+  //       .doc(Provider.of<ProfileProvider>(context, listen: false).mobileNo)
+  //       .collection("bookings")
+  //       .doc(widget.bookingHistoryModel.bookingId)
+  //       .set({
+  //     widget.bookingHistoryModel.bookingId: widget.bookingHistoryModel.toJson()
+  //   });
+  // }
 }

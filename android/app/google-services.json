@@ -1,10 +1,83 @@
 {
   "project_info": {
     "project_number": "1099359424912",
+    "firebase_url": "https://bookany-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "bookany",
     "storage_bucket": "bookany.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1099359424912:android:b7319e63f49d8923e6a315",
+        "android_client_info": {
+          "package_name": "com.bookany.users"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1099359424912-umpool0nedo6e0100d046788f7ps68oe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDbJfa_QC8QnHs6SYIkUhv3Xz-9qlADYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1099359424912-umpool0nedo6e0100d046788f7ps68oe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1099359424912-7rkkl0egc1133150fa2uco1ot1ouh921.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hotelOwners"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1099359424912:android:e3e27167698ed394e6a315",
+        "android_client_info": {
+          "package_name": "com.example.hotel_owners"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1099359424912-umpool0nedo6e0100d046788f7ps68oe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDbJfa_QC8QnHs6SYIkUhv3Xz-9qlADYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1099359424912-umpool0nedo6e0100d046788f7ps68oe.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1099359424912-7rkkl0egc1133150fa2uco1ot1ouh921.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hotelOwners"
+              }
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:1099359424912:android:49a4a16a6012efe4e6a315",
@@ -29,6 +102,13 @@
             {
               "client_id": "1099359424912-umpool0nedo6e0100d046788f7ps68oe.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1099359424912-7rkkl0egc1133150fa2uco1ot1ouh921.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.hotelOwners"
+              }
             }
           ]
         }

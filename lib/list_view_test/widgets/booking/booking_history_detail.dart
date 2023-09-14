@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/list_view_test/utils/common_helper/general_utils.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/list_view_test/utils/string_utils.dart';
+import 'package:practise1/list_view_test/widgets/booking/chat_bubble.dart';
 import 'package:practise1/list_view_test/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/list_view_test/widgets/room_occupancy_details/add_rooms_widget.dart';
 
@@ -161,7 +163,9 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                               ),
                             ),
                             Text(bookingHistoryDisplayModel
-                                .bookingHistoryModel.bookingId),
+                                .bookingHistoryModel.bookingId
+                                .split("_")
+                                .last),
                           ],
                         ),
                         Align(
@@ -171,7 +175,9 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                               GeneralUtils.copyBookingIdToClipboard(
                                   context,
                                   bookingHistoryDisplayModel
-                                      .bookingHistoryModel.bookingId);
+                                      .bookingHistoryModel.bookingId
+                                      .split("_")
+                                      .last);
                             },
                             icon: const Icon(Icons.copy),
                           ),
@@ -257,6 +263,31 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
+                          "Room Type",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(StringUtils.convertToSentenceCaseForAll(
+                            bookingHistoryDisplayModel
+                                .bookingHistoryModel.roomType)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CustomPaint(
+                      painter: DottedLinePainter(),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
                           "Payment Details",
                           style: TextStyle(
                             fontSize: 17,
@@ -272,7 +303,10 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                                 const Text("Amount paid"),
                                 SizedBoxHelper.sizedBox_10,
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    // Todo need to work here for the info button
+                                    print("test");
+                                  },
                                   icon: const Icon(Icons.info_outline),
                                 ),
                               ],
@@ -307,32 +341,50 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Contact BookAny"),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.arrow_forward_ios)),
-                          ],
+                        InkWell(
+                          onTap: () {},
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Contact bookAny"),
+                                    Icon(Icons.arrow_forward_ios),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  InkWell(
+                    onTap: () {
+                      GeneralUtils.launchPhone(bookingHistoryDisplayModel
+                          .hotelSearchModel.hotelContactDetails.phone);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Contact Property Desk"),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.arrow_forward_ios)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Contact Property Desk"),
+                              Icon(Icons.arrow_forward_ios),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(
                     width: double.infinity,

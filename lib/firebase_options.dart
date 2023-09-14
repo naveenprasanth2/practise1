@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -52,25 +49,41 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1099359424912',
     projectId: 'bookany',
     authDomain: 'bookany-2a548.firebaseapp.com',
+    databaseURL: 'https://bookany-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'bookany.appspot.com',
     measurementId: 'G-YP3M9TZ0B5',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDDbJfa_QC8QnHs6SYIkUhv3Xz-9qlADYg',
-    appId: '1:1099359424912:android:49a4a16a6012efe4e6a315',
+    appId: '1:1099359424912:android:b7319e63f49d8923e6a315',
     messagingSenderId: '1099359424912',
     projectId: 'bookany',
+    databaseURL: 'https://bookany-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'bookany.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyADREC4-IaVqly1q1Wt5LkOTGa3xwwT8Ss',
-    appId: '1:1099359424912:ios:d56cdd0ad9ad7ccee6a315',
+    appId: '1:1099359424912:ios:b24d73a9c0d367b8e6a315',
     messagingSenderId: '1099359424912',
     projectId: 'bookany',
+    databaseURL: 'https://bookany-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'bookany.appspot.com',
-    iosClientId: '1099359424912-odmstdiitiqke906s42gumqdg523dhj7.apps.googleusercontent.com',
-    iosBundleId: 'com.example.practise1',
+    androidClientId: '1099359424912-2j31lcgmk796uv31mvd2osbevm7kelkg.apps.googleusercontent.com',
+    iosClientId: '1099359424912-l1gkdk4nieb19vcpn6urq6pl9jng2cev.apps.googleusercontent.com',
+    iosBundleId: 'com.bookany.users',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyADREC4-IaVqly1q1Wt5LkOTGa3xwwT8Ss',
+    appId: '1:1099359424912:ios:e53c4fbde838d023e6a315',
+    messagingSenderId: '1099359424912',
+    projectId: 'bookany',
+    databaseURL: 'https://bookany-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'bookany.appspot.com',
+    androidClientId: '1099359424912-2j31lcgmk796uv31mvd2osbevm7kelkg.apps.googleusercontent.com',
+    iosClientId: '1099359424912-snf0ke634n6qgdc2sd4tph9coa3q6qlj.apps.googleusercontent.com',
+    iosBundleId: 'com.example.practise1.RunnerTests',
   );
 }

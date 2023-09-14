@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/extras/circle.dart';
-import 'package:practise1/list_view_test/extras/square.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
-
-  final List<String> _list = ["post", "cat", "mat", "bat", "summa","post", "cat", "mat", "bat", "summa"];
+  final GlobalKey<FormState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +13,19 @@ class MyHomePage extends StatelessWidget {
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.pinkAccent,
-                Colors.purpleAccent
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.topRight
-            )
-          ),
+              gradient: LinearGradient(
+                  colors: [Colors.pinkAccent, Colors.purpleAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.topRight)),
         ),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Expanded(child: TextField(
+            child: Expanded(
+                child: TextFormField(
+              key: _key,
               controller: TextEditingController(),
               decoration: InputDecoration(
                 hintText: "enter city name",
@@ -49,31 +43,23 @@ class MyHomePage extends StatelessWidget {
               ),
               keyboardType: TextInputType.text,
               obscureText: false,
+              validator: (String? text) {
+                if (text!.isEmpty) {
+                  return "Please enter a city name";
+                } else if (!text.contains(",")) {
+                  return "Please select a valid name from dropdown";
+                } else {
+                  return null;
+                }
+              },
             )),
-          ),
-          Expanded(
-            flex: 0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _list.length,
-              itemBuilder: (context, index){
-                return MyCircle(title: _list[index],);
-              },
-            ),
-          ),
-          Expanded(
-            flex: 4,
-            child: ListView.builder(
-              itemCount: _list.length,
-              itemBuilder: (context, index) {
-                return MySquare(
-                  title: _list[index], index: index
-                );
-              },
-            ),
           ),
         ],
       ),
     );
+  }
+
+  void validateSearchBoxText() {
+    if (_key.currentState!.validate()) {}
   }
 }

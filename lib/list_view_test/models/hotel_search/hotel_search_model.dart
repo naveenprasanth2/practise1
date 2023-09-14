@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
 
+import '../hotel_contact_details/hotel_contact_details.dart';
 import '../nearby_places_model/place_category_model.dart';
 import '../room_type_search_model/room_type_search_model.dart';
 
@@ -26,13 +27,22 @@ class HotelSearchModel {
   @JsonKey(name: 'ratings')
   StarRatingAverageModel starRatingAverageModel;
 
-  HotelSearchModel(
-      {required this.hotelImages,
-      required this.hotelLocationDetails,
-      required this.highlights,
-      required this.hotelId,
-      required this.roomTypeForSearch,
-      required this.starRatingAverageModel});
+  @JsonKey(name: 'hotelContactDetails')
+  HotelContactDetails hotelContactDetails;
+
+  @JsonKey(name: 'cityAndState')
+  String cityAndState;
+
+  HotelSearchModel({
+    required this.hotelImages,
+    required this.hotelLocationDetails,
+    required this.highlights,
+    required this.hotelId,
+    required this.roomTypeForSearch,
+    required this.starRatingAverageModel,
+    required this.hotelContactDetails,
+    required this.cityAndState,
+  });
 
   // Add the factory constructor for parsing from JSON
   factory HotelSearchModel.fromJson(Map<String, dynamic> json) =>
