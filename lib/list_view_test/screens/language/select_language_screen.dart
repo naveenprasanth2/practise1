@@ -4,14 +4,9 @@ import 'package:practise1/list_view_test/providers/language_provider.dart';
 import 'package:practise1/list_view_test/utils/dart_helper/sizebox_helper.dart';
 import 'package:provider/provider.dart';
 
-class SelectLanguageScreen extends StatefulWidget {
-  const SelectLanguageScreen({Key? key}) : super(key: key);
+class SelectLanguageScreen extends StatelessWidget {
+  SelectLanguageScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SelectLanguageScreen> createState() => _SelectLanguageScreenState();
-}
-
-class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
   final List<Map<String, String>> languages = [
     {"United Kingdom": "English"},
     {"United States": "English"}

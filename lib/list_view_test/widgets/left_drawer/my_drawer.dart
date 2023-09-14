@@ -181,33 +181,6 @@ class _MyDrawerState extends State<MyDrawer> {
                       context,
                       MaterialPageRoute(
                         //editing profile page
-                        builder: (builder) => const ProfilePage(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    height: 60,
-                    color: Colors.white,
-                    child: Row(children: [
-                      const Icon(
-                        Icons.person,
-                        size: 30,
-                      ),
-                      SizedBoxHelper.sizedBox_20,
-                      const Text(
-                        'My Profile',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ]),
-                  ),
-                ),
-              if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        //editing profile page
                         builder: (builder) => const MyBookingsScreen(),
                       ),
                     );
@@ -222,35 +195,6 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                       SizedBoxHelper.sizedBox_20,
                       const Text('My Bookings', style: TextStyle(fontSize: 17)),
-                    ]),
-                  ),
-                ),
-              if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
-                InkWell(
-                  onTap: () {
-                    Provider.of<AuthProvider>(context, listen: false)
-                        .logout(context);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => const MySplashScreen(),
-                        ),
-                        (route) => false);
-                  },
-                  child: Container(
-                    height: 60,
-                    color: Colors.white,
-                    child: Row(children: [
-                      //made changes for this icon to align with other icons
-                      const Padding(
-                        padding: EdgeInsets.only(left: 5.0),
-                        child: Icon(
-                          Icons.logout,
-                          size: 30,
-                        ),
-                      ),
-                      SizedBoxHelper.sizedBox_15,
-                      const Text('Logout', style: TextStyle(fontSize: 17)),
                     ]),
                   ),
                 ),
@@ -323,6 +267,33 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBoxHelper.sizedBox_20,
                       const Text(
                         'Change language',
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => SelectLanguageScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 60,
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.lock_outline,
+                        size: 30,
+                      ),
+                      SizedBoxHelper.sizedBox_20,
+                      const Text(
+                        'Privacy policy',
                         style: TextStyle(fontSize: 17),
                       ),
                     ],
