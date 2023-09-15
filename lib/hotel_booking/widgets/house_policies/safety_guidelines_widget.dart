@@ -37,7 +37,7 @@ class SafetyGuidelinesWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SizedBoxHelper.sizedBox10,
+                    SizedBoxHelper.sizedBox20,
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () {
