@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:practise1/hotel_booking/models/coupon_model/coupon_model.dart';
 import 'package:practise1/hotel_booking/models/guest_policies/guest_policy_model.dart';
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
@@ -92,13 +90,14 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
         .collection("details")
         .doc(widget.hotelSearchModel.hotelId)
         .get();
-    final couponList =
-        await rootBundle.loadString("assets/discounts_applicable.json");
+    final couponsList =
+        await FirebaseFirestore.instance.collection("discounts").get();
+
     setState(() {
       hotelDetailsModel =
           HotelDetailsModel.fromJson(valueFromDb.data()!["details"]);
-      coupons = (json.decode(couponList) as List<dynamic>)
-          .map((val) => CouponModel.fromJson(val))
+      coupons = couponsList.docs
+          .map((doc) => CouponModel.fromJson(doc.data()['couponDetails']))
           .toList();
       amenitiesModel = hotelDetailsModel!.amenities;
       guestPolicies = hotelDetailsModel!.guestPolicies;
