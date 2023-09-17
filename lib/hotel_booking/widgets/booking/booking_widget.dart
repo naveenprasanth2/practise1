@@ -56,7 +56,6 @@ class _BookingWidgetState extends State<BookingWidget> {
         .setIsPayNowLoading(false);
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsRetryLoading(false);
-    print("success");
     GeneralUtils.showSuccessSnackBar(context, "Your booking is successful");
     Navigator.pushAndRemoveUntil(
         context,
@@ -69,7 +68,6 @@ class _BookingWidgetState extends State<BookingWidget> {
         .setIsPayNowLoading(false);
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsRetryLoading(false);
-    print("failure");
     showDialog(
       context: context,
       builder: (context) =>
@@ -250,6 +248,10 @@ class _BookingWidgetState extends State<BookingWidget> {
           .setIsPayAtHotelLoading(false);
       Navigator.pop(context);
       if (statusCode == 200) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
+            (route) => route.isFirst);
         GeneralUtils.showSuccessSnackBarUsingScaffold(
             scaffoldMessenger, "Your booking is successful");
       } else {

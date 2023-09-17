@@ -14,7 +14,7 @@ const razorpay = new Razorpay({
 const processRefund = functions.https.onRequest(async (request, response) => {
     const orderId = request.body.orderId;
     const mobileNo = request.body.userId;
-    let paymentId;
+    let paymentDetails;
     const userDocRef = admin.firestore().collection('users').doc(mobileNo);
     const bookingDocRef = userDocRef.collection('bookings').doc(orderId);
     try {
@@ -29,13 +29,13 @@ const processRefund = functions.https.onRequest(async (request, response) => {
                 response.status(400).json({ error: 'We cannot process refund for this orderId' });
                 return;
             }else if(bookingData?.[orderId].status == 'success'){
-               const paymentDetails = (await bookingDocRef.collection('paymentId').doc('paymentId').get()).data();
-                paymentId = paymentDetails?.paymentDetails.id;
+               const paymentDetail = (await bookingDocRef.collection('paymentDetails').doc('paymentDetails').get()).data();
+               paymentDetails = paymentDetail?.paymentDetails.id;
                 response.status(200).json({ success: 'order refund in progress' });
             }
 
             try {
-                const refund = await razorpay.payments.refund(paymentId, {});
+                const refund = await razorpay.payments.refund(paymentDetails, {});
                 response.json(refund);
             } catch (error) {
                 response.status(500).json(error);
@@ -87,17 +87,16 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     res.status(500).send('Internal server error');
                 });
                 
-        } else if (event === 'refund.created') {
+        } else if (event === 'payment.failed') {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
-            const refundDetails = req.body.payload.refund.entity;
+            const paymentDetails = req.body.payload.payment.entity;
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
-            const fieldPath = `${description}.status`;
-            const fieldPathForBookingStatus = `${description}.checkOutStatus`;
+            const fieldPath = `${description}.paymentStatus`;
 
-            bookingDocRef.update({ [fieldPath]: "processing refund", [fieldPathForBookingStatus]:'cancelled'  })
+            bookingDocRef.update({ [fieldPath]: "failed" })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -105,7 +104,36 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     console.error('Error updating database:', error);
                     res.status(500).send('Internal server error');
                 });
-                bookingDocRef.collection('paymentId').doc('paymentId').update({ refundDetails: refundDetails })
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').set({ paymentDetails: paymentDetails })
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                
+        } else if (event === 'refund.created') {
+            const mobileNo = req.body.payload.payment.entity.contact;
+            const description = req.body.payload.payment.entity.description;
+            const refundDetails = req.body.payload.refund.entity;
+
+            const userDocRef = admin.firestore().collection('users').doc(mobileNo);
+            const bookingDocRef = userDocRef.collection('bookings').doc(description);
+            const paymentStatus = `${description}.paymentStatus`;
+            const fieldPathForBookingStatus = `${description}.checkOutStatus`;
+
+                if(description.paymentStatus == "success"){
+                    bookingDocRef.update({[paymentStatus]: "processing refund", [fieldPathForBookingStatus]:'cancelled'  })
+                    .then(() => {
+                        res.status(200).send('OK');
+                    })
+                    .catch(error => {
+                        console.error('Error updating database:', error);
+                        res.status(500).send('Internal server error');
+                    });
+                }
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').update({ refundDetails: refundDetails })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -131,7 +159,7 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     console.error('Error updating database:', error);
                     res.status(500).send('Internal server error');
                 });
-                bookingDocRef.collection('paymentId').doc('paymentId').update({ processedRefundDetails: refundDetails })
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').update({ processedRefundDetails: refundDetails })
                 .then(() => {
                     res.status(200).send('OK');
                 })
