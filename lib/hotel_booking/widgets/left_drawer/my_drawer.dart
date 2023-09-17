@@ -121,9 +121,14 @@ class _MyDrawerState extends State<MyDrawer> {
                                         Text(
                                           //this is done in order to handle non login situations
                                           (Provider.of<ProfileProvider>(context,
-                                                          listen: false)
-                                                      .name !=
-                                                  "")
+                                                              listen: false)
+                                                          .name !=
+                                                      "" &&
+                                                  Provider.of<ProfileProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .name !=
+                                                      null)
                                               ? Provider.of<ProfileProvider>(
                                                       context,
                                                       listen: false)
