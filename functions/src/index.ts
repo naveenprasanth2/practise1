@@ -64,22 +64,13 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
         if (event === 'payment.captured') {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
-            const notesString = req.body.payload.payment.entity.notes;
             const paymentDetails = req.body.payload.payment.entity;
-            console.log(paymentDetails);
-
-            let notes = {
-                ...JSON.parse(notesString.paymentDetails),
-                ...JSON.parse(notesString.hotelDetails),
-                ...JSON.parse(notesString.bookingSchedule),
-                ...JSON.parse(notesString.bookingStatus),
-            };
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
-            notes.status = "success";
+            const fieldPath = `${description}.paymentStatus`;
 
-            bookingDocRef.set({ [description]: notes })
+            bookingDocRef.update({ [fieldPath]: "success" })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -87,7 +78,7 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     console.error('Error updating database:', error);
                     res.status(500).send('Internal server error');
                 });
-                bookingDocRef.collection('paymentId').doc('paymentId').set({ paymentDetails: paymentDetails })
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').set({ paymentDetails: paymentDetails })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -303,5 +294,36 @@ const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
     }
   });
 
-export { processRefund, handleRazorpayCallback, processRating,fetchRatingsDaily };
+  const processBookingDataForOnlinePayment = functions.https.onRequest(async (request, response) => {
+    const userId = request.body.userId;
+    const bookingId = request.body.bookingId;
+    request.body.paymentMode = "online";
+    request.body.paymentStatus = "initiated";
+    const userDocRef = admin.firestore().collection('users').doc(userId).collection("bookings").doc(bookingId);
+    try {
+       await userDocRef.set({[bookingId]: request.body});
+       response.status(200).json("booking for cash payment is success");
+    } catch (error) {
+        console.error("Error:", error);
+        response.status(500).json(error);
+    }
+});
+
+const processBookingDataForCashPayment = functions.https.onRequest(async (request, response) => {
+    const userId = request.body.userId;
+    console.error(userId);
+    const bookingId = request.body.bookingId;
+    request.body.paymentMode = "cash";
+    request.body.paymentStatus = "verified";
+    const userDocRef = admin.firestore().collection('users').doc(userId).collection("bookings").doc(bookingId);
+    try {
+       await userDocRef.set({[bookingId]: request.body});
+       response.status(200).json("booking for cash payment is success");
+    } catch (error) {
+        console.error("Error:", error);
+        response.status(500).json(error);
+    }
+});
+
+export { processRefund, handleRazorpayCallback, processRating,fetchRatingsDaily,processBookingDataForOnlinePayment, processBookingDataForCashPayment };
 

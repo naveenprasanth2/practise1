@@ -151,8 +151,6 @@ class BookingCancelWidget extends StatelessWidget {
   Future<void> sendCancellationToApiEndPoint(BuildContext context) async {
     final bookingProvider =
         Provider.of<BookingDataProvider>(context, listen: false);
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     const String url =
         'https://us-central1-bookany.cloudfunctions.net/processRefund';

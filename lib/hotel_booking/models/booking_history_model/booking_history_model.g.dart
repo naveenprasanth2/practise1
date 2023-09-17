@@ -18,12 +18,15 @@ BookingHistoryModel _$BookingHistoryModelFromJson(Map<String, dynamic> json) =>
       checkOutDate: json['checkOutDate'] as String,
       checkOutTime: json['checkOutTime'] as String,
       bookingId: json['bookingId'] as String,
+      userId: json['userId'] as String,
       checkOutStatus: json['checkOutStatus'] as String,
       rated: json['rated'] as bool,
       reservedFor: json['reservedFor'] as String,
       amountPaid: json['amountPaid'] as int,
       discount: json['discount'] as int,
       discountCoupon: json['discountCoupon'] as String,
+      paymentMode: json['paymentMode'] as String?,
+      paymentStatus: json['paymentStatus'] as String?,
     );
 
 Map<String, dynamic> _$BookingHistoryModelToJson(
@@ -38,6 +41,7 @@ Map<String, dynamic> _$BookingHistoryModelToJson(
       'checkInTime': instance.checkInTime,
       'checkOutDate': instance.checkOutDate,
       'checkOutTime': instance.checkOutTime,
+      'userId': instance.userId,
       'bookingId': instance.bookingId,
       'checkOutStatus': instance.checkOutStatus,
       'rated': instance.rated,
@@ -45,4 +49,6 @@ Map<String, dynamic> _$BookingHistoryModelToJson(
       'amountPaid': instance.amountPaid,
       'discount': instance.discount,
       'discountCoupon': instance.discountCoupon,
+      'paymentMode': instance.paymentMode,
+      'paymentStatus': instance.paymentStatus,
     };

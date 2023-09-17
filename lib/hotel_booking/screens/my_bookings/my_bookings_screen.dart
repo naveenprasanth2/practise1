@@ -52,8 +52,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
       allValues.addAll(dataMap.values);
     }
 
-    myBookingHistoryList.addAll(
-        allValues.map((value) => BookingHistoryModel.fromJson(value)).toList());
+    myBookingHistoryList.addAll(allValues
+        .map((value) => BookingHistoryModel.fromJson(value))
+        .where((element) =>
+            element.paymentStatus == "verified" ||
+            element.paymentStatus == "success")
+        .toList());
     // Sort the list based on the checkIndate field
     myBookingHistoryList.sort((a, b) {
       DateTime dateA = DateFormat("dd-MMM-yyyy").parse(a.checkInDate);

@@ -22,6 +22,8 @@ class BookingHistoryModel {
   final String checkOutDate;
   @JsonKey(name: 'checkOutTime')
   final String checkOutTime;
+  @JsonKey(name: 'userId')
+  final String userId;
   @JsonKey(name: 'bookingId')
   final String bookingId;
   @JsonKey(name: 'checkOutStatus')
@@ -36,25 +38,31 @@ class BookingHistoryModel {
   final int discount;
   @JsonKey(name: 'discountCoupon')
   final String discountCoupon;
+  @JsonKey(name: 'paymentMode')
+  String? paymentMode;
+  @JsonKey(name: 'paymentStatus')
+  String? paymentStatus;
 
-  BookingHistoryModel({
-    required this.hotelId,
-    required this.cityAndState,
-    required this.roomsCount,
-    required this.roomType,
-    required this.guestsCount,
-    required this.checkInDate,
-    required this.checkInTime,
-    required this.checkOutDate,
-    required this.checkOutTime,
-    required this.bookingId,
-    required this.checkOutStatus,
-    required this.rated,
-    required this.reservedFor,
-    required this.amountPaid,
-    required this.discount,
-    required this.discountCoupon,
-  });
+  BookingHistoryModel(
+      {required this.hotelId,
+      required this.cityAndState,
+      required this.roomsCount,
+      required this.roomType,
+      required this.guestsCount,
+      required this.checkInDate,
+      required this.checkInTime,
+      required this.checkOutDate,
+      required this.checkOutTime,
+      required this.bookingId,
+      required this.userId,
+      required this.checkOutStatus,
+      required this.rated,
+      required this.reservedFor,
+      required this.amountPaid,
+      required this.discount,
+      required this.discountCoupon,
+      this.paymentMode,
+      this.paymentStatus});
 
   factory BookingHistoryModel.fromJson(Map<String, dynamic> json) =>
       _$BookingHistoryModelFromJson(json);

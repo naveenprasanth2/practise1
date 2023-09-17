@@ -186,6 +186,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         checkOutDate: dateProvider.checkOutDateWithYear,
         reservedFor: profileProvider.reservedFor!,
         bookingId: bookingId,
+        userId: profileProvider.mobileNo,
         checkInTime: "12:00PM",
         checkOutTime: "11:00AM",
         checkOutStatus: "booked",
