@@ -9,6 +9,7 @@ import 'package:practise1/hotel_booking/providers/count_provider.dart';
 import 'package:practise1/hotel_booking/providers/date_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
 import 'package:practise1/hotel_booking/screens/my_bookings/my_bookings_screen.dart';
+import 'package:practise1/hotel_booking/screens/payment_success/payment_success_screen.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
 import 'package:practise1/hotel_booking/widgets/booking/days_of_stay.dart';
@@ -57,10 +58,16 @@ class _BookingWidgetState extends State<BookingWidget> {
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsRetryLoading(false);
     GeneralUtils.showSuccessSnackBar(context, "Your booking is successful");
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
-        (route) => route.isFirst);
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
+    //     (route) => route.isFirst);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (builder) => const PaymentSuccessScreen(),
+      ),
+    );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
