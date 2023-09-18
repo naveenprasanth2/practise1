@@ -24,14 +24,14 @@ const processRefund = functions.https.onRequest(async (request, response) => {
             const bookingData = booking.data();
             console.log("Booking Data:", bookingData);
 
-            if (bookingData?.[orderId].status !== 'success') {
+            if (bookingData?.[orderId].paymentStatus == 'success') {
+                const paymentDetail = (await bookingDocRef.collection('paymentDetails').doc('paymentDetails').get()).data();
+                paymentDetails = paymentDetail?.paymentDetails.id;
+                 response.status(200).json({ success: 'order refund in progress' });
+            }else if(bookingData?.[orderId].paymentStatus !== 'success'){
                 console.error("Booking status is not 'success'");
                 response.status(400).json({ error: 'We cannot process refund for this orderId' });
                 return;
-            }else if(bookingData?.[orderId].status == 'success'){
-               const paymentDetail = (await bookingDocRef.collection('paymentDetails').doc('paymentDetails').get()).data();
-               paymentDetails = paymentDetail?.paymentDetails.id;
-                response.status(200).json({ success: 'order refund in progress' });
             }
 
             try {
@@ -122,9 +122,31 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
             const paymentStatus = `${description}.paymentStatus`;
             const fieldPathForBookingStatus = `${description}.checkOutStatus`;
-
-                if(description.paymentStatus == "success"){
-                    bookingDocRef.update({[paymentStatus]: "processing refund", [fieldPathForBookingStatus]:'cancelled'  })
+            
+            bookingDocRef.get().then((documentSnapshot) => {
+                if (documentSnapshot.exists) {
+                    // Document data will be available in documentSnapshot.data()
+                    const paymentStatusValue = documentSnapshot.get(paymentStatus);
+                    console.log('Payment Status:', paymentStatusValue);
+                    if(paymentStatusValue === "success"){
+                        bookingDocRef.update({[paymentStatus]: "processing refund"})
+                        .then(() => {
+                            res.status(200).send('OK');
+                        })
+                        .catch(error => {
+                            console.error('Error updating database:', error);
+                            res.status(500).send('Internal server error');
+                        });
+                    }
+                    bookingDocRef.update({[fieldPathForBookingStatus]:'cancelled'  })
+                        .then(() => {
+                            res.status(200).send('OK');
+                        })
+                        .catch(error => {
+                            console.error('Error updating database:', error);
+                            res.status(500).send('Internal server error');
+                        });
+                    bookingDocRef.collection('paymentDetails').doc('paymentDetails').update({ refundDetails: refundDetails })
                     .then(() => {
                         res.status(200).send('OK');
                     })
@@ -132,16 +154,12 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                         console.error('Error updating database:', error);
                         res.status(500).send('Internal server error');
                     });
+                } else {
+                    console.error("No such document!");
                 }
-                bookingDocRef.collection('paymentDetails').doc('paymentDetails').update({ refundDetails: refundDetails })
-                .then(() => {
-                    res.status(200).send('OK');
-                })
-                .catch(error => {
-                    console.error('Error updating database:', error);
-                    res.status(500).send('Internal server error');
-                });
-                
+             }).catch((error) => {
+                console.error("Error fetching document:", error);
+             });
         } else if (event === 'refund.processed') {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
@@ -149,7 +167,7 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
-            const fieldPath = `${description}.status`;
+            const fieldPath = `${description}.paymentStatus`;
             console.error(refundDetails);
             bookingDocRef.update({ [fieldPath]: "refund processed"})
                 .then(() => {

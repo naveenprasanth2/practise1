@@ -56,7 +56,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         .map((value) => BookingHistoryModel.fromJson(value))
         .where((element) =>
             element.paymentStatus == "verified" ||
-            element.paymentStatus == "success")
+            element.paymentStatus == "success" ||
+            element.paymentStatus == "processing refund" ||
+            element.paymentStatus == "refund processed")
         .toList());
     // Sort the list based on the checkIndate field
     myBookingHistoryList.sort((a, b) {
