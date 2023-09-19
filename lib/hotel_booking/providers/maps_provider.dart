@@ -141,4 +141,39 @@ class MapProvider extends ChangeNotifier {
       },
     );
   }
+
+  void openMapWithoutClick(BuildContext context, double latitude,
+      double longitude, String title) async {
+    await MapLauncher.installedMaps.then(
+      (availableMaps) => {
+        if (availableMaps.isNotEmpty)
+          {
+            availableMaps[0].showMarker(
+              coords: Coords(latitude, longitude),
+              title: title,
+            ),
+          }
+        else
+          {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('No Maps Apps Installed'),
+                  content: const Text('Please install a maps app to navigate.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          },
+      },
+    );
+  }
 }

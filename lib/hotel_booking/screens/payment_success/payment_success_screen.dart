@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
-import 'package:practise1/hotel_booking/screens/home/home_page.dart';
+import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/hotel_booking/widgets/booking_confirmation/booking_confirmation_widget.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
   final BookingHistoryDisplayModel bookingHistoryDisplayModel;
+  final HotelDetailsModel hotelDetailsModel;
   const PaymentSuccessScreen(
-      {super.key, required this.bookingHistoryDisplayModel});
+      {super.key,
+      required this.bookingHistoryDisplayModel,
+      required this.hotelDetailsModel});
 
   @override
   State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
@@ -34,6 +37,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
                 builder: (builder) => BookingConfirmationWidget(
                       bookingHistoryDisplayModel:
                           widget.bookingHistoryDisplayModel,
+                      hotelDetailsModel: widget.hotelDetailsModel,
                     )),
           );
         }

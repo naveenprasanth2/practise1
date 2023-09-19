@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/guest_policies/guest_policy_model.dart';
+import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 
 import '../../screens/guest_policies/guest_policies_screen.dart';
 import '../hotel_details/guest_policies_widget.dart';
@@ -13,11 +14,11 @@ class GuestPoliciesMainWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        height: 200,
+        height: 250,
         width: double.infinity,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
           child: Column(
             children: [
               Row(
@@ -54,6 +55,7 @@ class GuestPoliciesMainWidget extends StatelessWidget {
               if (guestPolicies.length >= 3)
                 Column(
                   children: [
+                    SizedBoxHelper.sizedBox10,
                     GuestPoliciesWidget(
                       guestPolicies: guestPolicies,
                       title: guestPolicies[0].title,

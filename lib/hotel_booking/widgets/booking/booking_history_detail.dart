@@ -4,6 +4,7 @@ import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/booking_tile_widget.dart';
+import 'package:practise1/hotel_booking/widgets/booking_data_display/contact_details_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/guest_details_widget.dart';
 import 'package:practise1/hotel_booking/widgets/room_occupancy_details/add_rooms_widget.dart';
 
@@ -168,6 +169,13 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                           bookingHistoryDisplayModel
                               .bookingHistoryModel.roomType),
                       copyIcon: false),
+                  ContactDetailsWidget(
+                    title: "Contact details",
+                    mobileNo:
+                        bookingHistoryDisplayModel.bookingHistoryModel.mobileNo,
+                    emailId:
+                        bookingHistoryDisplayModel.bookingHistoryModel.emailId,
+                  ),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Column(

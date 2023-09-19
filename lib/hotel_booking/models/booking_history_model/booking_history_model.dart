@@ -24,6 +24,10 @@ class BookingHistoryModel {
   final String checkOutTime;
   @JsonKey(name: 'userId')
   final String userId;
+  @JsonKey(name: 'mobileNo')
+  final String mobileNo;
+  @JsonKey(name: 'emailId')
+  final String emailId;
   @JsonKey(name: 'bookingId')
   final String bookingId;
   @JsonKey(name: 'checkOutStatus')
@@ -55,6 +59,8 @@ class BookingHistoryModel {
       required this.checkOutTime,
       required this.bookingId,
       required this.userId,
+      required this.mobileNo,
+      required this.emailId,
       required this.checkOutStatus,
       required this.rated,
       required this.reservedFor,

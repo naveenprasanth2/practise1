@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
+import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/hotel_booking/screens/home/home_page.dart';
-import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/booking_tile_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
+import 'package:practise1/hotel_booking/widgets/booking_data_display/contact_details_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/guest_details_widget.dart';
-import 'package:practise1/hotel_booking/widgets/room_occupancy_details/add_rooms_widget.dart';
+import 'package:practise1/hotel_booking/widgets/booking_data_display/upcoming_helper.dart';
+import 'package:practise1/hotel_booking/widgets/cancellation/cancellation_policy.dart';
+import 'package:practise1/hotel_booking/widgets/hotel_details_main_widgets/guest_policies_widget.dart';
+import 'package:practise1/hotel_booking/widgets/house_policies/house_policies.dart';
 
 class BookingConfirmationWidget extends StatelessWidget {
   final BookingHistoryDisplayModel bookingHistoryDisplayModel;
+  final HotelDetailsModel hotelDetailsModel;
   const BookingConfirmationWidget(
-      {super.key, required this.bookingHistoryDisplayModel});
+      {super.key,
+      required this.bookingHistoryDisplayModel,
+      required this.hotelDetailsModel});
 
   @override
   Widget build(BuildContext context) {
@@ -120,11 +127,9 @@ class BookingConfirmationWidget extends StatelessWidget {
                       ],
                     ),
                     SizedBoxHelper.sizedBox20,
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
+                    UpcomingHelper(
+                      hotelDetailsModel: hotelDetailsModel,
+                      bookingHistoryDisplayModel: bookingHistoryDisplayModel,
                     ),
                     ShowCheckInCheckOutDetailsWidget(
                       bookingHistoryDisplayModel: bookingHistoryDisplayModel,
@@ -151,6 +156,13 @@ class BookingConfirmationWidget extends StatelessWidget {
                             bookingHistoryDisplayModel
                                 .bookingHistoryModel.roomType),
                         copyIcon: false),
+                    ContactDetailsWidget(
+                      title: "Contact details",
+                      mobileNo: bookingHistoryDisplayModel
+                          .bookingHistoryModel.mobileNo,
+                      emailId: bookingHistoryDisplayModel
+                          .bookingHistoryModel.emailId,
+                    ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: Column(
@@ -192,17 +204,34 @@ class BookingConfirmationWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Divider(
+              thickness: 20,
+              color: Colors.grey.shade100,
+            ),
+          ),
+          const HousePoliciesWidget(),
+          SliverToBoxAdapter(
+            child: Divider(
+              thickness: 20,
+              color: Colors.grey.shade100,
+            ),
+          ),
+          GuestPoliciesMainWidget(
+            guestPolicies: hotelDetailsModel.guestPolicies,
+          ),
+          SliverToBoxAdapter(
+            child: Divider(
+              thickness: 20,
+              color: Colors.grey.shade100,
+            ),
+          ),
+          const CancellationPolicyWidget(),
         ],
       ),
     );

@@ -69,6 +69,7 @@ class _BookingWidgetState extends State<BookingWidget> {
           bookingHistoryDisplayModel: BookingHistoryDisplayModel(
               bookingHistoryModel: widget.bookingHistoryModel,
               hotelSearchModel: hotelSearchModel),
+          hotelDetailsModel: widget.hotelDetailsModel,
         ),
       ),
     );
@@ -268,6 +269,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               bookingHistoryDisplayModel: BookingHistoryDisplayModel(
                   bookingHistoryModel: widget.bookingHistoryModel,
                   hotelSearchModel: hotelSearchModel),
+              hotelDetailsModel: widget.hotelDetailsModel,
             ),
           ),
         );
