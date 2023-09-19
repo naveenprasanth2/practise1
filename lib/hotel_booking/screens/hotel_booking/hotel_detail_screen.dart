@@ -15,6 +15,7 @@ import 'package:practise1/hotel_booking/widgets/hotel_details_main_widgets/ameni
 import 'package:practise1/hotel_booking/widgets/hotel_details_main_widgets/hotel_images_widget.dart';
 import 'package:practise1/hotel_booking/widgets/hotel_details_main_widgets/pricing_details_widget.dart';
 import 'package:practise1/hotel_booking/widgets/house_policies/house_policies.dart';
+import 'package:practise1/hotel_booking/widgets/loading/three_dot_loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:practise1/hotel_booking/models/amenities_model/amenities_model.dart';
 import 'package:practise1/hotel_booking/utils/star_rating_colour_utils.dart';
@@ -149,7 +150,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: ThreeDotLoadingWidget(),
                 );
               } else if (snapshot.hasError) {
                 return const Center(

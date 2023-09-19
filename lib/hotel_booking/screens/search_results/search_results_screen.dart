@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/hotel_booking/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/hotel_booking/widgets/loading/three_dot_loading_widget.dart';
 import 'package:practise1/hotel_booking/widgets/room_occupancy_details/add_rooms_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -137,7 +138,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SliverFillRemaining(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: ThreeDotLoadingWidget(),
                   ),
                 );
               } else if (snapshot.hasError) {

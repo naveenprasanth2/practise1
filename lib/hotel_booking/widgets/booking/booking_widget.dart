@@ -11,7 +11,6 @@ import 'package:practise1/hotel_booking/providers/calculation_provider.dart';
 import 'package:practise1/hotel_booking/providers/count_provider.dart';
 import 'package:practise1/hotel_booking/providers/date_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
-import 'package:practise1/hotel_booking/screens/my_bookings/my_bookings_screen.dart';
 import 'package:practise1/hotel_booking/screens/payment_success/payment_success_screen.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
