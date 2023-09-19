@@ -1,17 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:practise1/list_view_test/providers/auth_provider.dart';
-import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
-import 'package:practise1/list_view_test/providers/calculation_provider.dart';
-import 'package:practise1/list_view_test/providers/count_provider.dart';
-import 'package:practise1/list_view_test/providers/date_provider.dart';
-import 'package:practise1/list_view_test/providers/language_provider.dart';
-import 'package:practise1/list_view_test/providers/maps_provider.dart';
-import 'package:practise1/list_view_test/providers/profile_provider.dart';
+import 'package:practise1/hotel_booking/providers/auth_provider.dart';
+import 'package:practise1/hotel_booking/providers/booking_data_provider.dart';
+import 'package:practise1/hotel_booking/providers/calculation_provider.dart';
+import 'package:practise1/hotel_booking/providers/count_provider.dart';
+import 'package:practise1/hotel_booking/providers/date_provider.dart';
+import 'package:practise1/hotel_booking/providers/language_provider.dart';
+import 'package:practise1/hotel_booking/providers/maps_provider.dart';
+import 'package:practise1/hotel_booking/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'list_view_test/providers/coupon_state_provider.dart';
-import 'list_view_test/screens/flash_screen/flash_screen.dart';
+import 'hotel_booking/providers/coupon_state_provider.dart';
+import 'hotel_booking/screens/flash_screen/flash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
