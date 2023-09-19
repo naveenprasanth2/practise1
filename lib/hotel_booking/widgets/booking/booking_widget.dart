@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_model.dart';
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/hotel_booking/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/hotel_booking/providers/booking_data_provider.dart';
 import 'package:practise1/hotel_booking/providers/calculation_provider.dart';
 import 'package:practise1/hotel_booking/providers/count_provider.dart';
@@ -52,20 +55,22 @@ class _BookingWidgetState extends State<BookingWidget> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handlePaymentError);
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    final NavigatorState navigator = Navigator.of(context);
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsPayNowLoading(false);
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsRetryLoading(false);
     GeneralUtils.showSuccessSnackBar(context, "Your booking is successful");
-    // Navigator.pushAndRemoveUntil(
-    //     context,
-    //     MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
-    //     (route) => route.isFirst);
-    Navigator.push(
-      context,
+    HotelSearchModel hotelSearchModel =
+        await getHotelDetails(widget.bookingHistoryModel);
+    navigator.push(
       MaterialPageRoute(
-        builder: (builder) => const PaymentSuccessScreen(),
+        builder: (builder) => PaymentSuccessScreen(
+          bookingHistoryDisplayModel: BookingHistoryDisplayModel(
+              bookingHistoryModel: widget.bookingHistoryModel,
+              hotelSearchModel: hotelSearchModel),
+        ),
       ),
     );
   }
@@ -249,16 +254,24 @@ class _BookingWidgetState extends State<BookingWidget> {
 
   Future<void> handleBookingForCashPayment() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final NavigatorState navigator = Navigator.of(context);
     final statusCode = await postDataToDatabaseForCashPayment();
     if (mounted) {
       Provider.of<BookingDataProvider>(context, listen: false)
           .setIsPayAtHotelLoading(false);
       Navigator.pop(context);
       if (statusCode == 200) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
-            (route) => route.isFirst);
+        HotelSearchModel hotelSearchModel =
+            await getHotelDetails(widget.bookingHistoryModel);
+        navigator.push(
+          MaterialPageRoute(
+            builder: (builder) => PaymentSuccessScreen(
+              bookingHistoryDisplayModel: BookingHistoryDisplayModel(
+                  bookingHistoryModel: widget.bookingHistoryModel,
+                  hotelSearchModel: hotelSearchModel),
+            ),
+          ),
+        );
         GeneralUtils.showSuccessSnackBarUsingScaffold(
             scaffoldMessenger, "Your booking is successful");
       } else {
@@ -325,5 +338,19 @@ class _BookingWidgetState extends State<BookingWidget> {
       },
     };
     _razorpay.open(options);
+  }
+
+  Future<HotelSearchModel> getHotelDetails(
+      BookingHistoryModel bookingHistoryModel) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection(
+            bookingHistoryModel.cityAndState.split(",")[1].trim().toLowerCase())
+        .doc(
+            bookingHistoryModel.cityAndState.split(",")[0].trim().toLowerCase())
+        .collection("hotels")
+        .doc(bookingHistoryModel.hotelId)
+        .get();
+    return HotelSearchModel.fromJson(querySnapshot
+        .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
   }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/screens/home/home_page.dart';
+import 'package:practise1/hotel_booking/widgets/booking_confirmation/booking_confirmation_widget.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
-  const PaymentSuccessScreen({super.key});
+  final BookingHistoryDisplayModel bookingHistoryDisplayModel;
+  const PaymentSuccessScreen(
+      {super.key, required this.bookingHistoryDisplayModel});
 
   @override
   State<PaymentSuccessScreen> createState() => _PaymentSuccessScreenState();
@@ -19,14 +23,18 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
     )
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           // Navigate to home screen when animation is completed
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (builder) => const HomeScreen()),
+            MaterialPageRoute(
+                builder: (builder) => BookingConfirmationWidget(
+                      bookingHistoryDisplayModel:
+                          widget.bookingHistoryDisplayModel,
+                    )),
           );
         }
       })

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
-import 'package:practise1/hotel_booking/widgets/booking/chat_bubble.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/hotel_booking/widgets/room_occupancy_details/add_rooms_widget.dart';
 

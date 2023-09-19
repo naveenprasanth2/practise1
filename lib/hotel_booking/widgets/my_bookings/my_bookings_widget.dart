@@ -25,7 +25,6 @@ class MyBookingsWidget extends StatefulWidget {
 class _MyBookingsWidgetState extends State<MyBookingsWidget> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
