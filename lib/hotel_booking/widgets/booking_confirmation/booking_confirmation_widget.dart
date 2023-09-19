@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/hotel_booking/screens/home/home_page.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/date_helper/date_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
+import 'package:practise1/hotel_booking/widgets/booking/pop_over_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/booking_tile_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/contact_details_widget.dart';
@@ -260,13 +262,30 @@ class BookingConfirmationWidget extends StatelessWidget {
                                 children: [
                                   const Text("Amount paid"),
                                   SizedBoxHelper.sizedBox_10,
-                                  IconButton(
-                                    onPressed: () {
-                                      // Todo need to work here for the info button
-                                      print("test");
-                                    },
-                                    icon: const Icon(Icons.info_outline),
-                                  ),
+                                  //builder used to fetch the context from the parent
+                                  Builder(builder: (context) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        showPopover(
+                                          context: context,
+                                          bodyBuilder: (context) =>
+                                              const PopOverWidget(
+                                                  message:
+                                                      "This is the amount you have paid/payable after discount"),
+                                          direction: PopoverDirection.bottom,
+                                          backgroundColor: Colors.white,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.90,
+                                          height: 100,
+                                          arrowHeight: 15,
+                                          arrowWidth: 30,
+                                        );
+                                      },
+                                      icon: const Icon(Icons.info_outline),
+                                    );
+                                  }),
                                 ],
                               ),
                               SizedBoxHelper.sizedBox_10,

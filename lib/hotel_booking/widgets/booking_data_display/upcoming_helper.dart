@@ -25,6 +25,7 @@ class UpcomingHelper extends StatelessWidget {
         children: [
           UpcomingAssistanceWidget(
             iconData: Icons.navigation_outlined,
+            rotate: true,
             onPressed: () {
               Provider.of<MapProvider>(context, listen: false)
                   .openMapWithoutClick(
@@ -37,6 +38,7 @@ class UpcomingHelper extends StatelessWidget {
             title: "Directions",
           ),
           UpcomingAssistanceWidget(
+            rotate: false,
             iconData: Icons.phone_outlined,
             onPressed: () {
               GeneralUtils.launchPhone(bookingHistoryDisplayModel
@@ -45,6 +47,7 @@ class UpcomingHelper extends StatelessWidget {
             title: "Call hotel",
           ),
           UpcomingAssistanceWidget(
+            rotate: false,
             iconData: Icons.question_answer_outlined,
             onPressed: () {},
             title: "Need help?",

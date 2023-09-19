@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
+import 'package:practise1/hotel_booking/widgets/booking/pop_over_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/booking_tile_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/contact_details_widget.dart';
@@ -199,8 +201,19 @@ class BookingHistoryDetailWidget extends StatelessWidget {
                                 SizedBoxHelper.sizedBox_10,
                                 IconButton(
                                   onPressed: () {
-                                    // Todo need to work here for the info button
-                                    print("test");
+                                    showPopover(
+                                      context: context,
+                                      bodyBuilder: (context) => const PopOverWidget(
+                                          message:
+                                              "This is the amount you have paid/payable after discount"),
+                                      direction: PopoverDirection.bottom,
+                                      backgroundColor: Colors.white,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.90,
+                                      height: 100,
+                                      arrowHeight: 15,
+                                      arrowWidth: 30,
+                                    );
                                   },
                                   icon: const Icon(Icons.info_outline),
                                 ),
