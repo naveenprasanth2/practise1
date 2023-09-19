@@ -265,7 +265,7 @@ const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
         const collectionId = collectionRef.id;
         
         // Skip the "users" collection
-        if (collectionId === 'users') {
+        if (collectionId === 'users' || collectionId == 'discounts') {
           continue;
         }
 
