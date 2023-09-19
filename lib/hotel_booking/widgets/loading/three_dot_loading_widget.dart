@@ -7,6 +7,7 @@ class ThreeDotLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: 200,
       child: Center(
         child: Lottie.asset('lottie_assets/three_dot_loader.json',
             repeat: true, reverse: false, animate: true),
