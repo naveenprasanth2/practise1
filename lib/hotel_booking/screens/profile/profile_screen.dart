@@ -265,6 +265,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final ProfileProvider profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
+    final AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     await profileProvider.setName(_nameController.text.trim());
     String formattedName =
         StringUtils.convertToSentenceCaseForAll(profileProvider.name!);
@@ -288,6 +290,7 @@ class _ProfilePageState extends State<ProfilePage> {
             .set(_userProfileModel.toJson())
             .then((value) {
           profileProvider.setSignIn(true);
+          authProvider.setSignIn(true);
           profileProvider.setProfileDataFromModel(_userProfileModel);
           profileProvider.setIsLoading(false);
           Navigator.pushAndRemoveUntil(

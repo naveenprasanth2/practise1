@@ -36,6 +36,7 @@ class PaymentFailureSheet extends StatelessWidget {
                     Provider.of<BookingDataProvider>(context, listen: false)
                         .setIsRetryLoading(true);
                     initiatePayment();
+                    Navigator.pop(context);
                   },
                   child: Container(
                     height: 50,

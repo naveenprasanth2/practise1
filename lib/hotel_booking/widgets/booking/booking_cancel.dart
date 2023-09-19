@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_model.dart';
 import 'package:practise1/hotel_booking/providers/booking_data_provider.dart';
@@ -118,21 +117,21 @@ class BookingCancelWidget extends StatelessWidget {
     );
   }
 
-  void cancelBooking(BuildContext context) {
-    bookingHistoryModel.checkOutStatus = "cancelled";
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc("dummy")
-        .collection("bookings")
-        .doc(bookingHistoryModel.bookingId.toString())
-        .set({
-      bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
-    });
-    Provider.of<BookingDataProvider>(context, listen: false)
-        .swapDataFromUpcomingToCancelledList(
-            bookingHistoryModel.bookingId.toString());
-  }
-
+  // void cancelBooking(BuildContext context) {
+  //   bookingHistoryModel.checkOutStatus = "cancelled";
+  //   FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc("dummy")
+  //       .collection("bookings")
+  //       .doc(bookingHistoryModel.bookingId.toString())
+  //       .set({
+  //     bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
+  //   });
+  //   Provider.of<BookingDataProvider>(context, listen: false)
+  //       .swapDataFromUpcomingToCancelledList(
+  //           bookingHistoryModel.bookingId.toString());
+  // }
+  //using now only for testing purposes
   // void cancelBookingThroughValidatingServer(BuildContext context) {
   //   bookingHistoryModel.checkOutStatus = "cancelled";
   //   FirebaseFirestore.instance
@@ -151,8 +150,6 @@ class BookingCancelWidget extends StatelessWidget {
   Future<void> sendCancellationToApiEndPoint(BuildContext context) async {
     final bookingProvider =
         Provider.of<BookingDataProvider>(context, listen: false);
-    final profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     const String url =
         'https://us-central1-bookany.cloudfunctions.net/processRefund';
@@ -166,6 +163,7 @@ class BookingCancelWidget extends StatelessWidget {
       headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
+      bookingHistoryModel.checkOutStatus = "cancelled";
       bookingProvider.swapDataFromUpcomingToCancelledList(
           bookingHistoryModel.bookingId.toString());
       GeneralUtils.showSuccessSnackBarUsingScaffold(scaffoldMessenger,

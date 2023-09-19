@@ -8,7 +8,7 @@ class DateHelper {
   }
 
   static String formatDateWithDayAndYear(String date) {
-    return DateFormat('EEE, MMM-dd-yy').format(
+    return DateFormat('EEE, dd-MMM-yy').format(
       DateFormat('dd-MMM-yyyy').parse(date),
     );
   }

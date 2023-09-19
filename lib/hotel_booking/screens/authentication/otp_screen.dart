@@ -168,6 +168,7 @@ class _OtpScreenState extends State<OtpScreen> {
           authProvider.checkExistingUser().then((value) async {
             if (value == true) {
               profileProvider.setSignIn(true);
+              authProvider.setSignIn(true);
               try {
                 await _firebaseFirestore
                     .collection("users")

@@ -54,9 +54,13 @@ class _MyDrawerState extends State<MyDrawer> {
                               //check whether user signedin, if signed in navigate to profile screen
                               //else to Register screen
                               Provider.of<ProfileProvider>(context,
-                                              listen: false)
-                                          .name !=
-                                      ""
+                                                  listen: false)
+                                              .name !=
+                                          "" &&
+                                      Provider.of<ProfileProvider>(context,
+                                                  listen: false)
+                                              .name !=
+                                          null
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -121,9 +125,14 @@ class _MyDrawerState extends State<MyDrawer> {
                                         Text(
                                           //this is done in order to handle non login situations
                                           (Provider.of<ProfileProvider>(context,
-                                                          listen: false)
-                                                      .name !=
-                                                  "")
+                                                              listen: false)
+                                                          .name !=
+                                                      "" &&
+                                                  Provider.of<ProfileProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .name !=
+                                                      null)
                                               ? Provider.of<ProfileProvider>(
                                                       context,
                                                       listen: false)
