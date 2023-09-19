@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:practise1/list_view_test/models/star_ratings_model/star_ratings_average_model.dart';
 
 import '../nearby_places_model/place_category_model.dart';
 import '../room_type_search_model/room_type_search_model.dart';
@@ -16,30 +17,26 @@ class HotelSearchModel {
   @JsonKey(name: 'highlights')
   List<String> highlights;
 
-  @JsonKey(name: 'averageRatings')
-  double averageRatings;
-
-  @JsonKey(name: 'noOfRatings')
-  int noOfRatings;
-
   @JsonKey(name: 'hotelId')
   String hotelId;
 
   @JsonKey(name: 'roomTypeForSearch')
   List<RoomTypeSearchModel> roomTypeForSearch;
 
-  HotelSearchModel({
-    required this.hotelImages,
-    required this.hotelLocationDetails,
-    required this.highlights,
-    required this.averageRatings,
-    required this.noOfRatings,
-    required this.hotelId,
-    required this.roomTypeForSearch
-  });
+  @JsonKey(name: 'ratings')
+  StarRatingAverageModel starRatingAverageModel;
+
+  HotelSearchModel(
+      {required this.hotelImages,
+      required this.hotelLocationDetails,
+      required this.highlights,
+      required this.hotelId,
+      required this.roomTypeForSearch,
+      required this.starRatingAverageModel});
 
   // Add the factory constructor for parsing from JSON
-  factory HotelSearchModel.fromJson(Map<String, dynamic> json) => _$HotelSearchModelFromJson(json);
+  factory HotelSearchModel.fromJson(Map<String, dynamic> json) =>
+      _$HotelSearchModelFromJson(json);
 
   // Add the method for serialization to JSON
   Map<String, dynamic> toJson() => _$HotelSearchModelToJson(this);

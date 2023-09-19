@@ -42,7 +42,7 @@ class CouponWidgetWithButton extends StatelessWidget {
                 fit: BoxFit.fill,
                 height: 40,
               ),
-            SizedBoxHelper.sizedBox_10,
+              SizedBoxHelper.sizedBox_10,
               Expanded(
                 child: Column(
                   children: [
@@ -56,7 +56,8 @@ class CouponWidgetWithButton extends StatelessWidget {
                           children: [
                             Text(
                               couponModel.shortDescription,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Text(
                               couponModel.couponCode,
@@ -71,17 +72,20 @@ class CouponWidgetWithButton extends StatelessWidget {
                           builder: (context, couponStateProvider, _) {
                             return InkWell(
                               onTap: () async {
-                                Provider.of<CalculationProvider>(context, listen: false)
+                                Provider.of<CalculationProvider>(context,
+                                        listen: false)
                                     .setDiscounts(couponModel.percentage);
                                 if (couponStateProvider.couponCode !=
                                     couponModel.couponCode) {
                                   couponStateProvider
-                                      .setCouponCode(couponModel.couponCode);
-                                  await Future.delayed(const Duration(milliseconds: 200))
+                                      .setCouponCode(couponModel);
+                                  await Future.delayed(
+                                          const Duration(milliseconds: 200))
                                       .then((value) => Navigator.pop(context));
                                 } else {
                                   couponStateProvider.removeCouponCode();
-                                  Provider.of<CalculationProvider>(context, listen: false)
+                                  Provider.of<CalculationProvider>(context,
+                                          listen: false)
                                       .resetDiscounts();
                                 }
                               },
@@ -90,7 +94,7 @@ class CouponWidgetWithButton extends StatelessWidget {
                                 width: 100,
                                 decoration: BoxDecoration(
                                   color: couponStateProvider.couponCode !=
-                                      couponModel.couponCode
+                                          couponModel.couponCode
                                       ? Colors.red.shade600
                                       : Colors.white,
                                   borderRadius: BorderRadius.circular(10),
@@ -105,12 +109,12 @@ class CouponWidgetWithButton extends StatelessWidget {
                                 child: Center(
                                   child: Text(
                                     couponStateProvider.couponCode !=
-                                        couponModel.couponCode
+                                            couponModel.couponCode
                                         ? "Apply"
                                         : "Remove",
                                     style: TextStyle(
                                       color: couponStateProvider.couponCode !=
-                                          couponModel.couponCode
+                                              couponModel.couponCode
                                           ? Colors.white
                                           : Colors.black,
                                       fontSize: 10,
@@ -129,8 +133,7 @@ class CouponWidgetWithButton extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
                           color: Colors.grey.shade600,
-                          fontSize: 10
-                      ),
+                          fontSize: 10),
                     ),
                   ],
                 ),

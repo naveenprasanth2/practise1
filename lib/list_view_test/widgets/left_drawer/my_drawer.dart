@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:practise1/list_view_test/providers/profile_provider.dart';
+import 'package:practise1/list_view_test/screens/authentication/register_screen.dart';
 import 'package:practise1/list_view_test/screens/flash_screen/flash_screen.dart';
 import 'package:practise1/list_view_test/screens/profile/profile_screen.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +49,16 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                         ),
                         Text(
-                          snapshot.data!.split(" ").first.toString(),
+                          //this is done in order to handle non login situations
+                          Provider.of<ProfileProvider>(context, listen: false)
+                                      .name !=
+                                  null
+                              ? Provider.of<ProfileProvider>(context,
+                                      listen: false)
+                                  .name!
+                                  .split(" ")
+                                  .first
+                              : "Guest",
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -80,50 +91,73 @@ class _MyDrawerState extends State<MyDrawer> {
               }
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('My Profile'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  //editing profile page
-                  builder: (builder) => const ProfilePage(),
-                ),
-              );
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          const Divider(thickness: 1),
-          ListTile(
-            leading: const Icon(Icons.luggage),
-            title: const Text('My Bookings'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (builder) => const MyBookingsScreen(),
-                ),
-              );
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          const Divider(thickness: 1),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('logout'),
-            onTap: () {
-              Provider.of<AuthProvider>(context, listen: false).logout(context);
-              Navigator.pushAndRemoveUntil(
+          if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('My Profile'),
+              onTap: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (builder) => const MySplashScreen(),
+                    //editing profile page
+                    builder: (builder) => const ProfilePage(),
                   ),
-                  (route) => false);
-            },
-            trailing: const Icon(Icons.arrow_forward_ios),
-          ),
-          const Divider(thickness: 1),
+                );
+              },
+              trailing: const Icon(Icons.arrow_forward_ios),
+            ),
+          if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            const Divider(thickness: 1),
+          if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            ListTile(
+              leading: const Icon(Icons.luggage),
+              title: const Text('My Bookings'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const MyBookingsScreen(),
+                  ),
+                );
+              },
+              trailing: const Icon(Icons.arrow_forward_ios),
+            ),
+          if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            const Divider(thickness: 1),
+          if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('logout'),
+              onTap: () {
+                Provider.of<AuthProvider>(context, listen: false)
+                    .logout(context);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => const MySplashScreen(),
+                    ),
+                    (route) => false);
+              },
+              trailing: const Icon(Icons.arrow_forward_ios),
+            ),
+          if (Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            const Divider(thickness: 1),
+          if (!Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text('login'),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => const RegisterScreen(),
+                    ),
+                    (route) => false);
+              },
+              trailing: const Icon(Icons.arrow_forward_ios),
+            ),
+          if (!Provider.of<AuthProvider>(context, listen: true).isSignedIn)
+            const Divider(thickness: 1),
         ],
       ),
     );

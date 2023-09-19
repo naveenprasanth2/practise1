@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider extends ChangeNotifier {
   String? _name;
+  String? _reservedFor;
   String? _mobileNo;
   String? _emailId;
   String? _dateOfBirth;
@@ -20,12 +21,20 @@ class ProfileProvider extends ChangeNotifier {
 
   String? get name => _name;
 
+//todo this needs to be checked
+  String? get reservedFor => _reservedFor ?? _name;
+
   Future<void> setName(String value) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     _name = value;
+    _reservedFor = value;
     sharedPreferences.setString("name", _name!);
     notifyListeners();
+  }
+
+  void setReservedFor(String value) {
+    _reservedFor = value;
   }
 
   void setProfileDataFromModel(UserProfileModel userProfileModel) {

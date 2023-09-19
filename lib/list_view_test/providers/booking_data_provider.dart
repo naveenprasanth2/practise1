@@ -6,13 +6,18 @@ class BookingDataProvider extends ChangeNotifier {
   List<BookingHistoryDisplayModel> _upcomingList = [];
   List<BookingHistoryDisplayModel> _checkedOutList = [];
   List<BookingHistoryDisplayModel> _cancelledList = [];
-  bool isPayNowLoading = false;
+  bool _isPayNowLoading = false;
+  bool _isRetryLoading = false;
 
   List<BookingHistoryDisplayModel> get upcomingList => _upcomingList;
 
   List<BookingHistoryDisplayModel> get checkedOutList => _checkedOutList;
 
   List<BookingHistoryDisplayModel> get cancelledList => _cancelledList;
+
+  bool get isPayNowLoading => _isPayNowLoading;
+
+  bool get isRetryLoading => _isRetryLoading;
 
   void setUpcomingList(List<BookingHistoryDisplayModel> upcomingList) {
     _upcomingList = upcomingList;
@@ -39,7 +44,12 @@ class BookingDataProvider extends ChangeNotifier {
   }
 
   void setIsPayNowLoading(bool value) {
-    isPayNowLoading = value;
+    _isPayNowLoading = value;
+    notifyListeners();
+  }
+
+  void setIsRetryLoading(bool value) {
+    _isRetryLoading = value;
     notifyListeners();
   }
 }

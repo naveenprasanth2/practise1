@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as crypto from 'crypto';
 import Razorpay from 'razorpay';
+import * as moment from 'moment-timezone';
 
 admin.initializeApp();
 
@@ -156,5 +157,158 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
     }
 });
 
-export { processRefund, handleRazorpayCallback };
+const processRating = functions.https.onRequest(async (request, response) => {
+    const bookingId = request.body.bookingHistoryModel.bookingId;
+    const bookingHistoryModel = request.body.bookingHistoryModel;
+    const ratingsModel = request.body.starRatingDetailsModel;
+    const mobileNo = request.body.mobileNo;
+    const userRatedStatus = admin.firestore().collection('users').doc(mobileNo).collection('bookings')
+        .doc(bookingId);
+        const snapshot = await userRatedStatus.get();
+    
+        if (!snapshot.exists) {
+            console.error('Document not found');
+            response.status(500).send('No corresponding booking id found for the user');
+        }
+    
+        const data = snapshot.data();
+        const rated = data ? data?.[bookingId].rated : null;  // Ensure the data exists before trying to access the ratings field
+        const checkOutStatus = data ? data?.[bookingId].checkOutStatus : null;
+        console.log(data?.[bookingId].rated);
+    
+    if(rated == false && checkOutStatus == 'checkedOut'){
+        const ratingRefDoc = admin.firestore().collection(bookingHistoryModel.cityAndState
+            .split(",")
+            .pop()  // equivalent to .last
+            .trim()
+            .toLowerCase()).doc(bookingHistoryModel.cityAndState
+                .split(",")
+                [0]  // equivalent to .first in Dart
+                .trim()
+                .toLowerCase()).collection('hotels').doc(bookingHistoryModel.hotelId).collection('ratings').doc(bookingId);
+                ratingRefDoc.set({ 'ratings': ratingsModel })
+                .then(() => {
+                    response.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    response.status(500).send('Internal server error');
+                });
+        const filePathToSetRating = `${bookingId}.rated`;
+        userRatedStatus.update({ [filePathToSetRating]: true })
+        .then(() => {
+            response.status(200).send('OK');
+        })
+        .catch(error => {
+            console.error('Error updating user rated status:', error);
+            response.status(500).send('Internal server error');
+        });
+    }else{
+        response.status(500).send('User cannot rate for this booking id');
+    }
+
+});
+
+const fetchRatingsDaily = functions.pubsub
+    .schedule('5 * * * *')
+    .timeZone('Asia/Kolkata') // Set to Indian Standard Time
+    .onRun(async (context) => {
+    try {
+        // Get the current date and time in IST
+const nowInIST = moment.tz("Asia/Kolkata");
+
+// Subtract one day to get yesterday's date
+const yesterdayInIST = nowInIST.subtract(2, 'days');
+
+// Format the date
+const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
+      const collectionsSnapshot = await admin.firestore().listCollections();
+
+      for (const collectionRef of collectionsSnapshot) {
+        const collectionId = collectionRef.id;
+        
+        // Skip the "users" collection
+        if (collectionId === 'users') {
+          continue;
+        }
+
+        const documentsSnapshot = await collectionRef.get();
+
+        for (const documentSnapshot of documentsSnapshot.docs) {
+          const hotelsCollectionRef = documentSnapshot.ref.collection('hotels');
+          const hotelsDocumentsSnapshot = await hotelsCollectionRef.get();
+
+          for (const hotelDocumentSnapshot of hotelsDocumentsSnapshot.docs) {
+            const ratingsCollectionRef = hotelDocumentSnapshot.ref.collection('ratings');
+                    // Fetch ratings documents created in the last 10 minutes and before 5 minutes
+                    const ratingsSnapshot = await ratingsCollectionRef
+                        .where('ratings.timeStamp', '==', formattedYesterdayDate)
+                        .get();
+                        console.log(formattedYesterdayDate);
+                        
+            const ratings: number[] = []; // Array to store rating values
+            
+            ratingsSnapshot.forEach((ratingDoc) => {
+              const ratingData = ratingDoc.data();
+              const ratingValue = ratingData.ratings.rating;
+              ratings.push(ratingValue);
+            });
+
+            const valueOfOneStarRating = ratings.filter(rating => rating === 1).length;
+            const valueOfTwoStarRating = ratings.filter(rating => rating === 2).length;
+            const valueOfThreeStarRating = ratings.filter(rating => rating === 3).length;
+            const valueOfFourStarRating = ratings.filter(rating => rating === 4).length;
+            const valueOfFiveStarRating = ratings.filter(rating => rating === 5).length;
+            const sumOfAllNewRating = ratings.reduce((sum, rating) => sum + rating, 0);
+            const countOfNewRatings = ratings.length;
+            
+
+            console.log(valueOfOneStarRating + "one");
+            console.log(valueOfTwoStarRating + "two");
+            console.log(valueOfThreeStarRating+ "three");
+            console.log(valueOfFourStarRating + "four");
+            console.log(valueOfFiveStarRating + "five");
+
+            // Get the document ID as the field name
+            const fieldName = hotelDocumentSnapshot.id;
+
+            // Access the nested field "ratings" using data() method
+            const fieldData = hotelDocumentSnapshot.data();
+
+            // Using optional chain expression to access nested "ratings" field
+            const ratingsData = fieldData?.[fieldName]?.ratings;
+
+            if (ratingsData !== undefined) {
+                const totalCurrentRatings = (ratingsData.oneStarRatingsCount + ratingsData.twoStarRatingsCount + 
+                                            ratingsData.threeStarRatingsCount + ratingsData.fourStarRatingsCount + ratingsData.fiveStarRatingsCount);
+                let calculatedAverage = ((ratingsData.averageRating * totalCurrentRatings) + sumOfAllNewRating) / (totalCurrentRatings + countOfNewRatings);
+
+                // Check if the calculated average is NaN and set it to 0 if true
+                ratingsData.averageRating = isNaN(calculatedAverage) ? 0 : calculatedAverage;
+                                            
+                ratingsData.oneStarRatingsCount = ratingsData.oneStarRatingsCount + valueOfOneStarRating;
+                ratingsData.twoStarRatingsCount = ratingsData.twoStarRatingsCount + valueOfTwoStarRating;
+                ratingsData.threeStarRatingsCount = ratingsData.threeStarRatingsCount + valueOfThreeStarRating;
+                ratingsData.fourStarRatingsCount = ratingsData.fourStarRatingsCount + valueOfFourStarRating;
+                ratingsData.fiveStarRatingsCount = ratingsData.fiveStarRatingsCount + valueOfFiveStarRating;
+                ratingsData.noOfRatings = totalCurrentRatings + countOfNewRatings;
+                await hotelDocumentSnapshot.ref.update({
+                    [`${fieldName}.ratings`]: ratingsData
+                });
+
+            } else {
+            console.error('Nested field "ratings" is missing or undefined in hotel document data.');
+            }
+
+          }
+        }
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching ratings:', error);
+      return null;
+    }
+  });
+
+export { processRefund, handleRazorpayCallback, processRating,fetchRatingsDaily };
 

@@ -64,8 +64,7 @@ class CouponDetailWidget extends StatelessWidget {
                           .setDiscounts(couponModel.percentage);
                       if (couponStateProvider.couponCode !=
                           couponModel.couponCode) {
-                        couponStateProvider
-                            .setCouponCode(couponModel.couponCode);
+                        couponStateProvider.setCouponCode(couponModel);
                       } else {
                         couponStateProvider.removeCouponCode();
                         Provider.of<CalculationProvider>(context, listen: false)

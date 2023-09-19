@@ -33,7 +33,8 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    initialValue ??= Provider.of<ProfileProvider>(context, listen: true).name ?? '';
+    initialValue ??=
+        Provider.of<ProfileProvider>(context, listen: true).name ?? '';
     super.didChangeDependencies();
   }
 
@@ -43,13 +44,15 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
     return TextFormField(
       controller: widget.textEditingController,
       autocorrect: false,
-      onChanged: (value){
+      onChanged: (value) {
         initialValue = value;
       },
       decoration: InputDecoration(
         hintText: widget.hintText,
         labelText: widget.labelText,
         enabled: widget.enabled,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 15,
