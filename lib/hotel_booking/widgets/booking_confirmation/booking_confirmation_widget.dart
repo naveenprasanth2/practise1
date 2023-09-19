@@ -103,6 +103,8 @@ class BookingConfirmationWidget extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
                                   "${DateHelper.formatDateWithDay(bookingHistoryDisplayModel.bookingHistoryModel.checkInDate)} - ${DateHelper.formatDateWithDay(bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate)}",
