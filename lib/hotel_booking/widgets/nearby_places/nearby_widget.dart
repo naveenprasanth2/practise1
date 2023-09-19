@@ -157,9 +157,13 @@ class _NearByTabViewState extends State<NearByTabView>
               InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (builder) => const MapScreen()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => MapScreen(
+                        nearbyPlacesModel: widget.nearbyPlacesModel,
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   height: 40,

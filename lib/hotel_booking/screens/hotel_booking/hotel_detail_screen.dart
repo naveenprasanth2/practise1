@@ -315,8 +315,11 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (builder) =>
-                                                  const MapScreen(),
+                                              builder: (builder) => MapScreen(
+                                                nearbyPlacesModel:
+                                                    hotelDetailsModel
+                                                        .locationDetails,
+                                              ),
                                             ),
                                           );
                                         },
