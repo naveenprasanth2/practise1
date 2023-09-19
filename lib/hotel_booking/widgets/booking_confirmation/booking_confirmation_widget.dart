@@ -3,6 +3,7 @@ import 'package:practise1/hotel_booking/models/booking_history_model/booking_his
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/hotel_booking/screens/home/home_page.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/hotel_booking/utils/date_helper/date_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
 import 'package:practise1/hotel_booking/widgets/booking_data_display/booking_tile_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
@@ -27,45 +28,118 @@ class BookingConfirmationWidget extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            expandedHeight: 100.0,
+            collapsedHeight: 90.0,
+            floating: false,
+            pinned: true,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.green,
-            flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.parallax,
-              background: SafeArea(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Booking Confirmed",
-                          style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (builder) => const HomeScreen(),
+            flexibleSpace: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                double maxExtent = constraints.maxHeight;
+                double threshold = 150; // Adjust this threshold as needed.
+                if (maxExtent > threshold) {
+                  // Display content for expanded state
+                  return SafeArea(
+                    child: FlexibleSpaceBar(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 30, left: 10),
+                              child: Text(
+                                "Booking Confirmed",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                            (route) => false);
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 30,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30, left: 10),
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (builder) => const HomeScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  );
+                } else {
+                  // Display content for collapsed state
+                  return SafeArea(
+                    child: FlexibleSpaceBar(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30, left: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  hotelDetailsModel.hotelName,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  "${DateHelper.formatDateWithDay(bookingHistoryDisplayModel.bookingHistoryModel.checkInDate)} - ${DateHelper.formatDateWithDay(bookingHistoryDisplayModel.bookingHistoryModel.checkOutDate)}",
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30, left: 10),
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (builder) => const HomeScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
           SliverToBoxAdapter(
