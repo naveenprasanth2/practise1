@@ -16,47 +16,54 @@ class BookingConfirmationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          AppBar(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
             automaticallyImplyLeading: false,
-            flexibleSpace: Container(
-              color: Colors.green,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 80,
-                    child: Center(
-                      child: Text(
-                        "Booking Confirmed",
-                        style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+            backgroundColor: Colors.green,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
+              background: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          "Booking Confirmed",
+                          style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (builder) => const HomeScreen()),
-                          (route) => false);
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 30,
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (builder) => const HomeScreen(),
+                            ),
+                            (route) => false);
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-          Expanded(
+          SliverToBoxAdapter(
+            child: SizedBoxHelper.sizedBox20,
+          ),
+          SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
@@ -110,37 +117,6 @@ class BookingConfirmationWidget extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
-                    SizedBoxHelper.sizedBox20,
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (builder) => HotelDetailScreen(
-                                hotelSearchModel:
-                                    bookingHistoryDisplayModel.hotelSearchModel,
-                                cityAndState: bookingHistoryDisplayModel
-                                    .bookingHistoryModel.cityAndState),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade400,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Book again ",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
                     ),
                     SizedBoxHelper.sizedBox20,
                     SizedBox(
