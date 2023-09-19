@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/screens/home/home_page.dart';
-import 'package:practise1/hotel_booking/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
+import 'package:practise1/hotel_booking/widgets/booking_data_display/booking_tile_widget.dart';
 import 'package:practise1/hotel_booking/widgets/booking/show_checkin_checkout_details.dart';
+import 'package:practise1/hotel_booking/widgets/booking_data_display/guest_details_widget.dart';
 import 'package:practise1/hotel_booking/widgets/room_occupancy_details/add_rooms_widget.dart';
 
 class BookingConfirmationWidget extends StatelessWidget {
@@ -90,7 +91,7 @@ class BookingConfirmationWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBoxHelper.sizedBox_10,
+                        SizedBoxHelper.sizedBox_20,
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,148 +129,28 @@ class BookingConfirmationWidget extends StatelessWidget {
                     ShowCheckInCheckOutDetailsWidget(
                       bookingHistoryDisplayModel: bookingHistoryDisplayModel,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
+                    BookingTileWidget(
+                      title: "Booking ID",
+                      value: bookingHistoryDisplayModel
+                          .bookingHistoryModel.bookingId
+                          .split("_")
+                          .last,
+                      copyIcon: true,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Booking ID",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(bookingHistoryDisplayModel
-                                  .bookingHistoryModel.bookingId
-                                  .split("_")
-                                  .last),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              onPressed: () {
-                                GeneralUtils.copyBookingIdToClipboard(
-                                    context,
-                                    bookingHistoryDisplayModel
-                                        .bookingHistoryModel.bookingId
-                                        .split("_")
-                                        .last);
-                              },
-                              icon: const Icon(Icons.copy),
-                            ),
-                          ),
-                        ],
-                      ),
+                    BookingTileWidget(
+                        title: "Reserved for",
+                        value: bookingHistoryDisplayModel
+                            .bookingHistoryModel.reservedFor,
+                        copyIcon: false),
+                    GuestDetailsWidget(
+                      bookingHistoryDisplayModel: bookingHistoryDisplayModel,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Reserved for",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(bookingHistoryDisplayModel
-                              .bookingHistoryModel.reservedFor),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Rooms & Guests",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                  "${bookingHistoryDisplayModel.bookingHistoryModel.roomsCount} Rooms"),
-                              SizedBoxHelper.sizedBox_10,
-                              Container(
-                                height: 5,
-                                width: 5,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black,
-                                  border: Border.all(color: Colors.black),
-                                ),
-                              ),
-                              SizedBoxHelper.sizedBox_10,
-                              Text(
-                                  "${bookingHistoryDisplayModel.bookingHistoryModel.guestsCount} Guests"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Room Type",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(StringUtils.convertToSentenceCaseForAll(
-                              bookingHistoryDisplayModel
-                                  .bookingHistoryModel.roomType)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: DottedLinePainter(),
-                      ),
-                    ),
+                    BookingTileWidget(
+                        title: "Room Type",
+                        value: StringUtils.convertToSentenceCaseForAll(
+                            bookingHistoryDisplayModel
+                                .bookingHistoryModel.roomType),
+                        copyIcon: false),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: Column(
