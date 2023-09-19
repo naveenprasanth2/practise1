@@ -40,8 +40,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
     return BottomAppBar(
       height: 80,
       color: Colors.white,
-      child: Container(
-        decoration: const BoxDecoration(color: Colors.transparent),
+      child: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -190,7 +189,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
         checkInTime: "12:00PM",
         checkOutTime: "11:00AM",
         checkOutStatus: "booked",
-        cityAndState: "chennai, Tamilnadu",
+        cityAndState: widget.hotelSearchModel.cityAndState,
         discount: Provider.of<CouponStateProvider>(context, listen: false)
                 .selectedCoupon
                 ?.percentage ??
@@ -199,6 +198,7 @@ class _HotelDetailsBottomBarState extends State<HotelDetailsBottomBar> {
             Provider.of<CouponStateProvider>(context, listen: false).couponCode,
         hotelId: widget.hotelDetailsModel!.id,
         rated: false,
-        roomsCount: countProvider.roomsInfo.length);
+        roomsCount: countProvider.roomsInfo.length,
+        roomType: calculationProvider.roomSelection.roomType);
   }
 }

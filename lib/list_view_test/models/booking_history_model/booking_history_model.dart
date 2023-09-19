@@ -10,6 +10,8 @@ class BookingHistoryModel {
   final String cityAndState;
   @JsonKey(name: 'roomsCount')
   final int roomsCount;
+  @JsonKey(name: 'roomType')
+  final String roomType;
   @JsonKey(name: 'guestsCount')
   final int guestsCount;
   @JsonKey(name: 'checkInDate')
@@ -39,6 +41,7 @@ class BookingHistoryModel {
     required this.hotelId,
     required this.cityAndState,
     required this.roomsCount,
+    required this.roomType,
     required this.guestsCount,
     required this.checkInDate,
     required this.checkInTime,

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1099359424912-snf0ke634n6qgdc2sd4tph9coa3q6qlj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1099359424912-snf0ke634n6qgdc2sd4tph9coa3q6qlj</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1099359424912-da7mg9ifho07hgsfc20d5vmf8pf6fr36.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyADREC4-IaVqly1q1Wt5LkOTGa3xwwT8Ss</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1099359424912</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.practise1.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>bookany</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bookany.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1099359424912:ios:e53c4fbde838d023e6a315</string>
+	<key>DATABASE_URL</key>
+	<string>https://bookany-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

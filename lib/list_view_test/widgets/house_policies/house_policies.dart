@@ -97,6 +97,7 @@ class HousePoliciesWidget extends StatelessWidget {
                     onTap: () {
                       showBottomSheet(
                           context: context,
+                          backgroundColor: Colors.white,
                           builder: (context) {
                             return SafetyGuidelinesWidget();
                           });

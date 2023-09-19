@@ -31,7 +31,8 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
   Widget build(BuildContext context) {
     return Consumer<CalculationProvider>(
         builder: (context, calculationProvider, _) {
-      return SizedBox(
+      return Container(
+        color: Colors.white,
         height: 700,
         child: Padding(
           padding:
@@ -63,14 +64,14 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                       fontSize: 15,
                     ),
                   ),
-          SizedBoxHelper.sizedBox_20,
+                  SizedBoxHelper.sizedBox_20,
                   Text(
                     "${Provider.of<CountProvider>(context).adultCount} Adult",
                     style: const TextStyle(
                       fontSize: 15,
                     ),
                   ),
-          SizedBoxHelper.sizedBox_20,
+                  SizedBoxHelper.sizedBox_20,
                   Text(
                     "${Provider.of<CountProvider>(context).childCount} Child",
                     style: const TextStyle(
@@ -176,83 +177,80 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                   ],
                 ),
               ),
-              if(Provider.of<CouponStateProvider>(context).couponCode != "")
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Discount Applied',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Text(
-                                  'Discount ${calculationProvider.discountPercentage} %',
-                                  style:
-                                      const TextStyle(color: Colors.black),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "(${Provider.of<CouponStateProvider>(context).couponCode})",
-                                      style: const TextStyle(
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 12
+              if (Provider.of<CouponStateProvider>(context).couponCode != "")
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Discount Applied',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    'Discount ${calculationProvider.discountPercentage} %',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "(${Provider.of<CouponStateProvider>(context).couponCode})",
+                                        style: const TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 12),
                                       ),
-                                    ),
-                                    SizedBoxHelper.sizedBox_2,
-                                    const Text(
-                                      "applied",
-                                      style: TextStyle(
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.normal,
-                                          fontStyle: FontStyle.italic,
-                                          fontSize: 12
+                                      SizedBoxHelper.sizedBox_2,
+                                      const Text(
+                                        "applied",
+                                        style: TextStyle(
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.normal,
+                                            fontStyle: FontStyle.italic,
+                                            fontSize: 12),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              calculationProvider.discountedPrice.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.green),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                calculationProvider.discountedPrice.toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.green),
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              calculationProvider.discountedPrice.toString(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.green),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                calculationProvider.discountedPrice.toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.green),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               const Divider(
                 thickness: 2,
               ),
@@ -373,7 +371,8 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(
-                              calculationProvider.gstPriceWithoutPrepaidDiscount.toString(),
+                              calculationProvider.gstPriceWithoutPrepaidDiscount
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
@@ -384,7 +383,8 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(
-                              calculationProvider.gstPriceWithPrepaidDiscount.toString(),
+                              calculationProvider.gstPriceWithPrepaidDiscount
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
@@ -431,7 +431,8 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(
-                              calculationProvider.finalPriceWithPrepaidDiscount.toString(),
+                              calculationProvider.finalPriceWithPrepaidDiscount
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(color: Colors.black),
                             ),
@@ -485,7 +486,8 @@ class _PricingDetailsWidgetState extends State<PricingDetailsWidget> {
                           child: Container(
                             alignment: Alignment.center,
                             child: Text(
-                              calculationProvider.finalPriceWithPrepaidDiscount.toString(),
+                              calculationProvider.finalPriceWithPrepaidDiscount
+                                  .toString(),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.black,

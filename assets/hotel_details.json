@@ -2,10 +2,8 @@
   "hotelName": "MPlaza Hotel",
   "doorNumber": "Plot No 22",
   "streetNumber": "2nd Cross, Parapana Agrahara",
-  "cityName": "Bangalore",
+  "cityAndState": "bangalore, karnataka",
   "id": "BANMA1274",
-  "averageRatings": 3.5,
-  "noOfRatings": 30,
   "mainImage": "https://media.istockphoto.com/id/177289466/photo/swimming-pool.jpg?s=1024x1024&w=is&k=20&c=qvliI9r-123BQ79vybLR16jUbmQV5_rsq4WGCaepptU=",
   "hotelImages": {
     "room": [

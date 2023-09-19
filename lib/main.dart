@@ -5,6 +5,7 @@ import 'package:practise1/list_view_test/providers/booking_data_provider.dart';
 import 'package:practise1/list_view_test/providers/calculation_provider.dart';
 import 'package:practise1/list_view_test/providers/count_provider.dart';
 import 'package:practise1/list_view_test/providers/date_provider.dart';
+import 'package:practise1/list_view_test/providers/language_provider.dart';
 import 'package:practise1/list_view_test/providers/maps_provider.dart';
 import 'package:practise1/list_view_test/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (create) => MapProvider()),
         ChangeNotifierProvider(create: (create) => CouponStateProvider()),
         ChangeNotifierProvider(create: (create) => BookingDataProvider()),
+        ChangeNotifierProvider(create: (create) => LanguageProvider()),
         ChangeNotifierProxyProvider2<DateProvider, CountProvider,
             CalculationProvider>(
           create: (context) => CalculationProvider(),

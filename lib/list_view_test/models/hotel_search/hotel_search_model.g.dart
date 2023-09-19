@@ -22,6 +22,9 @@ HotelSearchModel _$HotelSearchModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       starRatingAverageModel: StarRatingAverageModel.fromJson(
           json['ratings'] as Map<String, dynamic>),
+      hotelContactDetails: HotelContactDetails.fromJson(
+          json['hotelContactDetails'] as Map<String, dynamic>),
+      cityAndState: json['cityAndState'] as String,
     );
 
 Map<String, dynamic> _$HotelSearchModelToJson(HotelSearchModel instance) =>
@@ -32,4 +35,6 @@ Map<String, dynamic> _$HotelSearchModelToJson(HotelSearchModel instance) =>
       'hotelId': instance.hotelId,
       'roomTypeForSearch': instance.roomTypeForSearch,
       'ratings': instance.starRatingAverageModel,
+      'hotelContactDetails': instance.hotelContactDetails,
+      'cityAndState': instance.cityAndState,
     };
