@@ -22,23 +22,41 @@ const processRefund = functions.https.onRequest(async (request, response) => {
 
         if (booking.exists) {
             const bookingData = booking.data();
-            console.log("Booking Data:", bookingData);
 
-            if (bookingData?.[orderId].paymentStatus == 'success') {
+            if(bookingData?.[orderId].paymentMode == 'online'){
+                if (bookingData?.[orderId].paymentStatus == 'success') {
                 const paymentDetail = (await bookingDocRef.collection('paymentDetails').doc('paymentDetails').get()).data();
                 paymentDetails = paymentDetail?.paymentDetails.id;
-                 response.status(200).json({ success: 'order refund in progress' });
+                try {
+                    const refund = await razorpay.payments.refund(paymentDetails, {});
+                    response.json(refund);
+                    response.status(200).json({ success: 'order refund in progress' });
+                } catch (error) {
+                    response.status(500).json(error);
+                }
             }else if(bookingData?.[orderId].paymentStatus !== 'success'){
                 console.error("Booking status is not 'success'");
                 response.status(400).json({ error: 'We cannot process refund for this orderId' });
                 return;
             }
-
-            try {
-                const refund = await razorpay.payments.refund(paymentDetails, {});
-                response.json(refund);
-            } catch (error) {
-                response.status(500).json(error);
+            }else if(bookingData?.[orderId].paymentMode == 'cash'){
+                if (bookingData?.[orderId].paymentStatus == 'verified') {
+                    const fieldPath = `${orderId}.checkOutStatus`;
+                    console.error(fieldPath);
+                    bookingDocRef.update({ [fieldPath]: "cancelled" })
+                    .then(() => {
+                        response.status(200).send('OK');
+                    })
+                    .catch(error => {
+                        console.error('Error updating database:', error);
+                        response.status(500).send('Internal server error');
+                    });
+                 response.status(200).json({ success: 'order is cancelled' });
+            }else if(bookingData?.[orderId].paymentStatus !== 'verified'){
+                console.error("Payment status is not 'verified'");
+                response.status(400).json({ error: 'We cannot process cancellation for this orderId' });
+                return;
+            }
             }
         } else {
             console.log("Booking not found");
