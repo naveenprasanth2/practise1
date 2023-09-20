@@ -73,28 +73,32 @@ class _SearchPageState extends State<SearchPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            TextField(
-              controller: _searchController,
-              onChanged: _performSearch,
-              decoration: InputDecoration(
-                hintText: "Enter city name",
-                border: OutlineInputBorder(
-                  borderSide: Divider.createBorderSide(context),
-                  borderRadius: BorderRadius.circular(10),
+            SizedBox(
+              //this width is specified to make sure the text box aligns with the bottom texts
+              width: MediaQuery.of(context).size.width * 0.92,
+              child: TextField(
+                controller: _searchController,
+                onChanged: _performSearch,
+                decoration: InputDecoration(
+                  hintText: "Enter city name",
+                  border: OutlineInputBorder(
+                    borderSide: Divider.createBorderSide(context),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: Divider.createBorderSide(context),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: Divider.createBorderSide(context),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  filled: false,
+                  contentPadding: const EdgeInsets.all(8),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: Divider.createBorderSide(context),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: Divider.createBorderSide(context),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                filled: false,
-                contentPadding: const EdgeInsets.all(8),
+                keyboardType: TextInputType.text,
+                obscureText: false,
               ),
-              keyboardType: TextInputType.text,
-              obscureText: false,
             ),
             Expanded(
               // Wrap the Column with Expanded
