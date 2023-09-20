@@ -11,7 +11,7 @@ import 'package:practise1/hotel_booking/providers/calculation_provider.dart';
 import 'package:practise1/hotel_booking/providers/count_provider.dart';
 import 'package:practise1/hotel_booking/providers/date_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
-import 'package:practise1/hotel_booking/screens/payment_success/payment_success_screen.dart';
+import 'package:practise1/hotel_booking/screens/payment/payment_success_screen.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
 import 'package:practise1/hotel_booking/widgets/booking/days_of_stay.dart';
@@ -159,37 +159,41 @@ class _BookingWidgetState extends State<BookingWidget> {
                           Provider.of<DateProvider>(context).checkOutDate,
                     ),
                     const SizedBox(height: 30),
-                    InkWell(
-                      onTap: () async {
-                        Provider.of<BookingDataProvider>(context, listen: false)
-                            .setIsPayNowLoading(true);
-                        setPaymentMode("online");
-                        await handleBookingForOnlinePayment();
-                      },
-                      child: paymentOption(
-                          "Pay Now",
-                          Provider.of<CalculationProvider>(context)
-                              .finalPriceWithPrepaidDiscount
-                              .toString(),
-                          Colors.red.shade400,
-                          loading: bookingProvider.isPayNowLoading),
-                    ),
+                    if (!bookingProvider.isPayAtHotelLoading)
+                      InkWell(
+                        onTap: () async {
+                          Provider.of<BookingDataProvider>(context,
+                                  listen: false)
+                              .setIsPayNowLoading(true);
+                          setPaymentMode("online");
+                          await handleBookingForOnlinePayment();
+                        },
+                        child: paymentOption(
+                            "Pay Now",
+                            Provider.of<CalculationProvider>(context)
+                                .finalPriceWithPrepaidDiscount
+                                .toString(),
+                            Colors.red.shade400,
+                            loading: bookingProvider.isPayNowLoading),
+                      ),
                     const SizedBox(height: 15),
-                    InkWell(
-                      onTap: () async {
-                        Provider.of<BookingDataProvider>(context, listen: false)
-                            .setIsPayAtHotelLoading(true);
-                        setPaymentMode("cash");
-                        await handleBookingForCashPayment();
-                      },
-                      child: paymentOption(
-                          "Pay at Hotel",
-                          Provider.of<CalculationProvider>(context)
-                              .finalPriceWithoutPrepaidDiscount
-                              .toString(),
-                          Colors.pinkAccent.shade100,
-                          loading: bookingProvider.isPayAtHotelLoading),
-                    ),
+                    if (!bookingProvider.isPayNowLoading)
+                      InkWell(
+                        onTap: () async {
+                          Provider.of<BookingDataProvider>(context,
+                                  listen: false)
+                              .setIsPayAtHotelLoading(true);
+                          setPaymentMode("cash");
+                          await handleBookingForCashPayment();
+                        },
+                        child: paymentOption(
+                            "Pay at Hotel",
+                            Provider.of<CalculationProvider>(context)
+                                .finalPriceWithoutPrepaidDiscount
+                                .toString(),
+                            Colors.pinkAccent.shade100,
+                            loading: bookingProvider.isPayAtHotelLoading),
+                      ),
                     const SizedBox(height: 30),
                   ],
                 ),
@@ -218,18 +222,18 @@ class _BookingWidgetState extends State<BookingWidget> {
 
   Widget paymentOption(String label, String price, Color color,
       {bool loading = false}) {
-    return Container(
-      height: 60,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: loading
-          ? const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            )
-          : Column(
+    return loading
+        ? const Center(
+            child: CircularProgressIndicator(color: Colors.red),
+          )
+        : Container(
+            height: 60,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
@@ -245,7 +249,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                 ),
               ],
             ),
-    );
+          );
   }
 
   void setPaymentMode(String paymentMode) {
