@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/providers/auth_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
+import 'package:practise1/hotel_booking/providers/upcoming_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../authentication/register_screen.dart';
@@ -24,16 +25,17 @@ class _MySplashScreenState extends State<MySplashScreen> {
     final authenticationProvider =
         Provider.of<AuthProvider>(context, listen: false);
     await authenticationProvider.init();
-    navigateToHomeScreen();
+    navigateBasedOnDecision();
   }
 
-  void navigateToHomeScreen() async {
+  void navigateBasedOnDecision() async {
     await Future.delayed(const Duration(seconds: 1)).then((value) {
       final authenticationProvider =
           Provider.of<AuthProvider>(context, listen: false);
       if (authenticationProvider.isSignedIn) {
         Provider.of<ProfileProvider>(context, listen: false)
             .setProfileDataFromSharedPreferences();
+        Provider.of<UpcomingProvider>(context, listen: false).init();
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

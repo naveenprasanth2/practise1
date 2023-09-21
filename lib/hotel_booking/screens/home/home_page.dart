@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/providers/date_provider.dart';
+import 'package:practise1/hotel_booking/providers/upcoming_provider.dart';
 import 'package:practise1/hotel_booking/screens/search_results/search_results_screen.dart';
 import 'package:practise1/hotel_booking/widgets/location/city_widget.dart';
+import 'package:practise1/hotel_booking/widgets/upcoming/upcoming_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/location_constants.dart';
@@ -338,6 +340,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              if (Provider.of<UpcomingProvider>(context, listen: true)
+                      .bookingHistoryDisplayModel !=
+                  null)
+                SliverToBoxAdapter(
+                  child: UpcomingWidget(
+                      bookingHistoryDisplayModel:
+                          Provider.of<UpcomingProvider>(context, listen: true)
+                              .bookingHistoryDisplayModel!,
+                      hotelDetailsModel:
+                          Provider.of<UpcomingProvider>(context, listen: true)
+                              .hotelDetailsModel),
+                ),
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 200.0,
