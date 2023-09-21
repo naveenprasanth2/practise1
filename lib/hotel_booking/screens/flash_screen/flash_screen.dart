@@ -35,7 +35,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
       if (authenticationProvider.isSignedIn) {
         Provider.of<ProfileProvider>(context, listen: false)
             .setProfileDataFromSharedPreferences();
-        Provider.of<UpcomingProvider>(context, listen: false).init();
+        // Provider.of<UpcomingProvider>(context, listen: false).init();
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

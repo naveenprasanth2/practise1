@@ -8,6 +8,7 @@ import 'package:practise1/hotel_booking/models/booking_history_model/booking_his
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
 import 'package:practise1/hotel_booking/models/hotel_search/hotel_search_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:time/time.dart';
 
 class UpcomingProvider extends ChangeNotifier {
   BookingHistoryDisplayModel? _bookingHistoryDisplayModel;
@@ -26,13 +27,42 @@ class UpcomingProvider extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    await getBookingsDetails();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("mobileNo") != null) {
+      if (!await checkBookingDetailsAvailableIsValid()) {
+        await getBookingsDetails();
+        setSharedPreferences();
+      }
+    }
+  }
+
+  Future<bool> checkBookingDetailsAvailableIsValid() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    if (sharedPreferences.getString("bookingHistoryDisplayModel") != null) {
+      _bookingHistoryDisplayModel = BookingHistoryDisplayModel.fromJson(
+          jsonDecode(
+              sharedPreferences.getString("bookingHistoryDisplayModel")!));
+      _hotelDetailsModel = HotelDetailsModel.fromJson(
+          jsonDecode(sharedPreferences.getString("hotelDetailsModel")!));
+
+      if ((DateFormat("dd-MMM-yyyy")
+              .parse(
+                  _bookingHistoryDisplayModel!.bookingHistoryModel.checkInDate)
+              .isAtSameDayAs(DateTime.now()) &&
+          DateTime.now().hour > 12)) {
+        _bookingHistoryDisplayModel = null;
+      }
+    }
+    notifyListeners();
+    return _bookingHistoryDisplayModel == null ? false : true;
   }
 
   Future<void> getBookingsDetails() async {
     List<BookingHistoryModel> myBookingHistoryList = [];
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final String userId = sharedPreferences.getString("mobileNo")!;
+    // Navigate to the bookings collection of the dummy user document
     final bookingsCollection = _firebaseFirestore
         .collection("users")
         .doc(userId)
@@ -54,12 +84,13 @@ class UpcomingProvider extends ChangeNotifier {
             element.paymentStatus == "success" ||
             element.paymentStatus == "processing refund" ||
             element.paymentStatus == "refund processed")
+        .where((element) => element.checkOutStatus == "booked")
         .toList());
     // Sort the list based on the checkIndate field
-    myBookingHistoryList.removeWhere((element) => (DateFormat("dd-MMM-yyyy")
+    myBookingHistoryList.removeWhere((element) => ((DateFormat("dd-MMM-yyyy")
             .parse(element.checkInDate)
-            .isAfter(DateTime.now()) &&
-        DateTime.now().hour < 12));
+            .isAtSameDayAs(DateTime.now()) &&
+        DateTime.now().hour > 12)));
     myBookingHistoryList.sort((a, b) {
       DateTime dateA = DateFormat("dd-MMM-yyyy").parse(a.checkInDate);
       DateTime dateB = DateFormat("dd-MMM-yyyy").parse(b.checkInDate);
@@ -103,15 +134,14 @@ class UpcomingProvider extends ChangeNotifier {
         .get();
     _hotelDetailsModel = HotelDetailsModel.fromJson(
         querySnapshot.data()!["details"] as Map<String, dynamic>);
-    print("summa");
     notifyListeners();
   }
 
   void setSharedPreferences() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString("bookingHistoryDisplayModel",
-        _bookingHistoryDisplayModel!.toJson().toString());
+        (jsonEncode(_bookingHistoryDisplayModel)).toString());
     sharedPreferences.setString(
-        "hotelDetailsModel", _hotelDetailsModel!.toJson().toString());
+        "hotelDetailsModel", (jsonEncode(_hotelDetailsModel)).toString());
   }
 }
