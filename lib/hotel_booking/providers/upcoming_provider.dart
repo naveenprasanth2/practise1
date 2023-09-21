@@ -144,4 +144,13 @@ class UpcomingProvider extends ChangeNotifier {
     sharedPreferences.setString(
         "hotelDetailsModel", (jsonEncode(_hotelDetailsModel)).toString());
   }
+
+  Future<void> clearBookingData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove("bookingHistoryDisplayModel");
+    sharedPreferences.remove("hotelDetailsModel");
+    _bookingHistoryDisplayModel = null;
+    _hotelDetailsModel = null;
+    notifyListeners();
+  }
 }
