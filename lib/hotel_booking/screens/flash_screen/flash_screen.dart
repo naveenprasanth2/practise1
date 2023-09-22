@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/providers/auth_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
-import 'package:practise1/hotel_booking/providers/upcoming_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../authentication/register_screen.dart';

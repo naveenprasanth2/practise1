@@ -28,7 +28,8 @@ class UpcomingProvider extends ChangeNotifier {
 
   Future<void> init() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("mobileNo") != null) {
+    if (sharedPreferences.getString("mobileNo") != null &&
+        sharedPreferences.getString("mobileNo") != "") {
       if (!await checkBookingDetailsAvailableIsValid()) {
         await getBookingsDetails();
         setSharedPreferences();
