@@ -100,8 +100,11 @@ class UpcomingProvider extends ChangeNotifier {
     if (myBookingHistoryList.isNotEmpty) {
       _bookingHistoryModel = myBookingHistoryList.first;
     }
-    await getHotelSearchDetail(_bookingHistoryModel!);
-    await setHotelDetails(_bookingHistoryModel!);
+
+    if (myBookingHistoryList.isNotEmpty) {
+      await getHotelSearchDetail(_bookingHistoryModel!);
+      await setHotelDetails(_bookingHistoryModel!);
+    }
     notifyListeners();
   }
 
