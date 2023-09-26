@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/providers/booking_data_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
+import 'package:practise1/hotel_booking/widgets/loading/three_dot_loading_widget.dart';
 import 'package:practise1/hotel_booking/widgets/my_bookings/my_bookings_widget.dart';
 import 'package:provider/provider.dart';
 import '../../models/booking_history_model/booking_history_model.dart';
@@ -52,8 +53,14 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
       allValues.addAll(dataMap.values);
     }
 
-    myBookingHistoryList.addAll(
-        allValues.map((value) => BookingHistoryModel.fromJson(value)).toList());
+    myBookingHistoryList.addAll(allValues
+        .map((value) => BookingHistoryModel.fromJson(value))
+        .where((element) =>
+            element.paymentStatus == "verified" ||
+            element.paymentStatus == "success" ||
+            element.paymentStatus == "processing refund" ||
+            element.paymentStatus == "refund processed")
+        .toList());
     // Sort the list based on the checkIndate field
     myBookingHistoryList.sort((a, b) {
       DateTime dateA = DateFormat("dd-MMM-yyyy").parse(a.checkInDate);
@@ -187,7 +194,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
       key: _scaffoldKey,
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: ThreeDotLoadingWidget(),
             )
           : DefaultTabController(
               length: 3,

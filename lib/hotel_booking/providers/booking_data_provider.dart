@@ -7,6 +7,7 @@ class BookingDataProvider extends ChangeNotifier {
   List<BookingHistoryDisplayModel> _checkedOutList = [];
   List<BookingHistoryDisplayModel> _cancelledList = [];
   bool _isPayNowLoading = false;
+  bool _isPayAtHotelLoading = false;
   bool _isRetryLoading = false;
 
   List<BookingHistoryDisplayModel> get upcomingList => _upcomingList;
@@ -16,6 +17,8 @@ class BookingDataProvider extends ChangeNotifier {
   List<BookingHistoryDisplayModel> get cancelledList => _cancelledList;
 
   bool get isPayNowLoading => _isPayNowLoading;
+
+  bool get isPayAtHotelLoading => _isPayAtHotelLoading;
 
   bool get isRetryLoading => _isRetryLoading;
 
@@ -45,6 +48,11 @@ class BookingDataProvider extends ChangeNotifier {
 
   void setIsPayNowLoading(bool value) {
     _isPayNowLoading = value;
+    notifyListeners();
+  }
+
+  void setIsPayAtHotelLoading(bool value) {
+    _isPayAtHotelLoading = value;
     notifyListeners();
   }
 

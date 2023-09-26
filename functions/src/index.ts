@@ -14,7 +14,7 @@ const razorpay = new Razorpay({
 const processRefund = functions.https.onRequest(async (request, response) => {
     const orderId = request.body.orderId;
     const mobileNo = request.body.userId;
-    let paymentId;
+    let paymentDetails;
     const userDocRef = admin.firestore().collection('users').doc(mobileNo);
     const bookingDocRef = userDocRef.collection('bookings').doc(orderId);
     try {
@@ -22,23 +22,41 @@ const processRefund = functions.https.onRequest(async (request, response) => {
 
         if (booking.exists) {
             const bookingData = booking.data();
-            console.log("Booking Data:", bookingData);
 
-            if (bookingData?.[orderId].status !== 'success') {
+            if(bookingData?.[orderId].paymentMode == 'online'){
+                if (bookingData?.[orderId].paymentStatus == 'success') {
+                const paymentDetail = (await bookingDocRef.collection('paymentDetails').doc('paymentDetails').get()).data();
+                paymentDetails = paymentDetail?.paymentDetails.id;
+                try {
+                    const refund = await razorpay.payments.refund(paymentDetails, {});
+                    response.json(refund);
+                    response.status(200).json({ success: 'order refund in progress' });
+                } catch (error) {
+                    response.status(500).json(error);
+                }
+            }else if(bookingData?.[orderId].paymentStatus !== 'success'){
                 console.error("Booking status is not 'success'");
                 response.status(400).json({ error: 'We cannot process refund for this orderId' });
                 return;
-            }else if(bookingData?.[orderId].status == 'success'){
-               const paymentDetails = (await bookingDocRef.collection('paymentId').doc('paymentId').get()).data();
-                paymentId = paymentDetails?.paymentDetails.id;
-                response.status(200).json({ success: 'order refund in progress' });
             }
-
-            try {
-                const refund = await razorpay.payments.refund(paymentId, {});
-                response.json(refund);
-            } catch (error) {
-                response.status(500).json(error);
+            }else if(bookingData?.[orderId].paymentMode == 'cash'){
+                if (bookingData?.[orderId].paymentStatus == 'verified') {
+                    const fieldPath = `${orderId}.checkOutStatus`;
+                    console.error(fieldPath);
+                    bookingDocRef.update({ [fieldPath]: "cancelled" })
+                    .then(() => {
+                        response.status(200).send('OK');
+                    })
+                    .catch(error => {
+                        console.error('Error updating database:', error);
+                        response.status(500).send('Internal server error');
+                    });
+                 response.status(200).json({ success: 'order is cancelled' });
+            }else if(bookingData?.[orderId].paymentStatus !== 'verified'){
+                console.error("Payment status is not 'verified'");
+                response.status(400).json({ error: 'We cannot process cancellation for this orderId' });
+                return;
+            }
             }
         } else {
             console.log("Booking not found");
@@ -64,22 +82,13 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
         if (event === 'payment.captured') {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
-            const notesString = req.body.payload.payment.entity.notes;
             const paymentDetails = req.body.payload.payment.entity;
-            console.log(paymentDetails);
-
-            let notes = {
-                ...JSON.parse(notesString.paymentDetails),
-                ...JSON.parse(notesString.hotelDetails),
-                ...JSON.parse(notesString.bookingSchedule),
-                ...JSON.parse(notesString.bookingStatus),
-            };
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
-            notes.status = "success";
+            const fieldPath = `${description}.paymentStatus`;
 
-            bookingDocRef.set({ [description]: notes })
+            bookingDocRef.update({ [fieldPath]: "success" })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -87,7 +96,33 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     console.error('Error updating database:', error);
                     res.status(500).send('Internal server error');
                 });
-                bookingDocRef.collection('paymentId').doc('paymentId').set({ paymentDetails: paymentDetails })
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').set({ paymentDetails: paymentDetails })
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                
+        } else if (event === 'payment.failed') {
+            const mobileNo = req.body.payload.payment.entity.contact;
+            const description = req.body.payload.payment.entity.description;
+            const paymentDetails = req.body.payload.payment.entity;
+
+            const userDocRef = admin.firestore().collection('users').doc(mobileNo);
+            const bookingDocRef = userDocRef.collection('bookings').doc(description);
+            const fieldPath = `${description}.paymentStatus`;
+
+            bookingDocRef.update({ [fieldPath]: "failed" })
+                .then(() => {
+                    res.status(200).send('OK');
+                })
+                .catch(error => {
+                    console.error('Error updating database:', error);
+                    res.status(500).send('Internal server error');
+                });
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').set({ paymentDetails: paymentDetails })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -103,26 +138,46 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
-            const fieldPath = `${description}.status`;
+            const paymentStatus = `${description}.paymentStatus`;
             const fieldPathForBookingStatus = `${description}.checkOutStatus`;
-
-            bookingDocRef.update({ [fieldPath]: "processing refund", [fieldPathForBookingStatus]:'cancelled'  })
-                .then(() => {
-                    res.status(200).send('OK');
-                })
-                .catch(error => {
-                    console.error('Error updating database:', error);
-                    res.status(500).send('Internal server error');
-                });
-                bookingDocRef.collection('paymentId').doc('paymentId').update({ refundDetails: refundDetails })
-                .then(() => {
-                    res.status(200).send('OK');
-                })
-                .catch(error => {
-                    console.error('Error updating database:', error);
-                    res.status(500).send('Internal server error');
-                });
-                
+            
+            bookingDocRef.get().then((documentSnapshot) => {
+                if (documentSnapshot.exists) {
+                    // Document data will be available in documentSnapshot.data()
+                    const paymentStatusValue = documentSnapshot.get(paymentStatus);
+                    console.log('Payment Status:', paymentStatusValue);
+                    if(paymentStatusValue === "success"){
+                        bookingDocRef.update({[paymentStatus]: "processing refund"})
+                        .then(() => {
+                            res.status(200).send('OK');
+                        })
+                        .catch(error => {
+                            console.error('Error updating database:', error);
+                            res.status(500).send('Internal server error');
+                        });
+                    }
+                    bookingDocRef.update({[fieldPathForBookingStatus]:'cancelled'  })
+                        .then(() => {
+                            res.status(200).send('OK');
+                        })
+                        .catch(error => {
+                            console.error('Error updating database:', error);
+                            res.status(500).send('Internal server error');
+                        });
+                    bookingDocRef.collection('paymentDetails').doc('paymentDetails').update({ refundDetails: refundDetails })
+                    .then(() => {
+                        res.status(200).send('OK');
+                    })
+                    .catch(error => {
+                        console.error('Error updating database:', error);
+                        res.status(500).send('Internal server error');
+                    });
+                } else {
+                    console.error("No such document!");
+                }
+             }).catch((error) => {
+                console.error("Error fetching document:", error);
+             });
         } else if (event === 'refund.processed') {
             const mobileNo = req.body.payload.payment.entity.contact;
             const description = req.body.payload.payment.entity.description;
@@ -130,7 +185,7 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
 
             const userDocRef = admin.firestore().collection('users').doc(mobileNo);
             const bookingDocRef = userDocRef.collection('bookings').doc(description);
-            const fieldPath = `${description}.status`;
+            const fieldPath = `${description}.paymentStatus`;
             console.error(refundDetails);
             bookingDocRef.update({ [fieldPath]: "refund processed"})
                 .then(() => {
@@ -140,7 +195,7 @@ const handleRazorpayCallback = functions.https.onRequest((req, res) => {
                     console.error('Error updating database:', error);
                     res.status(500).send('Internal server error');
                 });
-                bookingDocRef.collection('paymentId').doc('paymentId').update({ processedRefundDetails: refundDetails })
+                bookingDocRef.collection('paymentDetails').doc('paymentDetails').update({ processedRefundDetails: refundDetails })
                 .then(() => {
                     res.status(200).send('OK');
                 })
@@ -228,7 +283,7 @@ const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
         const collectionId = collectionRef.id;
         
         // Skip the "users" collection
-        if (collectionId === 'users') {
+        if (collectionId === 'users' || collectionId == 'discounts') {
           continue;
         }
 
@@ -303,5 +358,36 @@ const formattedYesterdayDate = yesterdayInIST.format('DD-MM-yyyy');
     }
   });
 
-export { processRefund, handleRazorpayCallback, processRating,fetchRatingsDaily };
+  const processBookingDataForOnlinePayment = functions.https.onRequest(async (request, response) => {
+    const userId = request.body.userId;
+    const bookingId = request.body.bookingId;
+    request.body.paymentMode = "online";
+    request.body.paymentStatus = "initiated";
+    const userDocRef = admin.firestore().collection('users').doc(userId).collection("bookings").doc(bookingId);
+    try {
+       await userDocRef.set({[bookingId]: request.body});
+       response.status(200).json("booking for cash payment is success");
+    } catch (error) {
+        console.error("Error:", error);
+        response.status(500).json(error);
+    }
+});
+
+const processBookingDataForCashPayment = functions.https.onRequest(async (request, response) => {
+    const userId = request.body.userId;
+    console.error(userId);
+    const bookingId = request.body.bookingId;
+    request.body.paymentMode = "cash";
+    request.body.paymentStatus = "verified";
+    const userDocRef = admin.firestore().collection('users').doc(userId).collection("bookings").doc(bookingId);
+    try {
+       await userDocRef.set({[bookingId]: request.body});
+       response.status(200).json("booking for cash payment is success");
+    } catch (error) {
+        console.error("Error:", error);
+        response.status(500).json(error);
+    }
+});
+
+export { processRefund, handleRazorpayCallback, processRating,fetchRatingsDaily,processBookingDataForOnlinePayment, processBookingDataForCashPayment };
 

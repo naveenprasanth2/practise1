@@ -5,6 +5,7 @@ import 'package:practise1/hotel_booking/screens/flash_screen/flash_screen.dart';
 import 'package:practise1/hotel_booking/screens/language/select_language_screen.dart';
 import 'package:practise1/hotel_booking/screens/profile/profile_screen.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/hotel_booking/widgets/guest/drawer_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,9 +55,13 @@ class _MyDrawerState extends State<MyDrawer> {
                               //check whether user signedin, if signed in navigate to profile screen
                               //else to Register screen
                               Provider.of<ProfileProvider>(context,
-                                              listen: false)
-                                          .name !=
-                                      ""
+                                                  listen: false)
+                                              .name !=
+                                          "" &&
+                                      Provider.of<ProfileProvider>(context,
+                                                  listen: false)
+                                              .name !=
+                                          null
                                   ? Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -121,9 +126,14 @@ class _MyDrawerState extends State<MyDrawer> {
                                         Text(
                                           //this is done in order to handle non login situations
                                           (Provider.of<ProfileProvider>(context,
-                                                          listen: false)
-                                                      .name !=
-                                                  "")
+                                                              listen: false)
+                                                          .name !=
+                                                      "" &&
+                                                  Provider.of<ProfileProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .name !=
+                                                      null)
                                               ? Provider.of<ProfileProvider>(
                                                       context,
                                                       listen: false)
@@ -226,77 +236,37 @@ class _MyDrawerState extends State<MyDrawer> {
                     ),
                   ),
                 ),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  height: 60,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.help_outline_rounded,
-                        size: 30,
-                      ),
-                      SizedBoxHelper.sizedBox_20,
-                      const Text(
-                        'Need help?',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ],
+              DrawerTile(
+                icon: const Icon(
+                  Icons.help_outline_rounded,
+                  size: 30,
+                ),
+                tileName: 'Need help?',
+                onPressed: () {},
+              ),
+              DrawerTile(
+                icon: const Icon(
+                  Icons.language_outlined,
+                  size: 30,
+                ),
+                tileName: 'Change language',
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => SelectLanguageScreen(),
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => SelectLanguageScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 60,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.language_outlined,
-                        size: 30,
-                      ),
-                      SizedBoxHelper.sizedBox_20,
-                      const Text(
-                        'Change language',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ],
-                  ),
+              DrawerTile(
+                icon: const Icon(
+                  Icons.lock_outline,
+                  size: 30,
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => SelectLanguageScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 60,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.lock_outline,
-                        size: 30,
-                      ),
-                      SizedBoxHelper.sizedBox_20,
-                      const Text(
-                        'Privacy policy',
-                        style: TextStyle(fontSize: 17),
-                      ),
-                    ],
+                tileName: 'Privacy policy',
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => SelectLanguageScreen(),
                   ),
                 ),
               ),

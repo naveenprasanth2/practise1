@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/hotel_booking/screens/hotel_booking/hotel_detail_screen.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
+import 'package:practise1/hotel_booking/widgets/loading/three_dot_loading_widget.dart';
 import 'package:practise1/hotel_booking/widgets/room_occupancy_details/add_rooms_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -60,27 +61,22 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           // ... SliverAppBar and other widgets ...
           SliverAppBar(
             pinned: true,
-            automaticallyImplyLeading: true,
             iconTheme: const IconThemeData(color: Colors.white),
             centerTitle: true,
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.phone),
-              ),
-            ],
             backgroundColor: Colors.red.shade400,
-            title: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    // Use a null-aware operator to avoid null errors
-                    widget.cityAndState,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Row(
+            automaticallyImplyLeading: true,
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  // Use a null-aware operator to avoid null errors
+                  widget.cityAndState,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.60,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Flexible(
@@ -125,8 +121,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
 
@@ -137,7 +133,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SliverFillRemaining(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: ThreeDotLoadingWidget(),
                   ),
                 );
               } else if (snapshot.hasError) {

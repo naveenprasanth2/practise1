@@ -31,10 +31,12 @@ class CityWidget extends StatelessWidget {
         }
 
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (builder) =>
-                    SearchResultsScreen(cityAndState: cityAndStateName)));
+          context,
+          MaterialPageRoute(
+            builder: (builder) =>
+                SearchResultsScreen(cityAndState: cityAndStateName),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.all(8.0),

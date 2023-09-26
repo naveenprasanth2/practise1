@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:practise1/hotel_booking/providers/maps_provider.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
@@ -9,7 +7,9 @@ import '../../models/nearby_places_model/nearby_places_model.dart';
 import '../../widgets/maps/maps_bottom_widget.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  final NearbyPlacesModel nearbyPlacesModel;
+  const MapScreen({Key? key, required this.nearbyPlacesModel})
+      : super(key: key);
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -26,11 +26,8 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _loadNearbyPlaces() async {
-    final jsonString = await rootBundle.loadString('assets/nearby_places.json');
-    final jsonMap = json.decode(jsonString);
-    final nearbyPlacesModel = NearbyPlacesModel.fromJson(jsonMap);
     setState(() {
-      nearbyPlaces = nearbyPlacesModel;
+      nearbyPlaces = widget.nearbyPlacesModel;
     });
   }
 

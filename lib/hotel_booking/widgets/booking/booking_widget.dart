@@ -1,20 +1,24 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_model.dart';
-import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_splitter.dart';
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/hotel_booking/models/hotel_search/hotel_search_model.dart';
 import 'package:practise1/hotel_booking/providers/booking_data_provider.dart';
 import 'package:practise1/hotel_booking/providers/calculation_provider.dart';
 import 'package:practise1/hotel_booking/providers/count_provider.dart';
 import 'package:practise1/hotel_booking/providers/date_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
-import 'package:practise1/hotel_booking/screens/my_bookings/my_bookings_screen.dart';
+import 'package:practise1/hotel_booking/screens/payment/payment_success_screen.dart';
+import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:practise1/hotel_booking/utils/string_utils.dart';
 import 'package:practise1/hotel_booking/widgets/booking/days_of_stay.dart';
 import 'package:practise1/hotel_booking/widgets/booking/payment_failure_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class BookingWidget extends StatefulWidget {
   final HotelDetailsModel hotelDetailsModel;
@@ -35,7 +39,6 @@ class BookingWidget extends StatefulWidget {
 class _BookingWidgetState extends State<BookingWidget> {
   late Razorpay _razorpay;
   late String orderId;
-
   @override
   void dispose() {
     super.dispose();
@@ -48,17 +51,28 @@ class _BookingWidgetState extends State<BookingWidget> {
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handlePaymentError);
   }
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    final NavigatorState navigator = Navigator.of(context);
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsPayNowLoading(false);
     Provider.of<BookingDataProvider>(context, listen: false)
         .setIsRetryLoading(false);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (builder) => const MyBookingsScreen()),
-        (route) => route.isFirst);
+    GeneralUtils.showSuccessSnackBar(context, "Your booking is successful");
+    HotelSearchModel hotelSearchModel =
+        await getHotelDetails(widget.bookingHistoryModel);
+    navigator.push(
+      MaterialPageRoute(
+        builder: (builder) => PaymentSuccessScreen(
+          bookingHistoryDisplayModel: BookingHistoryDisplayModel(
+              bookingHistoryModel: widget.bookingHistoryModel,
+              hotelSearchModel: hotelSearchModel),
+          hotelDetailsModel: widget.hotelDetailsModel,
+        ),
+      ),
+    );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -69,48 +83,8 @@ class _BookingWidgetState extends State<BookingWidget> {
     showDialog(
       context: context,
       builder: (context) =>
-          PaymentFailureSheet(initiatePayment: initiatePayment),
+          PaymentFailureSheet(initiatePayment: initiateOnlinePayment),
     );
-  }
-
-  void initiatePayment() {
-    final ProfileProvider profileProvider =
-        Provider.of<ProfileProvider>(context, listen: false);
-    var options = {
-      'key': 'rzp_test_w1r1PYTH0wy118',
-      'amount': (Provider.of<CalculationProvider>(context, listen: false)
-              .finalPriceWithPrepaidDiscount!) *
-          100,
-      'name': 'BookAny',
-      'description': widget.bookingHistoryModel.bookingId,
-      'prefill': {
-        'contact': profileProvider.mobileNo,
-        'email': profileProvider.emailId,
-      },
-      'userId': profileProvider.mobileNo,
-      'external': {
-        'wallets': ['paytm'],
-      },
-      'notes': {
-        'hotelDetails': jsonEncode(
-            HotelDetailsSplitJson.fromBookingHistoryModel(
-                    widget.bookingHistoryModel)
-                .toJson()),
-        'bookingSchedule': jsonEncode(
-            BookingScheduleSplitJson.fromBookingHistoryModel(
-                    widget.bookingHistoryModel)
-                .toJson()),
-        'bookingStatus': jsonEncode(
-            BookingStatusSplitJson.fromBookingHistoryModel(
-                    widget.bookingHistoryModel)
-                .toJson()),
-        'paymentDetails': jsonEncode(
-            PaymentDetailsSplitJson.fromBookingHistoryModel(
-                    widget.bookingHistoryModel)
-                .toJson()),
-      }
-    };
-    _razorpay.open(options);
   }
 
   @override
@@ -169,12 +143,14 @@ class _BookingWidgetState extends State<BookingWidget> {
                             .childCount
                             .toString()),
                     bookingDetailRow(
-                        "Room Type:",
-                        StringUtils.convertToSentenceCase(
-                            Provider.of<CalculationProvider>(context)
-                                .roomSelection
-                                .roomType
-                                .toString())),
+                      "Room Type:",
+                      StringUtils.convertToSentenceCase(
+                        Provider.of<CalculationProvider>(context)
+                            .roomSelection
+                            .roomType
+                            .toString(),
+                      ),
+                    ),
                     const SizedBox(height: 30),
                     DatesOfStayContainer(
                       checkInDate:
@@ -183,27 +159,41 @@ class _BookingWidgetState extends State<BookingWidget> {
                           Provider.of<DateProvider>(context).checkOutDate,
                     ),
                     const SizedBox(height: 30),
-                    InkWell(
-                      onTap: () {
-                        Provider.of<BookingDataProvider>(context, listen: false)
-                            .setIsPayNowLoading(true);
-                        initiatePayment();
-                      },
-                      child: paymentOption(
-                          "Pay Now",
-                          Provider.of<CalculationProvider>(context)
-                              .finalPriceWithPrepaidDiscount
-                              .toString(),
-                          Colors.red.shade400,
-                          loading: bookingProvider.isPayNowLoading),
-                    ),
+                    if (!bookingProvider.isPayAtHotelLoading)
+                      InkWell(
+                        onTap: () async {
+                          Provider.of<BookingDataProvider>(context,
+                                  listen: false)
+                              .setIsPayNowLoading(true);
+                          setPaymentMode("online");
+                          await handleBookingForOnlinePayment();
+                        },
+                        child: paymentOption(
+                            "Pay Now",
+                            Provider.of<CalculationProvider>(context)
+                                .finalPriceWithPrepaidDiscount
+                                .toString(),
+                            Colors.red.shade400,
+                            loading: bookingProvider.isPayNowLoading),
+                      ),
                     const SizedBox(height: 15),
-                    paymentOption(
-                        "Pay at Hotel",
-                        Provider.of<CalculationProvider>(context)
-                            .finalPriceWithoutPrepaidDiscount
-                            .toString(),
-                        Colors.pinkAccent.shade100),
+                    if (!bookingProvider.isPayNowLoading)
+                      InkWell(
+                        onTap: () async {
+                          Provider.of<BookingDataProvider>(context,
+                                  listen: false)
+                              .setIsPayAtHotelLoading(true);
+                          setPaymentMode("cash");
+                          await handleBookingForCashPayment();
+                        },
+                        child: paymentOption(
+                            "Pay at Hotel",
+                            Provider.of<CalculationProvider>(context)
+                                .finalPriceWithoutPrepaidDiscount
+                                .toString(),
+                            Colors.pinkAccent.shade100,
+                            loading: bookingProvider.isPayAtHotelLoading),
+                      ),
                     const SizedBox(height: 30),
                   ],
                 ),
@@ -232,18 +222,18 @@ class _BookingWidgetState extends State<BookingWidget> {
 
   Widget paymentOption(String label, String price, Color color,
       {bool loading = false}) {
-    return Container(
-      height: 60,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: loading
-          ? const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            )
-          : Column(
+    return loading
+        ? const Center(
+            child: CircularProgressIndicator(color: Colors.red),
+          )
+        : Container(
+            height: 60,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
@@ -259,6 +249,113 @@ class _BookingWidgetState extends State<BookingWidget> {
                 ),
               ],
             ),
+          );
+  }
+
+  void setPaymentMode(String paymentMode) {
+    widget.bookingHistoryModel.paymentMode = paymentMode;
+  }
+
+  Future<void> handleBookingForCashPayment() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final NavigatorState navigator = Navigator.of(context);
+    final statusCode = await postDataToDatabaseForCashPayment();
+    if (mounted) {
+      Provider.of<BookingDataProvider>(context, listen: false)
+          .setIsPayAtHotelLoading(false);
+      Navigator.pop(context);
+      if (statusCode == 200) {
+        HotelSearchModel hotelSearchModel =
+            await getHotelDetails(widget.bookingHistoryModel);
+        navigator.push(
+          MaterialPageRoute(
+            builder: (builder) => PaymentSuccessScreen(
+              bookingHistoryDisplayModel: BookingHistoryDisplayModel(
+                  bookingHistoryModel: widget.bookingHistoryModel,
+                  hotelSearchModel: hotelSearchModel),
+              hotelDetailsModel: widget.hotelDetailsModel,
+            ),
+          ),
+        );
+        GeneralUtils.showSuccessSnackBarUsingScaffold(
+            scaffoldMessenger, "Your booking is successful");
+      } else {
+        GeneralUtils.showFailureSnackBarUsingScaffold(
+            scaffoldMessenger, "Your booking is unsuccessful");
+      }
+    }
+  }
+
+  Future<void> handleBookingForOnlinePayment() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final statusCode = await postDataToDatabaseForOnlinePayment();
+    if (mounted) {
+      if (statusCode == 200) {
+        initiateOnlinePayment();
+      } else {
+        GeneralUtils.showFailureSnackBarUsingScaffold(
+            scaffoldMessenger, "Your booking is unsuccessful");
+      }
+    }
+  }
+
+  Future<int> postDataToDatabaseForCashPayment() async {
+    const String url =
+        "https://us-central1-bookany.cloudfunctions.net/processBookingDataForCashPayment";
+    //posting the data
+    final response = await http.post(
+      Uri.parse(url),
+      body: jsonEncode(widget.bookingHistoryModel.toJson()),
+      headers: {'Content-Type': 'application/json'},
     );
+    return response.statusCode;
+  }
+
+  Future<int> postDataToDatabaseForOnlinePayment() async {
+    const String url =
+        "https://us-central1-bookany.cloudfunctions.net/processBookingDataForOnlinePayment";
+    //posting the data
+    final response = await http.post(
+      Uri.parse(url),
+      body: jsonEncode(widget.bookingHistoryModel.toJson()),
+      headers: {'Content-Type': 'application/json'},
+    );
+    return response.statusCode;
+  }
+
+  void initiateOnlinePayment() {
+    final ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    var options = {
+      'key': 'rzp_test_w1r1PYTH0wy118',
+      'amount': (Provider.of<CalculationProvider>(context, listen: false)
+              .finalPriceWithPrepaidDiscount!) *
+          100,
+      'name': 'BookAny',
+      'description': widget.bookingHistoryModel.bookingId,
+      'prefill': {
+        'contact': profileProvider.mobileNo,
+        'email': profileProvider.emailId,
+      },
+      'userId': profileProvider.mobileNo,
+      'external': {
+        'wallets': ['paytm'],
+      },
+    };
+    _razorpay.open(options);
+  }
+
+  Future<HotelSearchModel> getHotelDetails(
+      BookingHistoryModel bookingHistoryModel) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection(
+            bookingHistoryModel.cityAndState.split(",")[1].trim().toLowerCase())
+        .doc(
+            bookingHistoryModel.cityAndState.split(",")[0].trim().toLowerCase())
+        .collection("hotels")
+        .doc(bookingHistoryModel.hotelId)
+        .get();
+    return HotelSearchModel.fromJson(querySnapshot
+        .data()![bookingHistoryModel.hotelId] as Map<String, dynamic>);
   }
 }

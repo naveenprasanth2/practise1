@@ -28,37 +28,98 @@ class ReviewsScreen extends StatefulWidget {
 class _ReviewsScreenState extends State<ReviewsScreen> {
   List<StarRatingDetailsModel> ratingsDetails = [];
   bool _isLoading = true;
+  DocumentSnapshot? lastDocument;
+  bool _isFetchingMore = false;
+  // Change this to however many you want per fetch
+  final int documentsPerPage = 20;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     getDetailedReviews();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        loadMoreReviews();
+      }
+    });
   }
 
   Future<void> getDetailedReviews() async {
     final city = widget.cityAndState.split(",")[0].trim().toLowerCase();
     final state = widget.cityAndState.split(",")[1].trim().toLowerCase();
 
+    // Get the first batch of documents
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(state)
         .doc(city)
         .collection("hotels")
         .doc(widget.hotelSearchModel.hotelId)
         .collection("ratings")
+        .orderBy('ratings.timeStamp',
+            descending: true) // Sort based on nested field
+        .limit(documentsPerPage)
         .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      lastDocument = querySnapshot.docs.last;
+    }
 
     List<StarRatingDetailsModel> tempList = [];
     for (var doc in querySnapshot.docs) {
-      var docData =
-          doc.data() as Map<String, dynamic>?; // Cast to Map<String, dynamic>
+      var docData = doc.data() as Map<String, dynamic>?;
       if (docData != null) {
         var ratingsData = docData['ratings'] as Map<String, dynamic>;
         tempList.add(StarRatingDetailsModel.fromJson(ratingsData));
       }
     }
+
     setState(() {
       ratingsDetails = tempList;
       _isLoading = false;
+    });
+  }
+
+  Future<void> loadMoreReviews() async {
+    setState(() {
+      _isFetchingMore = true;
+    });
+    if (lastDocument == null) return;
+
+    final city = widget.cityAndState.split(",")[0].trim().toLowerCase();
+    final state = widget.cityAndState.split(",")[1].trim().toLowerCase();
+
+    // Get the next batch of documents starting after the last one
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(state)
+        .doc(city)
+        .collection("hotels")
+        .doc(widget.hotelSearchModel.hotelId)
+        .collection("ratings")
+        .orderBy('ratings.timeStamp',
+            descending: true) // Sort based on nested field
+        .startAfterDocument(lastDocument!)
+        .limit(documentsPerPage)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      lastDocument = querySnapshot.docs.last;
+    }
+
+    List<StarRatingDetailsModel> tempList = [];
+    for (var doc in querySnapshot.docs) {
+      var docData = doc.data() as Map<String, dynamic>?;
+      if (docData != null) {
+        var ratingsData = docData['ratings'] as Map<String, dynamic>;
+        tempList.add(StarRatingDetailsModel.fromJson(ratingsData));
+      }
+    }
+
+    setState(() {
+      ratingsDetails.addAll(
+          tempList); // Here, you append to your list instead of replacing it
+      _isFetchingMore = false;
     });
   }
 
@@ -66,6 +127,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.red.shade400,
@@ -224,6 +286,19 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     ),
                   ),
                 ),
+          if (_isFetchingMore)
+            const SliverToBoxAdapter(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(color: Colors.red),
+                ),
+              ),
+            )
+          else
+            const SliverToBoxAdapter(
+                child: SizedBox
+                    .shrink()), // This is an empty box to maintain the structure when not loading more data.
         ],
       ),
     );
