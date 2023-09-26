@@ -166,15 +166,6 @@ class BookingCancelWidget extends StatelessWidget {
       headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
-      bookingHistoryModel.checkOutStatus = "cancelled";
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(profileProvider.mobileNo)
-          .collection("bookings")
-          .doc(bookingHistoryModel.bookingId.toString())
-          .set({
-        bookingHistoryModel.bookingId.toString(): bookingHistoryModel.toJson()
-      });
       bookingProvider.swapDataFromUpcomingToCancelledList(
           bookingHistoryModel.bookingId.toString());
       GeneralUtils.showSuccessSnackBarUsingScaffold(scaffoldMessenger,

@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _resultsController = TextEditingController();
   final List<String> _dataList = LocationConstants.citiesList;
   List<String> _searchResults = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -141,33 +142,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: TextField(
-                              controller: _searchController,
-                              enabled: false,
-                              style: const TextStyle(color: Colors.black54),
-                              decoration: InputDecoration(
-                                hintText: "Enter city name",
-                                disabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        Divider.createBorderSide(context),
-                                    borderRadius: BorderRadius.circular(10)),
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        Divider.createBorderSide(context),
-                                    borderRadius: BorderRadius.circular(10)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        Divider.createBorderSide(context),
-                                    borderRadius: BorderRadius.circular(10)),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        Divider.createBorderSide(context),
-                                    borderRadius: BorderRadius.circular(10)),
-                                filled: false,
-                                contentPadding: const EdgeInsets.all(8),
+                            child: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                controller: _searchController,
+                                enabled: false,
+                                style: const TextStyle(color: Colors.black54),
+                                decoration: InputDecoration(
+                                  hintText: "Enter city name",
+                                  disabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          Divider.createBorderSide(context),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  filled: false,
+                                  contentPadding: const EdgeInsets.all(8),
+                                ),
+                                keyboardType: TextInputType.text,
+                                obscureText: false,
+                                validator: (text) {
+                                  if (text == "") {
+                                    return "Please enter a city name";
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
-                              keyboardType: TextInputType.text,
-                              obscureText: false,
                             ),
                           ),
                         ),
@@ -221,59 +232,63 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Flexible(
-                              child: Builder(
-                                builder: (context) {
-                                  return InkWell(
-                                    onTap: () {
-                                      showBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const AddRoomsWidget();
-                                        },
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20, right: 30),
-                                      child: TextField(
-                                        style: const TextStyle(color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
-                                          hintStyle: const TextStyle(
-                                              color: Colors.black54, fontSize: 13),
-                                          border: OutlineInputBorder(
-                                              borderSide:
-                                                  Divider.createBorderSide(context),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide:
-                                                  Divider.createBorderSide(context),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide:
-                                                  Divider.createBorderSide(context),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          disabledBorder: OutlineInputBorder(
-                                              borderSide:
-                                                  Divider.createBorderSide(context),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          filled: false,
-                                          contentPadding: const EdgeInsets.all(8),
-                                        ),
-                                        keyboardType: TextInputType.text,
-                                        obscureText: false,
-                                        enabled: false,
+                              child: Builder(builder: (context) {
+                                return InkWell(
+                                  onTap: () {
+                                    showBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AddRoomsWidget();
+                                      },
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 30),
+                                    child: TextField(
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        hintText:
+                                            "Adult ${Provider.of<CountProvider>(context, listen: true).adultCount} - Child ${Provider.of<CountProvider>(context, listen: true).childCount}",
+                                        hintStyle: const TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 13),
+                                        border: OutlineInputBorder(
+                                            borderSide:
+                                                Divider.createBorderSide(
+                                                    context),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                Divider.createBorderSide(
+                                                    context),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                Divider.createBorderSide(
+                                                    context),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        disabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                Divider.createBorderSide(
+                                                    context),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        filled: false,
+                                        contentPadding: const EdgeInsets.all(8),
                                       ),
+                                      keyboardType: TextInputType.text,
+                                      obscureText: false,
+                                      enabled: false,
                                     ),
-                                  );
-                                }
-                              ),
+                                  ),
+                                );
+                              }),
                             ),
                           ],
                         ),
@@ -283,14 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Flexible(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (builder) => SearchResultsScreen(
-                                    cityAndState: _resultsController.text,
-                                  ),
-                                ),
-                              );
+                              validate();
                             },
                             child: Container(
                               height: 50,
@@ -356,5 +364,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  void validate() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => SearchResultsScreen(
+            cityAndState: _resultsController.text,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GeneralUtils {
   static void copyAddressToClipboard(BuildContext context, String address) {
@@ -61,5 +62,17 @@ class GeneralUtils {
       ),
       backgroundColor: Colors.green,
     ));
+  }
+
+  static void launchPhone(String phoneNumber) async {
+    final Uri phoneLaunchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(Uri.parse(phoneLaunchUri.toString()))) {
+      await launchUrl(Uri.parse(phoneLaunchUri.toString()));
+    } else {
+      throw 'Could not launch $phoneLaunchUri';
+    }
   }
 }

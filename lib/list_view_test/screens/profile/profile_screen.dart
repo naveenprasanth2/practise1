@@ -65,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          centerTitle: true,
           backgroundColor: Colors.red,
           iconTheme: const IconThemeData(color: Colors.white),
           automaticallyImplyLeading:

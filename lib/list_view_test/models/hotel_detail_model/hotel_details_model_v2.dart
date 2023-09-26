@@ -20,17 +20,11 @@ class HotelDetailsModel {
   @JsonKey(name: 'streetNumber')
   String streetNumber;
 
-  @JsonKey(name: 'cityName')
-  String cityName;
+  @JsonKey(name: 'cityAndState')
+  String cityAndState;
 
   @JsonKey(name: 'id')
   String id;
-
-  @JsonKey(name: 'averageRatings')
-  double averageRatings;
-
-  @JsonKey(name: 'noOfRatings')
-  int noOfRatings;
 
   @JsonKey(name: 'mainImage')
   String mainImage;
@@ -63,10 +57,8 @@ class HotelDetailsModel {
       {required this.hotelName,
       required this.doorNumber,
       required this.streetNumber,
-      required this.cityName,
+      required this.cityAndState,
       required this.id,
-      required this.averageRatings,
-      required this.noOfRatings,
       required this.mainImage,
       required this.hotelImages,
       required this.locationDetails,
