@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:popover/popover.dart';
 import 'package:practise1/hotel_booking/models/booking_history_model/booking_history_display_model.dart';
 import 'package:practise1/hotel_booking/models/hotel_detail_model/hotel_details_model_v2.dart';
+import 'package:practise1/hotel_booking/providers/upcoming_provider.dart';
 import 'package:practise1/hotel_booking/screens/home/home_page.dart';
 import 'package:practise1/hotel_booking/utils/dart_helper/sizebox_helper.dart';
 import 'package:practise1/hotel_booking/utils/date_helper/date_helper.dart';
@@ -15,6 +16,7 @@ import 'package:practise1/hotel_booking/widgets/booking_data_display/upcoming_he
 import 'package:practise1/hotel_booking/widgets/cancellation/cancellation_policy.dart';
 import 'package:practise1/hotel_booking/widgets/hotel_details_main_widgets/guest_policies_widget.dart';
 import 'package:practise1/hotel_booking/widgets/house_policies/house_policies.dart';
+import 'package:provider/provider.dart';
 
 class BookingConfirmationWidget extends StatelessWidget {
   final BookingHistoryDisplayModel bookingHistoryDisplayModel;
@@ -64,7 +66,7 @@ class BookingConfirmationWidget extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 30, left: 10),
                             child: IconButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -72,6 +74,9 @@ class BookingConfirmationWidget extends StatelessWidget {
                                   ),
                                   (route) => false,
                                 );
+                                await Provider.of<UpcomingProvider>(context,
+                                        listen: false)
+                                    .clearBookingData();
                               },
                               icon: const Icon(
                                 Icons.close,

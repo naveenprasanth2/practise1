@@ -8,6 +8,7 @@ import 'package:practise1/hotel_booking/providers/date_provider.dart';
 import 'package:practise1/hotel_booking/providers/language_provider.dart';
 import 'package:practise1/hotel_booking/providers/maps_provider.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
+import 'package:practise1/hotel_booking/providers/upcoming_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'hotel_booking/providers/coupon_state_provider.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (create) => AuthProvider()),
         // ChangeNotifierProvider(create: (create) => ProfileProvider()),
+        ChangeNotifierProvider(create: (create) => UpcomingProvider()),
         ChangeNotifierProvider(create: (create) => DateProvider()),
         ChangeNotifierProvider(create: (create) => CountProvider()),
         ChangeNotifierProvider(create: (create) => CalculationProvider()),
