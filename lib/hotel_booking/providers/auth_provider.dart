@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:practise1/hotel_booking/models/user_profile/user_profile_model.dart';
 import 'package:practise1/hotel_booking/providers/profile_provider.dart';
+import 'package:practise1/hotel_booking/providers/upcoming_provider.dart';
 import 'package:practise1/hotel_booking/screens/authentication/otp_screen.dart';
 import 'package:practise1/hotel_booking/utils/common_helper/general_utils.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +57,8 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout(BuildContext context) async {
     final profileProvider =
         Provider.of<ProfileProvider>(context, listen: false);
+    final upcomingProvider =
+        Provider.of<UpcomingProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
@@ -63,6 +66,7 @@ class AuthProvider extends ChangeNotifier {
     _firebaseAuth.signOut();
     profileProvider.clearProfileProviderData();
     authProvider.resetUserProfileModel();
+    upcomingProvider.clearUpcomingData();
     await sharedPreferences.clear();
     notifyListeners();
   }

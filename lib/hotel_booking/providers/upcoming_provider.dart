@@ -157,4 +157,9 @@ class UpcomingProvider extends ChangeNotifier {
     _hotelDetailsModel = null;
     notifyListeners();
   }
+
+  void clearUpcomingData() {
+    _bookingHistoryDisplayModel = null;
+    _hotelDetailsModel = null;
+  }
 }
